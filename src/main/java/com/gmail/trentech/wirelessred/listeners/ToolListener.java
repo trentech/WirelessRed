@@ -69,7 +69,8 @@ public class ToolListener {
 			return;
 		}
 		TransmitterData transmitterData = optionalTransmitterData.get();
-
+		Transmitter transmitter = transmitterData.transmitter().get();
+		
 		List<Text> lore = itemStack.get(Keys.ITEM_LORE).get();
 		
 		if(lore.get(0).toPlain().equalsIgnoreCase("Mode: Tool")){
@@ -78,6 +79,18 @@ public class ToolListener {
 			ItemStack spawnItemStack = ItemStack.builder().itemType(ItemTypes.PAPER).itemData(transmitterData).build();
 			spawnItemStack.offer(Keys.DISPLAY_NAME, Text.of("Transmitter Circuit"));
 
+			lore = new ArrayList<>();
+			
+			if(transmitter.getRange() == 60000000){
+				lore.add(0, Text.of(TextColors.GREEN, "Range: ", TextColors.YELLOW, "Unlimited"));
+				lore.add(1, Text.of(TextColors.GREEN, "Mutli-World: ", TextColors.YELLOW, true));
+			}else{
+				lore.add(0, Text.of(TextColors.GREEN, "Range: ", TextColors.YELLOW, transmitter.getRange()));
+				lore.add(1, Text.of(TextColors.GREEN, "Mutli-World: ", TextColors.YELLOW, false));
+			}
+			
+			spawnItemStack.offer(Keys.ITEM_LORE, lore);
+			
 			Optional<Entity> itemEntity = location.getExtent().createEntity(EntityTypes.ITEM, location.getPosition());
 
 		    if (itemEntity.isPresent()) {
@@ -89,8 +102,6 @@ public class ToolListener {
 		    location.offer(Keys.SIGN_LINES, new ArrayList<>());
 		    location.remove(TransmitterData.class);
 		}else{
-			Transmitter transmitter = transmitterData.transmitter().get();
-			
 			int score = transmitter.getReceivers().size() + 5;
 			
 			Scoreboard scoreboard = Scoreboard.builder().build();
@@ -98,16 +109,22 @@ public class ToolListener {
 			Objective objective = Objective.builder().displayName(Text.of(TextColors.GREEN, "     Transmitter Info     ")).name("transmitterinfo").criterion(Criteria.DUMMY).build();
 
 			objective.getOrCreateScore(Text.of(TextColors.GREEN, "Upgrades")).setScore(score--);
-			objective.getOrCreateScore(Text.of(TextColors.YELLOW, "  Range: ", TextColors.WHITE, transmitter.getRange())).setScore(score--);
+			
+			if(transmitter.getRange() == 60000000){
+				objective.getOrCreateScore(Text.of(TextColors.YELLOW, "  Range: ", TextColors.WHITE, "Unlimited")).setScore(score--);
+			}else{
+				objective.getOrCreateScore(Text.of(TextColors.YELLOW, "  Range: ", TextColors.WHITE, transmitter.getRange())).setScore(score--);
+			}
+			
 			objective.getOrCreateScore(Text.of(TextColors.YELLOW, "  Multi-World: ", TextColors.WHITE, transmitter.isMultiWorld())).setScore(score--);
 			objective.getOrCreateScore(Text.EMPTY).setScore(score--);
 			objective.getOrCreateScore(Text.of(TextColors.GREEN, "Receivers")).setScore(score--);
 			
 			for(Location<World> receiver : transmitter.getReceivers()){
-				if(((location.getExtent() != receiver.getExtent()) && !transmitter.isMultiWorld()) ||  ((receiver.getPosition().distance(location.getPosition())) > transmitter.getRange())) {
-					objective.getOrCreateScore(Text.of(TextColors.RED, "- ", receiver.getExtent().getName(), " ", receiver.getBlockX(), " ", receiver.getBlockY(), " ", receiver.getBlockZ())).setScore(score--);
-				}else{
+				if(TransmitterHelper.isInRange(transmitter, location, receiver)) {
 					objective.getOrCreateScore(Text.of("- ", receiver.getExtent().getName(), " ", receiver.getBlockX(), " ", receiver.getBlockY(), " ", receiver.getBlockZ())).setScore(score--);
+				}else{
+					objective.getOrCreateScore(Text.of(TextColors.RED, "- ", receiver.getExtent().getName(), " ", receiver.getBlockX(), " ", receiver.getBlockY(), " ", receiver.getBlockZ())).setScore(score--);
 				}		
 			}
 			
@@ -163,6 +180,24 @@ public class ToolListener {
 			ItemStack spawnItemStack = ItemStack.builder().itemType(ItemTypes.PAPER).itemData(new ReceiverData(receiver)).build();
 			spawnItemStack.offer(Keys.DISPLAY_NAME, Text.of("Receiver Circuit"));
 
+			lore = new ArrayList<>();
+			
+			Optional<Location<World>> optionalTransmitter = receiver.getTransmitter();
+			
+			if(optionalTransmitter.isPresent()){
+				Location<World> transmitter = optionalTransmitter.get();
+				
+				if(transmitter.get(TransmitterData.class).isPresent()){
+					lore.add(0, Text.of(TextColors.GREEN, "Transmitter: ", TextColors.YELLOW, transmitter.getExtent().getName(), " ", transmitter.getBlockX(), " ", transmitter.getBlockY(), " ", transmitter.getBlockZ()));
+				}else{
+					lore.add(0, Text.of(TextColors.GREEN, "Transmitter: ", TextColors.RED, "Not found"));
+				}
+			}else{
+				lore.add(0, Text.of(TextColors.GREEN, "Transmitter: ", TextColors.RED, "Location error"));
+			}
+			
+			spawnItemStack.offer(Keys.ITEM_LORE, lore);
+			
 			Receiver.remove(location);
 			
 			Optional<Entity> itemEntity = location.getExtent().createEntity(EntityTypes.ITEM, location.getPosition());
@@ -193,14 +228,16 @@ public class ToolListener {
 					
 					Transmitter transmitter = optionalTransmitterData.get().transmitter().get();
 					
-					if(((transmitterLocation.getExtent() != location.getExtent()) && !transmitter.isMultiWorld()) ||  ((location.getPosition().distance(transmitterLocation.getPosition())) > transmitter.getRange())) {
+					if(!TransmitterHelper.isInRange(transmitter, transmitterLocation, location)) {
+						objective.getOrCreateScore(Text.of(TextColors.GREEN, "- In range")).setScore(1);
+					}else{
 						objective.getOrCreateScore(Text.of(TextColors.RED, "- Out of range")).setScore(1);
 					}
 				}else{
-					objective.getOrCreateScore(Text.of(TextColors.GREEN, "Transmitter: ", TextColors.RED, "Cannot locate")).setScore(1);
+					objective.getOrCreateScore(Text.of(TextColors.GREEN, "Transmitter: ", TextColors.RED, "Not found")).setScore(1);
 				}
 			}else{
-				objective.getOrCreateScore(Text.of(TextColors.GREEN, "Transmitter: ", TextColors.RED, "Cannot locate")).setScore(1);
+				objective.getOrCreateScore(Text.of(TextColors.GREEN, "Transmitter: ", TextColors.RED, "Location Error")).setScore(1);
 			}
 
 			scoreboard.addObjective(objective);
@@ -243,13 +280,14 @@ public class ToolListener {
 		
 		if(lore.get(0).toPlain().equalsIgnoreCase("Mode: Tool")){
 			lore.remove(0);
-			lore.add(0, Text.of(TextColors.GREEN, "Mode: Information"));
+			lore.add(0, Text.of(TextColors.GREEN, "Mode: ", TextColors.YELLOW, "Information"));
 			player.sendMessage(Text.of(TextColors.GREEN, "Information mode"));
 		}else{
 			lore.remove(0);
-			lore.add(0, Text.of(TextColors.GREEN, "Mode: Tool"));
+			lore.add(0, Text.of(TextColors.GREEN, "Mode: ", TextColors.YELLOW, "Tool"));
 			player.sendMessage(Text.of(TextColors.GREEN, "Tool mode"));
 		}
+		
 		Inventory inv = player.getInventory().query(itemStack);
 		
 		itemStack.offer(Keys.ITEM_LORE, lore);

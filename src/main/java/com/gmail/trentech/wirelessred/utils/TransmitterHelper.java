@@ -34,15 +34,12 @@ public class TransmitterHelper {
 				Optional<Receiver> optionalReceiver = Receiver.get(receiverLocation);
 				
 				if(!optionalReceiver.isPresent()){
+					transmitter.removeReceiver(receiverLocation);
 					continue;
 				}
 				Receiver receiver = optionalReceiver.get();
 
-				if((receiverLocation.getExtent() != location.getExtent()) && !transmitter.isMultiWorld()){
-					continue;
-				}
-				
-				if(receiverLocation.getPosition().distance(location.getPosition()) > transmitter.getRange()){
+				if(!isInRange(transmitter, location, receiverLocation)){
 					continue;
 				}
 
@@ -90,5 +87,16 @@ public class TransmitterHelper {
 			}
 		}
 		return false;
+	}
+	
+	public static boolean isInRange(Transmitter transmitter, Location<World> transmitterLocation, Location<World> receiverLocation){
+		if((receiverLocation.getExtent() != transmitterLocation.getExtent()) && !transmitter.isMultiWorld()){
+			return false;
+		}
+		
+		if(receiverLocation.getPosition().distance(transmitterLocation.getPosition()) > transmitter.getRange()){
+			return false;
+		}
+		return true;
 	}
 }

@@ -69,7 +69,10 @@ public class ConfigManager {
 	}
 	
 	public void init(){
-
+		if(config.getNode("starting_range").isVirtual()){
+			config.getNode("starting_range").setValue("32");
+			save();
+		}
 	}
 	
 	private void load(){

@@ -31,11 +31,55 @@ public class CMDUpgrade implements CommandExecutor {
 		Player player = (Player) src;
 
 	    ItemStack itemStack = Main.getGame().getRegistry().createBuilder(ItemStack.Builder.class).itemType(ItemTypes.PAPER).quantity(1).build();
-	    itemStack.offer(Keys.DISPLAY_NAME, Text.of("Range Upgrade"));
+	    itemStack.offer(Keys.DISPLAY_NAME, Text.of("Transmitter Upgrade"));
 	    
 	    List<Text> lore = new ArrayList<>();
 	    
-	    lore.add(0, Text.of(TextColors.GREEN, "Add 32"));
+	    lore.add(0, Text.of(TextColors.GREEN, "Range: ", TextColors.YELLOW, "64"));
+	    
+	    itemStack.offer(Keys.ITEM_LORE, lore);
+	    
+	    player.getInventory().offer(itemStack);
+
+	    itemStack = Main.getGame().getRegistry().createBuilder(ItemStack.Builder.class).itemType(ItemTypes.PAPER).quantity(1).build();
+	    itemStack.offer(Keys.DISPLAY_NAME, Text.of("Transmitter Upgrade"));
+	    
+	    lore = new ArrayList<>();
+	    
+	    lore.add(0, Text.of(TextColors.GREEN, "Range: ", TextColors.YELLOW, "128"));
+	    
+	    itemStack.offer(Keys.ITEM_LORE, lore);
+	    
+	    player.getInventory().offer(itemStack);
+	    
+	    itemStack = Main.getGame().getRegistry().createBuilder(ItemStack.Builder.class).itemType(ItemTypes.PAPER).quantity(1).build();
+	    itemStack.offer(Keys.DISPLAY_NAME, Text.of("Transmitter Upgrade"));
+	    
+	    lore = new ArrayList<>();
+	    
+	    lore.add(0, Text.of(TextColors.GREEN, "Range: ", TextColors.YELLOW, "256"));
+	    
+	    itemStack.offer(Keys.ITEM_LORE, lore);
+	    
+	    player.getInventory().offer(itemStack);
+	    
+	    itemStack = Main.getGame().getRegistry().createBuilder(ItemStack.Builder.class).itemType(ItemTypes.PAPER).quantity(1).build();
+	    itemStack.offer(Keys.DISPLAY_NAME, Text.of("Transmitter Upgrade"));
+	    
+	    lore = new ArrayList<>();
+	    
+	    lore.add(0, Text.of(TextColors.GREEN, "Range: ", TextColors.YELLOW, "512"));
+	    
+	    itemStack.offer(Keys.ITEM_LORE, lore);
+	    
+	    player.getInventory().offer(itemStack);
+	    
+	    itemStack = Main.getGame().getRegistry().createBuilder(ItemStack.Builder.class).itemType(ItemTypes.PAPER).quantity(1).build();
+	    itemStack.offer(Keys.DISPLAY_NAME, Text.of("Transmitter Upgrade"));
+	    
+	    lore = new ArrayList<>();
+	    
+	    lore.add(0, Text.of(TextColors.GREEN, "Range: ", TextColors.YELLOW, "Unlimited"));
 	    
 	    itemStack.offer(Keys.ITEM_LORE, lore);
 	    

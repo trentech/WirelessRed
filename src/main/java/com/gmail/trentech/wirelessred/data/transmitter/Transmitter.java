@@ -12,16 +12,23 @@ import org.spongepowered.api.world.World;
 import com.gmail.trentech.wirelessred.Main;
 import com.gmail.trentech.wirelessred.data.DataQueries;
 import com.gmail.trentech.wirelessred.data.receiver.Receiver;
+import com.gmail.trentech.wirelessred.utils.ConfigManager;
 
 public class Transmitter implements DataSerializable {
 
 	private boolean enabled = false;
 	private List<String> receivers = new ArrayList<>();
-	private double range = 32;
+	private double range;
 	private boolean multiWorld = false;
 	
 	public Transmitter(){
-
+		String range = new ConfigManager().getConfig().getNode("starting_range").getString();
+		if(range.equalsIgnoreCase("unlimited")){
+			this.range = 60000000;
+			this.multiWorld = true;
+		}else{
+			this.range = Double.parseDouble(range);
+		}
 	}
 
 	public Transmitter(boolean enabled, double range, boolean multiWorld, List<String> receivers){
@@ -78,7 +85,7 @@ public class Transmitter implements DataSerializable {
 		return this.range;
 	}
 	
-	public void setRange(int range){
+	public void setRange(double range){
 		this.range = range;
 	}
 	

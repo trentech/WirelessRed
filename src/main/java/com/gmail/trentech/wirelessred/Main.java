@@ -27,6 +27,7 @@ import com.gmail.trentech.wirelessred.data.transmitter.TransmitterDataManipulato
 import com.gmail.trentech.wirelessred.listeners.ReceiverListener;
 import com.gmail.trentech.wirelessred.listeners.ToolListener;
 import com.gmail.trentech.wirelessred.listeners.TransmitterListener;
+import com.gmail.trentech.wirelessred.utils.ConfigManager;
 import com.gmail.trentech.wirelessred.utils.Resource;
 import com.gmail.trentech.wirelessred.utils.SQLUtils;
 import com.google.inject.Inject;
@@ -60,6 +61,8 @@ public class Main {
 
     @Listener
     public void onInitialization(GameInitializationEvent event) {
+    	new ConfigManager().init();
+    	
     	getGame().getEventManager().registerListeners(this, new TransmitterListener());
     	getGame().getEventManager().registerListeners(this, new ReceiverListener());
     	getGame().getEventManager().registerListeners(this, new ToolListener());

@@ -35,7 +35,7 @@ public class CMDTool implements CommandExecutor {
 	    
 	    List<Text> lore = new ArrayList<>();
 	    
-	    lore.add(0, Text.of(TextColors.GREEN, "Mode: Tool"));
+	    lore.add(0, Text.of(TextColors.GREEN, "Mode: ", TextColors.YELLOW, "Tool"));
 	    
 	    itemStack.offer(Keys.ITEM_LORE, lore);
 	    

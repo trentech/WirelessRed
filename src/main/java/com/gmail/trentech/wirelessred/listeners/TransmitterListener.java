@@ -1,6 +1,7 @@
 package com.gmail.trentech.wirelessred.listeners;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Optional;
 
@@ -32,6 +33,7 @@ import org.spongepowered.api.world.World;
 
 import com.gmail.trentech.wirelessred.data.receiver.Receiver;
 import com.gmail.trentech.wirelessred.data.transmitter.ImmutableTransmitterData;
+import com.gmail.trentech.wirelessred.data.transmitter.Transmitter;
 import com.gmail.trentech.wirelessred.data.transmitter.TransmitterData;
 import com.gmail.trentech.wirelessred.utils.TransmitterHelper;
 
@@ -55,12 +57,25 @@ public class TransmitterListener {
 				continue;
 			}
 			TransmitterData transmitterData = optionalTransmitterData.get().asMutable();
-
+			Transmitter transmitter = transmitterData.transmitter().get();
+			
 			TransmitterHelper.toggleTransmitter(location, false);
 			
 			ItemStack itemStack = ItemStack.builder().itemType(ItemTypes.PAPER).itemData(transmitterData).build();
 			itemStack.offer(Keys.DISPLAY_NAME, Text.of("Transmitter Circuit"));
 
+			List<Text> lore = new ArrayList<>();
+			
+			if(transmitter.getRange() == 60000000){
+				lore.add(0, Text.of(TextColors.GREEN, "Range: ", TextColors.YELLOW, transmitter.getRange()));
+				lore.add(1, Text.of(TextColors.GREEN, "Mutli-World: ", TextColors.YELLOW, true));
+			}else{
+				lore.add(0, Text.of(TextColors.GREEN, "Range: ", TextColors.YELLOW, transmitter.getRange()));
+				lore.add(1, Text.of(TextColors.GREEN, "Mutli-World: ", TextColors.YELLOW, false));
+			}
+			
+			itemStack.offer(Keys.ITEM_LORE, lore);
+			
 			Optional<Entity> itemEntity = location.getExtent().createEntity(EntityTypes.ITEM, location.getPosition());
 
 		    if (itemEntity.isPresent()) {
@@ -95,7 +110,8 @@ public class TransmitterListener {
 			return;
 		}
 		TransmitterData transmitterData = optionalTransmitterData.get();
-
+		Transmitter transmitter = transmitterData.transmitter().get();
+		
 		if(!snapshot.getState().getType().equals(BlockTypes.STANDING_SIGN) && !snapshot.getState().getType().equals(BlockTypes.WALL_SIGN)){
 			return;
 		}
@@ -105,11 +121,11 @@ public class TransmitterListener {
 			return;
 		}
 		
-		for(Location<World> receiverLocation : new ArrayList<>(transmitterData.transmitter().get().getReceivers())){
+		for(Location<World> receiverLocation : new ArrayList<>(transmitter.getReceivers())){
 			Optional<Receiver> optionalReceiver = Receiver.get(receiverLocation);
 			
 			if(!optionalReceiver.isPresent()){
-				transmitterData.transmitter().get().removeReceiver(receiverLocation);
+				transmitter.removeReceiver(receiverLocation);
 				continue;
 			}
 			Receiver receiver = optionalReceiver.get();
@@ -125,6 +141,64 @@ public class TransmitterListener {
 		player.getInventory().query(itemStack).poll(1);
 	}
 
+	@Listener
+	public void onInteractUpgradeEvent(InteractBlockEvent.Secondary event, @First Player player){
+		Optional<Location<World>> optionalLocation = event.getTargetBlock().getLocation();
+		
+		if(!optionalLocation.isPresent()){
+			return;
+		}
+		Location<World> location = optionalLocation.get();
+		
+		Optional<TransmitterData> optionalTransmitterData = location.get(TransmitterData.class);
+		
+		if(!optionalTransmitterData.isPresent()){
+			return;
+		}
+		TransmitterData transmitterData = optionalTransmitterData.get();
+		
+		Optional<ItemStack> optionalItemStack = player.getItemInHand();
+		
+		if(!optionalItemStack.isPresent()){
+			return;
+		}		
+		ItemStack itemStack = optionalItemStack.get();
+		
+		Optional<Text> optionalDisplayName = itemStack.get(Keys.DISPLAY_NAME);
+		
+		if(!optionalDisplayName.isPresent()){
+			return;
+		}
+		
+		if(!optionalDisplayName.get().toPlain().equalsIgnoreCase("Transmitter Upgrade")){
+			return;
+		}
+		
+		List<Text> lore = itemStack.get(Keys.ITEM_LORE).get();
+		
+		String upgrade = lore.get(0).toPlain().replace("Range: ", "");
+		
+		Transmitter transmitter = transmitterData.transmitter().get();
+		
+		if(Double.parseDouble(upgrade) <= transmitter.getRange()){
+			player.sendMessage(Text.of(TextColors.RED, "Transmitter already contains current upgrade"));
+			return;
+		}
+		
+		if(upgrade.equalsIgnoreCase("Unlimited")){
+			transmitter.setMultiWorld(true);
+			transmitter.setRange(60000000);
+		}else{
+			transmitter.setRange(Double.parseDouble(upgrade));
+		}
+
+		TransmitterHelper.toggleTransmitter(location, transmitter.isEnabled());
+		
+		player.getInventory().query(itemStack).poll(1);
+		
+		player.sendMessage(Text.of(TextColors.GREEN, "Transmitter upgraded"));
+	}
+	
 	@Listener
 	public void onNotifyNeighborBlockEvent(NotifyNeighborBlockEvent event, @First BlockSnapshot snapshot){
 		if(snapshot.get(Keys.POWER).isPresent()){
