@@ -3,11 +3,13 @@ package com.gmail.trentech.wirelessred.listeners;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.Optional;
 
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockTypes;
+import org.spongepowered.api.block.tileentity.TileEntity;
 import org.spongepowered.api.data.Transaction;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.Entity;
@@ -23,6 +25,7 @@ import org.spongepowered.api.event.cause.NamedCause;
 import org.spongepowered.api.event.cause.entity.spawn.EntitySpawnCause;
 import org.spongepowered.api.event.cause.entity.spawn.SpawnTypes;
 import org.spongepowered.api.event.filter.cause.First;
+import org.spongepowered.api.event.world.chunk.LoadChunkEvent;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
@@ -202,6 +205,28 @@ public class TransmitterListener {
 				Location<World> location = snapshot.getLocation().get().getRelative(entry.getKey());
 				TransmitterHelper.toggleTransmitter(location, false);
 			}
+		}
+	}
+	
+	@Listener
+	public void onLoadChunkEvent(LoadChunkEvent event){
+		ThreadLocalRandom random = ThreadLocalRandom.current();
+		
+		for(TileEntity tileEntity : event.getTargetChunk().getTileEntities()){
+			Location<World> location = tileEntity.getLocation();
+			
+			Optional<TransmitterData> optionalTransmitterData = location.get(TransmitterData.class);
+			
+			if(!optionalTransmitterData.isPresent()){
+				return;
+			}
+			Transmitter transmitter = optionalTransmitterData.get().transmitter().get();
+			
+			if(!transmitter.isEnabled()){
+				return;
+			}
+
+			TransmitterHelper.particles(location, random);
 		}
 	}
 }

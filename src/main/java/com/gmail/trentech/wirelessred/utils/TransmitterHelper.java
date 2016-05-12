@@ -3,14 +3,20 @@ package com.gmail.trentech.wirelessred.utils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
 import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.effect.particle.ParticleEffect;
+import org.spongepowered.api.effect.particle.ParticleTypes;
+import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.util.Direction;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
+import com.gmail.trentech.wirelessred.Main;
 import com.gmail.trentech.wirelessred.data.receiver.Receiver;
 import com.gmail.trentech.wirelessred.data.transmitter.Transmitter;
 import com.gmail.trentech.wirelessred.data.transmitter.TransmitterData;
@@ -56,11 +62,20 @@ public class TransmitterHelper {
 				lines.add(Text.of(TextColors.GREEN, "====="));
 				lines.add(Text.of(TextColors.GREEN, "==="));
 				lines.add(Text.of(TextColors.GREEN, "="));
+				particles(location, ThreadLocalRandom.current());
 			}else{
 				lines.add(Text.of(TextColors.DARK_BLUE, "[Transmitter]"));
 				lines.add(Text.EMPTY);
 				lines.add(Text.EMPTY);
 				lines.add(Text.of(TextColors.RED, "="));
+				
+				String name = location.getExtent().getName() + ":" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ();
+				
+				for(Task task : Main.getGame().getScheduler().getScheduledTasks()){
+					if(task.getName().equals(name)){
+						task.cancel();
+					}
+				}
 			}
 			
 			location.offer(Keys.SIGN_LINES, lines);
@@ -98,5 +113,27 @@ public class TransmitterHelper {
 			return false;
 		}
 		return true;
+	}
+	
+	public static void particles(Location<World> location, ThreadLocalRandom random){
+		String name = location.getExtent().getName() + ":" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ();
+		
+		if(!Main.getGame().getScheduler().getTasksByName(name).isEmpty()){
+			return;
+		}
+		
+		ParticleEffect particle = ParticleEffect.builder().type(ParticleTypes.REDSTONE).build();
+		
+        Main.getGame().getScheduler().createTaskBuilder().interval(400, TimeUnit.MILLISECONDS).name(name).execute(t -> {
+        	if(random.nextDouble() > .8){
+    			location.getExtent().spawnParticles(particle, location.getPosition().add(random.nextDouble(),random.nextDouble(),random.nextDouble()));
+        	}//.add(.5, .8, .5));
+        	if(random.nextDouble() > .8){
+    			location.getExtent().spawnParticles(particle, location.getPosition().add(random.nextDouble(),random.nextDouble(),random.nextDouble()));
+        	}//.add(.5, .8, .5));
+        	if(random.nextDouble() > .8){
+    			location.getExtent().spawnParticles(particle, location.getPosition().add(random.nextDouble(),random.nextDouble(),random.nextDouble()));
+        	}//.add(.5, .8, .5));
+        }).submit(Main.getPlugin());
 	}
 }
