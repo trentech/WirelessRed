@@ -23,7 +23,6 @@ import org.spongepowered.api.event.cause.NamedCause;
 import org.spongepowered.api.event.cause.entity.spawn.EntitySpawnCause;
 import org.spongepowered.api.event.cause.entity.spawn.SpawnTypes;
 import org.spongepowered.api.event.filter.cause.First;
-import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
@@ -35,6 +34,7 @@ import com.gmail.trentech.wirelessred.data.receiver.Receiver;
 import com.gmail.trentech.wirelessred.data.transmitter.ImmutableTransmitterData;
 import com.gmail.trentech.wirelessred.data.transmitter.Transmitter;
 import com.gmail.trentech.wirelessred.data.transmitter.TransmitterData;
+import com.gmail.trentech.wirelessred.utils.ItemHelper;
 import com.gmail.trentech.wirelessred.utils.TransmitterHelper;
 
 public class TransmitterListener {
@@ -57,24 +57,10 @@ public class TransmitterListener {
 				continue;
 			}
 			TransmitterData transmitterData = optionalTransmitterData.get().asMutable();
-			Transmitter transmitter = transmitterData.transmitter().get();
-			
-			TransmitterHelper.toggleTransmitter(location, false);
-			
-			ItemStack itemStack = ItemStack.builder().itemType(ItemTypes.PAPER).itemData(transmitterData).build();
-			itemStack.offer(Keys.DISPLAY_NAME, Text.of("Transmitter Circuit"));
 
-			List<Text> lore = new ArrayList<>();
-			
-			if(transmitter.getRange() == 60000000){
-				lore.add(0, Text.of(TextColors.GREEN, "Range: ", TextColors.YELLOW, transmitter.getRange()));
-				lore.add(1, Text.of(TextColors.GREEN, "Mutli-World: ", TextColors.YELLOW, true));
-			}else{
-				lore.add(0, Text.of(TextColors.GREEN, "Range: ", TextColors.YELLOW, transmitter.getRange()));
-				lore.add(1, Text.of(TextColors.GREEN, "Mutli-World: ", TextColors.YELLOW, false));
-			}
-			
-			itemStack.offer(Keys.ITEM_LORE, lore);
+			TransmitterHelper.toggleTransmitter(location, false);
+
+			ItemStack itemStack = ItemHelper.getTransmitter(transmitterData);
 			
 			Optional<Entity> itemEntity = location.getExtent().createEntity(EntityTypes.ITEM, location.getPosition());
 
@@ -180,7 +166,7 @@ public class TransmitterListener {
 		
 		Transmitter transmitter = transmitterData.transmitter().get();
 		
-		if(Double.parseDouble(upgrade) <= transmitter.getRange()){
+		if((upgrade.equalsIgnoreCase("Unlimited") && transmitter.isMultiWorld()) || (!upgrade.equalsIgnoreCase("Unlimited") && Double.parseDouble(upgrade) <= transmitter.getRange())){
 			player.sendMessage(Text.of(TextColors.RED, "Transmitter already contains current upgrade"));
 			return;
 		}

@@ -1,7 +1,6 @@
 package com.gmail.trentech.wirelessred.listeners;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import org.spongepowered.api.block.BlockSnapshot;
@@ -20,8 +19,6 @@ import org.spongepowered.api.event.cause.NamedCause;
 import org.spongepowered.api.event.cause.entity.spawn.EntitySpawnCause;
 import org.spongepowered.api.event.cause.entity.spawn.SpawnTypes;
 import org.spongepowered.api.event.filter.cause.First;
-import org.spongepowered.api.item.ItemTypes;
-import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
@@ -32,6 +29,7 @@ import org.spongepowered.api.world.World;
 import com.gmail.trentech.wirelessred.data.receiver.Receiver;
 import com.gmail.trentech.wirelessred.data.receiver.ReceiverData;
 import com.gmail.trentech.wirelessred.data.transmitter.TransmitterData;
+import com.gmail.trentech.wirelessred.utils.ItemHelper;
 
 public class ReceiverListener {
 
@@ -52,26 +50,7 @@ public class ReceiverListener {
 			}
 			Receiver receiver = optionalReceiver.get();
 			
-			ItemStack itemStack = ItemStack.builder().itemType(ItemTypes.PAPER).itemData(new ReceiverData(receiver)).build();
-			itemStack.offer(Keys.DISPLAY_NAME, Text.of("Receiver Circuit"));
-
-			List<Text> lore = new ArrayList<>();
-			
-			Optional<Location<World>> optionalTransmitter = receiver.getTransmitter();
-			
-			if(optionalTransmitter.isPresent()){
-				Location<World> transmitter = optionalTransmitter.get();
-				
-				if(transmitter.get(TransmitterData.class).isPresent()){
-					lore.add(0, Text.of(TextColors.GREEN, "Transmitter: ", TextColors.YELLOW, transmitter.getExtent().getName(), " ", transmitter.getBlockX(), " ", transmitter.getBlockY(), " ", transmitter.getBlockZ()));
-				}else{
-					lore.add(0, Text.of(TextColors.GREEN, "Transmitter: ", TextColors.RED, "Not found"));
-				}
-			}else{
-				lore.add(0, Text.of(TextColors.GREEN, "Transmitter: ", TextColors.RED, "Location error"));
-			}
-			
-			itemStack.offer(Keys.ITEM_LORE, lore);
+			ItemStack itemStack = ItemHelper.getReceiver(receiver);
 			
 			Optional<Entity> itemEntity = location.getExtent().createEntity(EntityTypes.ITEM, location.getPosition());
 
@@ -181,18 +160,9 @@ public class ReceiverListener {
 		Receiver receiver = receiverData.receiver().get();
 		
 		receiver.setTransmitter(location);
-		itemStack.offer(receiverData);
-		
-		List<Text> lore = new ArrayList<>();
-		
-		lore.add(0, Text.of(TextColors.GREEN, "Transmitter: ", TextColors.YELLOW, location.getExtent().getName(), " ", location.getBlockX(), " ", location.getBlockY(), " ", location.getBlockZ()));
-		
-		Inventory inv = player.getInventory().query(itemStack);
-		
-		itemStack.offer(Keys.ITEM_LORE, lore);
 
-		inv.set(itemStack);
-		
+		player.getInventory().query(itemStack).set(ItemHelper.getReceiver(receiver));
+
 		player.sendMessage(Text.of(TextColors.GREEN, "Linked"));
 	}
 
