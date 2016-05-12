@@ -62,20 +62,14 @@ public class TransmitterHelper {
 				lines.add(Text.of(TextColors.GREEN, "====="));
 				lines.add(Text.of(TextColors.GREEN, "==="));
 				lines.add(Text.of(TextColors.GREEN, "="));
-				particles(location, ThreadLocalRandom.current());
+				enableParticles(location);
 			}else{
 				lines.add(Text.of(TextColors.DARK_BLUE, "[Transmitter]"));
 				lines.add(Text.EMPTY);
 				lines.add(Text.EMPTY);
 				lines.add(Text.of(TextColors.RED, "="));
 				
-				String name = location.getExtent().getName() + ":" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ();
-				
-				for(Task task : Main.getGame().getScheduler().getScheduledTasks()){
-					if(task.getName().equals(name)){
-						task.cancel();
-					}
-				}
+				disableParticles(location);
 			}
 			
 			location.offer(Keys.SIGN_LINES, lines);
@@ -115,7 +109,9 @@ public class TransmitterHelper {
 		return true;
 	}
 	
-	public static void particles(Location<World> location, ThreadLocalRandom random){
+	public static void enableParticles(Location<World> location){
+		ThreadLocalRandom random = ThreadLocalRandom.current();
+		
 		String name = location.getExtent().getName() + ":" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ();
 		
 		if(!Main.getGame().getScheduler().getTasksByName(name).isEmpty()){
@@ -135,5 +131,15 @@ public class TransmitterHelper {
     			location.getExtent().spawnParticles(particle, location.getPosition().add(random.nextDouble(),random.nextDouble(),random.nextDouble()));
         	}//.add(.5, .8, .5));
         }).submit(Main.getPlugin());
+	}
+	
+	public static void disableParticles(Location<World> location){
+		String name = location.getExtent().getName() + ":" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ();
+		
+		for(Task task : Main.getGame().getScheduler().getScheduledTasks()){
+			if(task.getName().equals(name)){
+				task.cancel();
+			}
+		}
 	}
 }
