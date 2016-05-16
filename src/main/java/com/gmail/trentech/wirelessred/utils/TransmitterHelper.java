@@ -23,59 +23,55 @@ import com.gmail.trentech.wirelessred.data.transmitter.TransmitterData;
 
 public class TransmitterHelper {
 
-	public static boolean toggleTransmitter(Location<World> location){
+	public static boolean toggleTransmitter(TransmitterData transmitterData, Location<World> location){
 		boolean b = isPowered(location);
-		toggleTransmitter(location, b);
+		toggleTransmitter(transmitterData, location, b);
 		return b;
 	}
 	
-	public static void toggleTransmitter(Location<World> location, boolean enable){
-		Optional<TransmitterData> optionalTransmitterData = location.get(TransmitterData.class);
-
-		optionalTransmitterData.ifPresent(transmitterData -> {
-			Transmitter transmitter = transmitterData.transmitter().get();
-			transmitter.setEnabled(enable);
+	public static void toggleTransmitter(TransmitterData transmitterData, Location<World> location, boolean enable){
+		Transmitter transmitter = transmitterData.transmitter().get();
+		transmitter.setEnabled(enable);
+		
+		for(Location<World> receiverLocation : transmitterData.transmitter().get().getReceivers()){
+			Optional<Receiver> optionalReceiver = Receiver.get(receiverLocation);
 			
-			for(Location<World> receiverLocation : transmitterData.transmitter().get().getReceivers()){
-				Optional<Receiver> optionalReceiver = Receiver.get(receiverLocation);
-				
-				if(!optionalReceiver.isPresent()){
-					transmitter.removeReceiver(receiverLocation);
-					continue;
-				}
-				Receiver receiver = optionalReceiver.get();
-
-				if(!isInRange(transmitter, location, receiverLocation)){
-					continue;
-				}
-
-				receiver.setEnabled(enable);
-				receiver.updateEnabled(receiverLocation);
-				
-				receiverLocation.offer(Keys.POWERED, enable);
+			if(!optionalReceiver.isPresent()){
+				transmitter.removeReceiver(receiverLocation);
+				continue;
 			}
-			
-			List<Text> lines = new ArrayList<>();
+			Receiver receiver = optionalReceiver.get();
 
-			if(enable){
-				lines.add(Text.of(TextColors.DARK_BLUE, "[Transmitter]"));
-				lines.add(Text.of(TextColors.GREEN, "====="));
-				lines.add(Text.of(TextColors.GREEN, "==="));
-				lines.add(Text.of(TextColors.GREEN, "="));
-				enableParticles(location);
-			}else{
-				lines.add(Text.of(TextColors.DARK_BLUE, "[Transmitter]"));
-				lines.add(Text.EMPTY);
-				lines.add(Text.EMPTY);
-				lines.add(Text.of(TextColors.RED, "="));
-				
-				disableParticles(location);
+			if(!isInRange(transmitter, location, receiverLocation)){
+				continue;
 			}
+
+			receiver.setEnabled(enable);
+			receiver.updateEnabled(receiverLocation);
 			
-			location.offer(Keys.SIGN_LINES, lines);
+			receiverLocation.offer(Keys.POWERED, enable);
+		}
+		
+		List<Text> lines = new ArrayList<>();
+
+		if(enable){
+			lines.add(Text.of(TextColors.DARK_BLUE, "[Transmitter]"));
+			lines.add(Text.of(TextColors.GREEN, "====="));
+			lines.add(Text.of(TextColors.GREEN, "==="));
+			lines.add(Text.of(TextColors.GREEN, "="));
+			enableParticles(location);
+		}else{
+			lines.add(Text.of(TextColors.DARK_BLUE, "[Transmitter]"));
+			lines.add(Text.EMPTY);
+			lines.add(Text.EMPTY);
+			lines.add(Text.of(TextColors.RED, "="));
 			
-			location.offer(transmitterData);
-		});
+			disableParticles(location);
+		}
+		
+		location.offer(Keys.SIGN_LINES, lines);
+		
+		location.offer(transmitterData);
 	}
 	
 	private static boolean isPowered(Location<World> location){

@@ -72,7 +72,7 @@ public class ToolListener {
 		List<Text> lore = itemStack.get(Keys.ITEM_LORE).get();
 		
 		if(lore.get(0).toPlain().equalsIgnoreCase("Mode: Tool")){
-			TransmitterHelper.toggleTransmitter(location, false);
+			TransmitterHelper.toggleTransmitter(transmitterData, location, false);
 
 			ItemStack spawnItemStack = ItemHelper.getTransmitter(transmitterData);
 			
@@ -195,7 +195,11 @@ public class ToolListener {
 					Transmitter transmitter = optionalTransmitterData.get().transmitter().get();
 					
 					if(TransmitterHelper.isInRange(transmitter, transmitterLocation, location)) {
-						objective.getOrCreateScore(Text.of(TextColors.GREEN, "- In range")).setScore(1);
+						if(transmitter.getReceivers().contains(location)){
+							objective.getOrCreateScore(Text.of(TextColors.GREEN, "- In range")).setScore(1);
+						}else{
+							objective.getOrCreateScore(Text.of(TextColors.RED, "- Not Linked")).setScore(1);
+						}					
 					}else{
 						objective.getOrCreateScore(Text.of(TextColors.RED, "- Out of range")).setScore(1);
 					}

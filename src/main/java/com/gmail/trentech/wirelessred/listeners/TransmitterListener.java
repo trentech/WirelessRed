@@ -61,7 +61,7 @@ public class TransmitterListener {
 			}
 			TransmitterData transmitterData = optionalTransmitterData.get().asMutable();
 
-			TransmitterHelper.toggleTransmitter(location, false);
+			TransmitterHelper.toggleTransmitter(transmitterData, location, false);
 
 			ItemStack itemStack = ItemHelper.getTransmitter(transmitterData);
 			
@@ -123,9 +123,9 @@ public class TransmitterListener {
 			receiver.updateTransmitter(receiverLocation);
 		}
 		
-		location.offer(transmitterData);
+		//location.offer(transmitterData);
 
-		TransmitterHelper.toggleTransmitter(location);
+		TransmitterHelper.toggleTransmitter(transmitterData, location);
 		
 		player.getInventory().query(itemStack).poll(1);
 	}
@@ -181,7 +181,7 @@ public class TransmitterListener {
 			transmitter.setRange(Double.parseDouble(upgrade));
 		}
 
-		TransmitterHelper.toggleTransmitter(location, transmitter.isEnabled());
+		TransmitterHelper.toggleTransmitter(transmitterData, location, transmitter.isEnabled());
 		
 		player.getInventory().query(itemStack).poll(1);
 		
@@ -193,17 +193,32 @@ public class TransmitterListener {
 		if(snapshot.get(Keys.POWER).isPresent()){
 			for(Entry<Direction, BlockState> entry : event.getNeighbors().entrySet()){
 				Location<World> location = snapshot.getLocation().get().getRelative(entry.getKey());
-				TransmitterHelper.toggleTransmitter(location, (snapshot.get(Keys.POWER).get() >= 1));
+				
+				Optional<TransmitterData> optionalTransmitterData = location.get(TransmitterData.class);
+				
+				if(optionalTransmitterData.isPresent()){
+					TransmitterHelper.toggleTransmitter(optionalTransmitterData.get(), location, (snapshot.get(Keys.POWER).get() >= 1));
+				}			
 			}
 		}else if(snapshot.get(Keys.POWERED).isPresent()){
 			for(Entry<Direction, BlockState> entry : event.getNeighbors().entrySet()){
 				Location<World> location = snapshot.getLocation().get().getRelative(entry.getKey());
-				TransmitterHelper.toggleTransmitter(location, snapshot.get(Keys.POWERED).get());
+				
+				Optional<TransmitterData> optionalTransmitterData = location.get(TransmitterData.class);
+				
+				if(optionalTransmitterData.isPresent()){
+					TransmitterHelper.toggleTransmitter(optionalTransmitterData.get(), location, snapshot.get(Keys.POWERED).get());
+				}			
 			}
 		}else{
 			for(Entry<Direction, BlockState> entry : event.getNeighbors().entrySet()){
 				Location<World> location = snapshot.getLocation().get().getRelative(entry.getKey());
-				TransmitterHelper.toggleTransmitter(location, false);
+				
+				Optional<TransmitterData> optionalTransmitterData = location.get(TransmitterData.class);
+				
+				if(optionalTransmitterData.isPresent()){
+					TransmitterHelper.toggleTransmitter(optionalTransmitterData.get(), location, false);
+				}			
 			}
 		}
 	}
