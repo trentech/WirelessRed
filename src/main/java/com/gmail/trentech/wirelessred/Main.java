@@ -77,6 +77,10 @@ public class Main {
         getGame().getDataManager().register(ReceiverData.class, ImmutableReceiverData.class, new ReceiverDataManipulatorBuilder());
         getGame().getDataManager().registerBuilder(Receiver.class, new ReceiverBuilder());
         
+        //getGame().getRegistry().getRecipeRegistry().register(RecipeHelper.getTransmitter());
+        //getGame().getRegistry().getRecipeRegistry().register(RecipeHelper.getReceiver());
+        //getGame().getRegistry().getRecipeRegistry().register(RecipeHelper.getTool());
+        
         SQLUtils.createTables();
     }
 

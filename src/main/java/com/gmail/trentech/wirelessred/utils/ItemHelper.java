@@ -12,7 +12,6 @@ import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
-import com.gmail.trentech.wirelessred.Main;
 import com.gmail.trentech.wirelessred.data.receiver.Receiver;
 import com.gmail.trentech.wirelessred.data.receiver.ReceiverData;
 import com.gmail.trentech.wirelessred.data.transmitter.Transmitter;
@@ -23,7 +22,7 @@ public class ItemHelper {
 	public static ItemStack getTransmitter(TransmitterData transmitterData){
 		Transmitter transmitter = transmitterData.transmitter().get();
 		
-	    ItemStack itemStack = Main.getGame().getRegistry().createBuilder(ItemStack.Builder.class).itemType(ItemTypes.PAPER).quantity(1).build();
+	    ItemStack itemStack = ItemStack.builder().itemType(ItemTypes.PAPER).quantity(1).build();
 	    itemStack.offer(new TransmitterData());
 	    itemStack.offer(Keys.DISPLAY_NAME, Text.of("Transmitter Circuit"));
 	    
@@ -73,7 +72,7 @@ public class ItemHelper {
 	}
 	
 	public static ItemStack getTool(boolean tool){
-	    ItemStack itemStack = Main.getGame().getRegistry().createBuilder(ItemStack.Builder.class).itemType(ItemTypes.STICK).quantity(1).build();
+	    ItemStack itemStack = ItemStack.builder().itemType(ItemTypes.STICK).quantity(1).build();
 	    itemStack.offer(Keys.DISPLAY_NAME, Text.of("Screw Driver"));
 	    
 	    List<Text> lore = new ArrayList<>();
@@ -90,7 +89,7 @@ public class ItemHelper {
 	}
 	
 	public static ItemStack getUpgrade(String range){
-	    ItemStack itemStack = Main.getGame().getRegistry().createBuilder(ItemStack.Builder.class).itemType(ItemTypes.PAPER).quantity(1).build();
+	    ItemStack itemStack = ItemStack.builder().itemType(ItemTypes.PAPER).quantity(1).build();
 	    itemStack.offer(Keys.DISPLAY_NAME, Text.of("Transmitter Upgrade"));
 	    
 	    List<Text> lore = new ArrayList<>();
