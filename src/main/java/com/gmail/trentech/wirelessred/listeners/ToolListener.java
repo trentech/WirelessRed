@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.Item;
@@ -44,7 +45,7 @@ public class ToolListener {
 		}
 		Location<World> location = optionalLocation.get();
 		
-		Optional<ItemStack> optionalItemStack = player.getItemInHand();
+		Optional<ItemStack> optionalItemStack = player.getItemInHand(HandTypes.MAIN_HAND);
 		
 		if(!optionalItemStack.isPresent()){
 			return;
@@ -133,7 +134,7 @@ public class ToolListener {
 		}
 		Location<World> location = optionalLocation.get();
 		
-		Optional<ItemStack> optionalItemStack = player.getItemInHand();
+		Optional<ItemStack> optionalItemStack = player.getItemInHand(HandTypes.MAIN_HAND);
 		
 		if(!optionalItemStack.isPresent()){
 			return;
@@ -229,7 +230,7 @@ public class ToolListener {
 			return;
 		}
 
-		Optional<ItemStack> optionalItemStack = player.getItemInHand();
+		Optional<ItemStack> optionalItemStack = player.getItemInHand(HandTypes.MAIN_HAND);
 		
 		if(!optionalItemStack.isPresent()){
 			return;
