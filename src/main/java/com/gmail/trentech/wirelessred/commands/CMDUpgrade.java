@@ -18,17 +18,17 @@ public class CMDUpgrade implements CommandExecutor {
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-		if(!(src instanceof Player)){
+		if (!(src instanceof Player)) {
 			src.sendMessage(Text.of(TextColors.DARK_RED, "Must be a player"));
 			return CommandResult.empty();
 		}
 		Player player = (Player) src;
 
-	    player.getInventory().offer(ItemHelper.getUpgrade("64"));
-	    player.getInventory().offer(ItemHelper.getUpgrade("128"));
-	    player.getInventory().offer(ItemHelper.getUpgrade("256"));
-	    player.getInventory().offer(ItemHelper.getUpgrade("512"));
-	    player.getInventory().offer(ItemHelper.getUpgrade("Unlimited"));
+		player.getInventory().offer(ItemHelper.getUpgrade("64"));
+		player.getInventory().offer(ItemHelper.getUpgrade("128"));
+		player.getInventory().offer(ItemHelper.getUpgrade("256"));
+		player.getInventory().offer(ItemHelper.getUpgrade("512"));
+		player.getInventory().offer(ItemHelper.getUpgrade("Unlimited"));
 
 		return CommandResult.success();
 	}

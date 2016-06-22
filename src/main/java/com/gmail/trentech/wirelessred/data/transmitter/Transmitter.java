@@ -20,31 +20,31 @@ public class Transmitter implements DataSerializable {
 	private List<String> receivers = new ArrayList<>();
 	private double range;
 	private boolean multiWorld = false;
-	
-	public Transmitter(){
+
+	public Transmitter() {
 		String range = new ConfigManager().getConfig().getNode("starting_range").getString();
-		if(range.equalsIgnoreCase("unlimited")){
+		if (range.equalsIgnoreCase("unlimited")) {
 			this.range = 60000000;
 			this.multiWorld = true;
-		}else{
+		} else {
 			this.range = Double.parseDouble(range);
 		}
 	}
 
-	public Transmitter(boolean enabled, double range, boolean multiWorld, List<String> receivers){
+	public Transmitter(boolean enabled, double range, boolean multiWorld, List<String> receivers) {
 		this.enabled = enabled;
 		this.range = range;
 		this.multiWorld = multiWorld;
 		this.receivers = receivers;
 	}
 
-	public List<Location<World>> getReceivers(){
+	public List<Location<World>> getReceivers() {
 		List<Location<World>> locations = new ArrayList<>();
-		
-		for(String receiver : this.receivers){
+
+		for (String receiver : this.receivers) {
 			String[] args = receiver.split(":");
-			
-			if(!Main.getGame().getServer().getWorld(args[0]).isPresent()){
+
+			if (!Main.getGame().getServer().getWorld(args[0]).isPresent()) {
 				continue;
 			}
 			World world = Main.getGame().getServer().getWorld(args[0]).get();
@@ -54,41 +54,41 @@ public class Transmitter implements DataSerializable {
 			int z = Integer.parseInt(args[3]);
 
 			Location<World> location = world.getLocation(x, y, z);
-			
-			if(Receiver.get(location).isPresent()){
+
+			if (Receiver.get(location).isPresent()) {
 				locations.add(location);
 			}
 		}
-		
+
 		return locations;
 	}
-	
-	public boolean addReceiver(Location<World> location){
+
+	public boolean addReceiver(Location<World> location) {
 		String loc = location.getExtent().getName() + ":" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ();
 		return this.receivers.add(loc);
 	}
-	
-	public boolean removeReceiver(Location<World> location){
+
+	public boolean removeReceiver(Location<World> location) {
 		String loc = location.getExtent().getName() + ":" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ();
 		return this.receivers.remove(loc);
 	}
 
-	public boolean isEnabled(){
+	public boolean isEnabled() {
 		return this.enabled;
 	}
-	
-	public void setEnabled(boolean enabled){
+
+	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
-	
-	public double getRange(){
+
+	public double getRange() {
 		return this.range;
 	}
-	
-	public void setRange(double range){
+
+	public void setRange(double range) {
 		this.range = range;
 	}
-	
+
 	public boolean isMultiWorld() {
 		return multiWorld;
 	}
@@ -96,14 +96,14 @@ public class Transmitter implements DataSerializable {
 	public void setMultiWorld(boolean multiWorld) {
 		this.multiWorld = multiWorld;
 	}
-	
-	@Override
-    public int getContentVersion() {
-        return 1;
-    }
 
-    @Override
-    public DataContainer toContainer() {
-        return new MemoryDataContainer().set(DataQueries.ENABLED, enabled).set(DataQueries.RANGE, range).set(DataQueries.MULTIWORLD, multiWorld).set(DataQueries.RECEVIERS, receivers);
-    }
+	@Override
+	public int getContentVersion() {
+		return 1;
+	}
+
+	@Override
+	public DataContainer toContainer() {
+		return new MemoryDataContainer().set(DataQueries.ENABLED, enabled).set(DataQueries.RANGE, range).set(DataQueries.MULTIWORLD, multiWorld).set(DataQueries.RECEVIERS, receivers);
+	}
 }

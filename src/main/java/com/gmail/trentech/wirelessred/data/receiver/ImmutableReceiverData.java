@@ -12,40 +12,40 @@ import org.spongepowered.api.data.value.immutable.ImmutableValue;
 
 public class ImmutableReceiverData extends AbstractImmutableSingleData<Receiver, ImmutableReceiverData, ReceiverData> {
 
-    protected ImmutableReceiverData(Receiver value) {
-        super(value, RECEIVER);
-    }
+	protected ImmutableReceiverData(Receiver value) {
+		super(value, RECEIVER);
+	}
 
-    public ImmutableValue<Receiver> receiver() {
-        return Sponge.getRegistry().getValueFactory().createValue(RECEIVER, getValue(), getValue()).asImmutable();
-    }
-    
-    @Override
-    public <E> Optional<ImmutableReceiverData> with(Key<? extends BaseValue<E>> key, E value) {
-        if (this.supports(key)) {
-            return Optional.of(asMutable().set(key, value).asImmutable());
-        } else {
-            return Optional.empty();
-        }
-    }
+	public ImmutableValue<Receiver> receiver() {
+		return Sponge.getRegistry().getValueFactory().createValue(RECEIVER, getValue(), getValue()).asImmutable();
+	}
 
-    @Override
-    public int compareTo(ImmutableReceiverData arg0) {
-        return 0;
-    }
+	@Override
+	public <E> Optional<ImmutableReceiverData> with(Key<? extends BaseValue<E>> key, E value) {
+		if (this.supports(key)) {
+			return Optional.of(asMutable().set(key, value).asImmutable());
+		} else {
+			return Optional.empty();
+		}
+	}
 
-    @Override
-    public int getContentVersion() {
-        return 1;
-    }
+	@Override
+	public int compareTo(ImmutableReceiverData arg0) {
+		return 0;
+	}
 
-    @Override
-    protected ImmutableValue<?> getValueGetter() {
-        return Sponge.getRegistry().getValueFactory().createValue(RECEIVER, getValue()).asImmutable();
-    }
+	@Override
+	public int getContentVersion() {
+		return 1;
+	}
 
-    @Override
-    public ReceiverData asMutable() {
-        return new ReceiverData(this.getValue());
-    }
+	@Override
+	protected ImmutableValue<?> getValueGetter() {
+		return Sponge.getRegistry().getValueFactory().createValue(RECEIVER, getValue()).asImmutable();
+	}
+
+	@Override
+	public ReceiverData asMutable() {
+		return new ReceiverData(this.getValue());
+	}
 }

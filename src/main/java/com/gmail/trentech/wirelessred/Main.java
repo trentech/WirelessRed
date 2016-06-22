@@ -28,55 +28,56 @@ import com.gmail.trentech.wirelessred.listeners.ReceiverListener;
 import com.gmail.trentech.wirelessred.listeners.ToolListener;
 import com.gmail.trentech.wirelessred.listeners.TransmitterListener;
 import com.gmail.trentech.wirelessred.utils.ConfigManager;
+import com.gmail.trentech.wirelessred.utils.RecipeHelper;
 import com.gmail.trentech.wirelessred.utils.Resource;
 import com.gmail.trentech.wirelessred.utils.SQLUtils;
 
 import me.flibio.updatifier.Updatifier;
 
 @Updatifier(repoName = "WirelessRed", repoOwner = "TrenTech", version = Resource.VERSION)
-@Plugin(id = Resource.ID, name = Resource.NAME, authors = Resource.AUTHOR, url = Resource.URL, dependencies = {@Dependency(id = "Updatifier", optional = true)})
+@Plugin(id = Resource.ID, name = Resource.NAME, authors = Resource.AUTHOR, url = Resource.URL, dependencies = { @Dependency(id = "Updatifier", optional = true) })
 public class Main {
 
 	private static Game game;
-	private static Logger log;	
+	private static Logger log;
 	private static PluginContainer plugin;
 
 	@Listener
-    public void onPreInitialization(GamePreInitializationEvent event) {
+	public void onPreInitialization(GamePreInitializationEvent event) {
 		game = Sponge.getGame();
 		plugin = getGame().getPluginManager().getPlugin(Resource.ID).get();
 		log = getPlugin().getLogger();
-    }
+	}
 
-    @Listener
-    public void onInitialization(GameInitializationEvent event) {
-    	new ConfigManager().init();
-    	
-    	getGame().getEventManager().registerListeners(this, new TransmitterListener());
-    	getGame().getEventManager().registerListeners(this, new ReceiverListener());
-    	getGame().getEventManager().registerListeners(this, new ToolListener());
-    	
-    	getGame().getCommandManager().register(this, new CMDTransmitter().cmdTransmitter, "transmitter");
-    	getGame().getCommandManager().register(this, new CMDReceiver().cmdReceiver, "receiver");
-    	getGame().getCommandManager().register(this, new CMDTool().cmdTool, "tool");
-    	getGame().getCommandManager().register(this, new CMDUpgrade().cmdUpgrade, "upgrade");
+	@Listener
+	public void onInitialization(GameInitializationEvent event) {
+		new ConfigManager().init();
 
-        getGame().getDataManager().register(TransmitterData.class, ImmutableTransmitterData.class, new TransmitterDataManipulatorBuilder());
-        getGame().getDataManager().registerBuilder(Transmitter.class, new TransmitterBuilder());
-        getGame().getDataManager().register(ReceiverData.class, ImmutableReceiverData.class, new ReceiverDataManipulatorBuilder());
-        getGame().getDataManager().registerBuilder(Receiver.class, new ReceiverBuilder());
-        
-        //getGame().getRegistry().getRecipeRegistry().register(RecipeHelper.getTransmitter());
-        //getGame().getRegistry().getRecipeRegistry().register(RecipeHelper.getReceiver());
-        //getGame().getRegistry().getRecipeRegistry().register(RecipeHelper.getTool());
-        
-        SQLUtils.createTables();
-    }
+		getGame().getEventManager().registerListeners(this, new TransmitterListener());
+		getGame().getEventManager().registerListeners(this, new ReceiverListener());
+		getGame().getEventManager().registerListeners(this, new ToolListener());
+
+		getGame().getCommandManager().register(this, new CMDTransmitter().cmdTransmitter, "transmitter");
+		getGame().getCommandManager().register(this, new CMDReceiver().cmdReceiver, "receiver");
+		getGame().getCommandManager().register(this, new CMDTool().cmdTool, "tool");
+		getGame().getCommandManager().register(this, new CMDUpgrade().cmdUpgrade, "upgrade");
+
+		getGame().getDataManager().register(TransmitterData.class, ImmutableTransmitterData.class, new TransmitterDataManipulatorBuilder());
+		getGame().getDataManager().registerBuilder(Transmitter.class, new TransmitterBuilder());
+		getGame().getDataManager().register(ReceiverData.class, ImmutableReceiverData.class, new ReceiverDataManipulatorBuilder());
+		getGame().getDataManager().registerBuilder(Receiver.class, new ReceiverBuilder());
+
+		getGame().getRegistry().getRecipeRegistry().register(RecipeHelper.getTransmitter());
+		getGame().getRegistry().getRecipeRegistry().register(RecipeHelper.getReceiver());
+		getGame().getRegistry().getRecipeRegistry().register(RecipeHelper.getTool());
+
+		SQLUtils.createTables();
+	}
 
 	public static Logger getLog() {
-        return log;
-    }
-    
+		return log;
+	}
+
 	public static Game getGame() {
 		return game;
 	}

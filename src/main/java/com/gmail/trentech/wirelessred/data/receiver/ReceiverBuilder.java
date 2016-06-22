@@ -11,16 +11,16 @@ import org.spongepowered.api.data.persistence.InvalidDataException;
 
 public class ReceiverBuilder extends AbstractDataBuilder<Receiver> {
 
-    public ReceiverBuilder() {
-        super(Receiver.class, 1);
-    }
+	public ReceiverBuilder() {
+		super(Receiver.class, 1);
+	}
 
-    @Override
-    protected Optional<Receiver> buildContent(DataView container) throws InvalidDataException {
-        if (container.contains(ENABLED, TRANSMITTER)) {
-        	Receiver receiver = new Receiver(container.getBoolean(ENABLED).get(), container.getString(TRANSMITTER).get());
-            return Optional.of(receiver);
-        }
-        return Optional.empty();
-    }
+	@Override
+	protected Optional<Receiver> buildContent(DataView container) throws InvalidDataException {
+		if (container.contains(ENABLED, TRANSMITTER)) {
+			Receiver receiver = new Receiver(container.getBoolean(ENABLED).get(), container.getString(TRANSMITTER).get());
+			return Optional.of(receiver);
+		}
+		return Optional.empty();
+	}
 }

@@ -19,85 +19,85 @@ import com.gmail.trentech.wirelessred.data.transmitter.TransmitterData;
 
 public class ItemHelper {
 
-	public static ItemStack getTransmitter(TransmitterData transmitterData){
+	public static ItemStack getTransmitter(TransmitterData transmitterData) {
 		Transmitter transmitter = transmitterData.transmitter().get();
-		
-	    ItemStack itemStack = ItemStack.builder().itemType(ItemTypes.PAPER).quantity(1).build();
-	    itemStack.offer(new TransmitterData());
-	    itemStack.offer(Keys.DISPLAY_NAME, Text.of("Transmitter Circuit"));
-	    
+
+		ItemStack itemStack = ItemStack.builder().itemType(ItemTypes.PAPER).quantity(1).build();
+		itemStack.offer(new TransmitterData());
+		itemStack.offer(Keys.DISPLAY_NAME, Text.of("Transmitter Circuit"));
+
 		List<Text> lore = new ArrayList<>();
-		
-		if(transmitter.getRange() == 60000000){
+
+		if (transmitter.getRange() == 60000000) {
 			lore.add(0, Text.of(TextColors.GREEN, "Range: ", TextColors.YELLOW, "Unlimited"));
 			lore.add(1, Text.of(TextColors.GREEN, "Mutli-World: ", TextColors.YELLOW, true));
-		}else{
+		} else {
 			lore.add(0, Text.of(TextColors.GREEN, "Range: ", TextColors.YELLOW, transmitter.getRange()));
 			lore.add(1, Text.of(TextColors.GREEN, "Mutli-World: ", TextColors.YELLOW, false));
 		}
-		
+
 		itemStack.offer(Keys.ITEM_LORE, lore);
-		
+
 		return itemStack;
 	}
-	
-	public static ItemStack getReceiver(Receiver receiver){
+
+	public static ItemStack getReceiver(Receiver receiver) {
 		ItemStack itemStack = ItemStack.builder().itemType(ItemTypes.PAPER).build();
 		itemStack.offer(Keys.DISPLAY_NAME, Text.of("Receiver Circuit"));
 
-		if(receiver != null){
+		if (receiver != null) {
 			List<Text> lore = new ArrayList<>();
-			
+
 			Optional<Location<World>> optionalTransmitter = receiver.getTransmitter();
-			
-			if(optionalTransmitter.isPresent()){
+
+			if (optionalTransmitter.isPresent()) {
 				Location<World> transmitter = optionalTransmitter.get();
-				
-				if(transmitter.get(TransmitterData.class).isPresent()){
+
+				if (transmitter.get(TransmitterData.class).isPresent()) {
 					itemStack.offer(new ReceiverData(receiver));
 					lore.add(0, Text.of(TextColors.GREEN, "Transmitter: ", TextColors.YELLOW, transmitter.getExtent().getName(), " ", transmitter.getBlockX(), " ", transmitter.getBlockY(), " ", transmitter.getBlockZ()));
-				}else{
+				} else {
 					itemStack.offer(new ReceiverData());
 				}
-			}else{
+			} else {
 				lore.add(0, Text.of(TextColors.GREEN, "Transmitter: ", TextColors.RED, "Location error"));
 			}
-			
+
 			itemStack.offer(Keys.ITEM_LORE, lore);
-		}else{
+		} else {
 			itemStack.offer(new ReceiverData());
 		}
 
 		return itemStack;
 	}
-	
-	public static ItemStack getTool(boolean tool){
-	    ItemStack itemStack = ItemStack.builder().itemType(ItemTypes.STICK).quantity(1).build();
-	    itemStack.offer(Keys.DISPLAY_NAME, Text.of("Screw Driver"));
-	    
-	    List<Text> lore = new ArrayList<>();
-	    
-	    if(tool){
-	    	lore.add(0, Text.of(TextColors.GREEN, "Mode: ", TextColors.YELLOW, "Tool"));
-	    }else{
-	    	lore.add(0, Text.of(TextColors.GREEN, "Mode: ", TextColors.YELLOW, "Information"));
-	    }
 
-	    itemStack.offer(Keys.ITEM_LORE, lore);
-	    
-	    return itemStack;
+	public static ItemStack getTool(boolean tool) {
+		ItemStack itemStack = ItemStack.builder().itemType(ItemTypes.STICK).quantity(1).build();
+		itemStack.offer(Keys.DISPLAY_NAME, Text.of("Screw Driver"));
+
+		List<Text> lore = new ArrayList<>();
+
+		if (tool) {
+			lore.add(0, Text.of(TextColors.GREEN, "Mode: ", TextColors.YELLOW, "Tool"));
+		} else {
+			lore.add(0, Text.of(TextColors.GREEN, "Mode: ", TextColors.YELLOW, "Information"));
+		}
+
+		itemStack.offer(Keys.ITEM_LORE, lore);
+
+		return itemStack;
 	}
-	
-	public static ItemStack getUpgrade(String range){
-	    ItemStack itemStack = ItemStack.builder().itemType(ItemTypes.PAPER).quantity(1).build();
-	    itemStack.offer(Keys.DISPLAY_NAME, Text.of("Transmitter Upgrade"));
-	    
-	    List<Text> lore = new ArrayList<>();
-	    
-	    lore.add(0, Text.of(TextColors.GREEN, "Range: ", TextColors.YELLOW, range));
-	    
-	    itemStack.offer(Keys.ITEM_LORE, lore);
-	    
-	    return itemStack;
+
+	public static ItemStack getUpgrade(String range) {
+		ItemStack itemStack = ItemStack.builder().itemType(ItemTypes.PAPER).quantity(1).build();
+		itemStack.offer(Keys.DISPLAY_NAME, Text.of("Transmitter Upgrade"));
+
+		List<Text> lore = new ArrayList<>();
+
+		lore.add(0, Text.of(TextColors.GREEN, "Range: ", TextColors.YELLOW, range));
+
+		itemStack.offer(Keys.ITEM_LORE, lore);
+
+		return itemStack;
 	}
 }

@@ -18,13 +18,13 @@ public class CMDReceiver implements CommandExecutor {
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-		if(!(src instanceof Player)){
+		if (!(src instanceof Player)) {
 			src.sendMessage(Text.of(TextColors.DARK_RED, "Must be a player"));
 			return CommandResult.empty();
 		}
 		Player player = (Player) src;
 
-	    player.getInventory().offer(ItemHelper.getReceiver(null));
+		player.getInventory().offer(ItemHelper.getReceiver(null));
 
 		return CommandResult.success();
 	}

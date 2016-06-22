@@ -21,23 +21,23 @@ public class Receiver extends SQLUtils implements DataSerializable {
 	private boolean enabled = false;
 	private String transmitter = "";
 
-	public Receiver(){
+	public Receiver() {
 
 	}
-	
-	public Receiver(boolean enabled){
+
+	public Receiver(boolean enabled) {
 		this.enabled = enabled;
 	}
 
-	public Receiver(boolean enabled, String transmitter){
+	public Receiver(boolean enabled, String transmitter) {
 		this.enabled = enabled;
 		this.transmitter = transmitter;
 	}
 
-	public Optional<Location<World>> getTransmitter(){
+	public Optional<Location<World>> getTransmitter() {
 		String[] args = this.transmitter.split(":");
-		
-		if(!Main.getGame().getServer().getWorld(args[0]).isPresent()){
+
+		if (!Main.getGame().getServer().getWorld(args[0]).isPresent()) {
 			return Optional.empty();
 		}
 		World world = Main.getGame().getServer().getWorld(args[0]).get();
@@ -45,7 +45,7 @@ public class Receiver extends SQLUtils implements DataSerializable {
 		int x = Integer.parseInt(args[1]);
 		int y = Integer.parseInt(args[2]);
 		int z = Integer.parseInt(args[3]);
-				
+
 		return Optional.of(world.getLocation(x, y, z));
 	}
 
@@ -53,44 +53,44 @@ public class Receiver extends SQLUtils implements DataSerializable {
 		this.transmitter = location.getExtent().getName() + ":" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ();
 	}
 
-	public boolean isEnabled(){
+	public boolean isEnabled() {
 		return this.enabled;
 	}
-	
-	public void setEnabled(boolean enabled){
+
+	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
 
 	@Override
-    public int getContentVersion() {
-        return 1;
-    }
+	public int getContentVersion() {
+		return 1;
+	}
 
-    @Override
-    public DataContainer toContainer() {
-        return new MemoryDataContainer().set(DataQueries.ENABLED, enabled).set(DataQueries.TRANSMITTER, transmitter);
-    }
-    
+	@Override
+	public DataContainer toContainer() {
+		return new MemoryDataContainer().set(DataQueries.ENABLED, enabled).set(DataQueries.TRANSMITTER, transmitter);
+	}
+
 	public static Optional<Receiver> get(Location<World> location) {
 		String name = location.getExtent().getName() + ":" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ();
-		
+
 		Optional<Receiver> optional = Optional.empty();
-		
+
 		try {
-		    Connection connection = getDataSource().getConnection();
-		    
-		    PreparedStatement statement = connection.prepareStatement("SELECT * FROM Receivers");
-		    
+			Connection connection = getDataSource().getConnection();
+
+			PreparedStatement statement = connection.prepareStatement("SELECT * FROM Receivers");
+
 			ResultSet result = statement.executeQuery();
 
 			while (result.next()) {
-				if(result.getString("Location").equalsIgnoreCase(name)){
+				if (result.getString("Location").equalsIgnoreCase(name)) {
 					boolean enabled = result.getBoolean("Enabled");
 					String transmitter = result.getString("Transmitter");
 					optional = Optional.of(new Receiver(enabled, transmitter));
 				}
 			}
-			
+
 			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -98,74 +98,74 @@ public class Receiver extends SQLUtils implements DataSerializable {
 
 		return optional;
 	}
-	
-    public void save(Location<World> location){
-    	String name = location.getExtent().getName() + ":" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ();
-		
-    	try {
-		    Connection connection = getDataSource().getConnection();
-		    
-		    PreparedStatement statement = connection.prepareStatement("INSERT into Receivers (Location, Enabled, Transmitter) VALUES (?, ?, ?)");	
-			
-		    statement.setString(1, name);
-		    statement.setBoolean(2, enabled);
-		    statement.setString(3, transmitter);
-		    
+
+	public void save(Location<World> location) {
+		String name = location.getExtent().getName() + ":" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ();
+
+		try {
+			Connection connection = getDataSource().getConnection();
+
+			PreparedStatement statement = connection.prepareStatement("INSERT into Receivers (Location, Enabled, Transmitter) VALUES (?, ?, ?)");
+
+			statement.setString(1, name);
+			statement.setBoolean(2, enabled);
+			statement.setString(3, transmitter);
+
 			statement.executeUpdate();
-			
+
 			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-    }
-    
-	public void updateEnabled(Location<World> location){
-		String name = location.getExtent().getName() + ":" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ();
-		
-		try {
-		    Connection connection = getDataSource().getConnection();
-		    PreparedStatement statement = connection.prepareStatement("UPDATE Receivers SET Enabled = ? WHERE Location = ?");
+	}
 
-		    statement.setBoolean(1, enabled);
+	public void updateEnabled(Location<World> location) {
+		String name = location.getExtent().getName() + ":" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ();
+
+		try {
+			Connection connection = getDataSource().getConnection();
+			PreparedStatement statement = connection.prepareStatement("UPDATE Receivers SET Enabled = ? WHERE Location = ?");
+
+			statement.setBoolean(1, enabled);
 			statement.setString(2, name);
-			
+
 			statement.executeUpdate();
 			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public void updateTransmitter(Location<World> location){
-		String name = location.getExtent().getName() + ":" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ();
-		
-		try {
-		    Connection connection = getDataSource().getConnection();
-		    PreparedStatement statement = connection.prepareStatement("UPDATE Receivers SET Transmitter = ? WHERE Location = ?");
 
-		    statement.setString(1, transmitter);
+	public void updateTransmitter(Location<World> location) {
+		String name = location.getExtent().getName() + ":" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ();
+
+		try {
+			Connection connection = getDataSource().getConnection();
+			PreparedStatement statement = connection.prepareStatement("UPDATE Receivers SET Transmitter = ? WHERE Location = ?");
+
+			statement.setString(1, transmitter);
 			statement.setString(2, name);
-			
+
 			statement.executeUpdate();
 			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void remove(Location<World> location) {
 		String name = location.getExtent().getName() + ":" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ();
-		
+
 		try {
-		    Connection connection = getDataSource().getConnection();
-		    
-		    PreparedStatement statement = connection.prepareStatement("DELETE from Receivers WHERE Location = ?");
-		    
+			Connection connection = getDataSource().getConnection();
+
+			PreparedStatement statement = connection.prepareStatement("DELETE from Receivers WHERE Location = ?");
+
 			statement.setString(1, name);
 			statement.executeUpdate();
-			
+
 			connection.close();
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}

@@ -35,73 +35,73 @@ import com.gmail.trentech.wirelessred.utils.ItemHelper;
 public class ReceiverListener {
 
 	@Listener
-	public void onChangeBlockEventBreak(ChangeBlockEvent.Break event){
-		for(Transaction<BlockSnapshot> transaction : new ArrayList<>(event.getTransactions())){
+	public void onChangeBlockEventBreak(ChangeBlockEvent.Break event) {
+		for (Transaction<BlockSnapshot> transaction : new ArrayList<>(event.getTransactions())) {
 			Optional<Location<World>> optionalLocation = transaction.getOriginal().getLocation();
-			
-			if(!optionalLocation.isPresent()){
+
+			if (!optionalLocation.isPresent()) {
 				return;
 			}
 			Location<World> location = optionalLocation.get();
-			
+
 			Optional<Receiver> optionalReceiver = Receiver.get(location);
-			
-			if(!optionalReceiver.isPresent()){
+
+			if (!optionalReceiver.isPresent()) {
 				continue;
 			}
 			Receiver receiver = optionalReceiver.get();
-			
+
 			ItemStack itemStack = ItemHelper.getReceiver(receiver);
-			
+
 			Optional<Entity> itemEntity = location.getExtent().createEntity(EntityTypes.ITEM, location.getPosition());
 
-		    if (itemEntity.isPresent()) {
-		        Item item = (Item) itemEntity.get();
-		        item.offer( Keys.REPRESENTED_ITEM, itemStack.createSnapshot() );
-		        location.getExtent().spawnEntity(item, Cause.of(NamedCause.source(EntitySpawnCause.builder().entity(item).type(SpawnTypes.PLUGIN).build())));
-		    }
-		    
-		    Receiver.remove(location);
+			if (itemEntity.isPresent()) {
+				Item item = (Item) itemEntity.get();
+				item.offer(Keys.REPRESENTED_ITEM, itemStack.createSnapshot());
+				location.getExtent().spawnEntity(item, Cause.of(NamedCause.source(EntitySpawnCause.builder().entity(item).type(SpawnTypes.PLUGIN).build())));
+			}
+
+			Receiver.remove(location);
 		}
 	}
-	
+
 	@Listener
-	public void onInteractTransmitterEvent(InteractBlockEvent.Secondary event, @First Player player){
+	public void onInteractTransmitterEvent(InteractBlockEvent.Secondary event, @First Player player) {
 		BlockSnapshot snapshot = event.getTargetBlock();
-		
+
 		Optional<Location<World>> optionalLocation = snapshot.getLocation();
-		
-		if(!optionalLocation.isPresent()){
+
+		if (!optionalLocation.isPresent()) {
 			return;
 		}
 		Location<World> location = optionalLocation.get();
-		
+
 		Optional<ItemStack> optionalItemStack = player.getItemInHand(HandTypes.MAIN_HAND);
-		
-		if(!optionalItemStack.isPresent()){
+
+		if (!optionalItemStack.isPresent()) {
 			return;
 		}
 		ItemStack itemStack = optionalItemStack.get();
-		
+
 		Optional<ReceiverData> optionalReceiverData = optionalItemStack.get().get(ReceiverData.class);
-		
-		if(!optionalReceiverData.isPresent()){
+
+		if (!optionalReceiverData.isPresent()) {
 			return;
 		}
 		Receiver receiver = optionalReceiverData.get().receiver().get();
 
-		if(!snapshot.getState().getType().equals(BlockTypes.STONE_BUTTON)){
+		if (!snapshot.getState().getType().equals(BlockTypes.STONE_BUTTON)) {
 			return;
 		}
 
-		if(Receiver.get(location).isPresent()){
+		if (Receiver.get(location).isPresent()) {
 			player.sendMessage(Text.of(TextColors.RED, "Circuit already inserted"));
 			return;
 		}
 
 		Optional<Location<World>> optionalTransmitter = receiver.getTransmitter();
-		
-		if(!optionalTransmitter.isPresent()){
+
+		if (!optionalTransmitter.isPresent()) {
 			event.setCancelled(true);
 			player.sendMessage(Text.of(TextColors.RED, "Not linked to a transmitter"));
 			return;
@@ -109,57 +109,57 @@ public class ReceiverListener {
 		Location<World> transmitter = optionalTransmitter.get();
 
 		Optional<TransmitterData> optionalTransmitterData = transmitter.get(TransmitterData.class);
-		
-		if(!optionalTransmitterData.isPresent()){
+
+		if (!optionalTransmitterData.isPresent()) {
 			event.setCancelled(true);
 			player.sendMessage(Text.of(TextColors.RED, "Linked transmitter no longer exists"));
 			return;
-		}		
+		}
 		TransmitterData transmitterData = optionalTransmitterData.get();
 
 		transmitterData.transmitter().get().addReceiver(location);
 		transmitter.offer(transmitterData);
-		
-		if(transmitterData.transmitter().get().isEnabled()){
-			if(transmitter.getPosition().distance(location.getPosition()) <= transmitterData.transmitter().get().getRange()){
+
+		if (transmitterData.transmitter().get().isEnabled()) {
+			if (transmitter.getPosition().distance(location.getPosition()) <= transmitterData.transmitter().get().getRange()) {
 				receiver.setEnabled(true);
 				location.offer(Keys.POWERED, true);
 			}
 		}
-		
+
 		receiver.save(location);
-		
+
 		player.getInventory().query(itemStack).poll(1);
 	}
 
 	@Listener
-	public void onInteractLinkEvent(InteractBlockEvent.Secondary event, @First Player player){
+	public void onInteractLinkEvent(InteractBlockEvent.Secondary event, @First Player player) {
 		Optional<Location<World>> optionalLocation = event.getTargetBlock().getLocation();
-		
-		if(!optionalLocation.isPresent()){
+
+		if (!optionalLocation.isPresent()) {
 			return;
 		}
 		Location<World> location = optionalLocation.get();
-		
-		if(!location.get(TransmitterData.class).isPresent()){
+
+		if (!location.get(TransmitterData.class).isPresent()) {
 			return;
 		}
-		
+
 		Optional<ItemStack> optionalItemStack = player.getItemInHand(HandTypes.MAIN_HAND);
-		
-		if(!optionalItemStack.isPresent()){
+
+		if (!optionalItemStack.isPresent()) {
 			return;
-		}		
+		}
 		ItemStack itemStack = optionalItemStack.get();
-		
+
 		Optional<ReceiverData> optionalReceiverData = itemStack.get(ReceiverData.class);
-		
-		if(!optionalReceiverData.isPresent()){
+
+		if (!optionalReceiverData.isPresent()) {
 			return;
 		}
 		ReceiverData receiverData = optionalReceiverData.get();
 		Receiver receiver = receiverData.receiver().get();
-		
+
 		receiver.setTransmitter(location);
 
 		player.getInventory().query(itemStack).set(ItemHelper.getReceiver(receiver));
@@ -168,24 +168,24 @@ public class ReceiverListener {
 	}
 
 	@Listener
-	public void onInteractReceiverEvent(InteractBlockEvent.Secondary event, @First Player player){
+	public void onInteractReceiverEvent(InteractBlockEvent.Secondary event, @First Player player) {
 		BlockSnapshot snapshot = event.getTargetBlock();
 
 		Optional<Location<World>> optionalLocation = snapshot.getLocation();
-		
-		if(!optionalLocation.isPresent()){
+
+		if (!optionalLocation.isPresent()) {
 			return;
 		}
 		Location<World> location = optionalLocation.get();
-		
-		if(!snapshot.getState().getType().equals(BlockTypes.STONE_BUTTON)){
+
+		if (!snapshot.getState().getType().equals(BlockTypes.STONE_BUTTON)) {
 			return;
 		}
 
-		if(!Receiver.get(location).isPresent()){
+		if (!Receiver.get(location).isPresent()) {
 			return;
 		}
-		
+
 		event.setUseBlockResult(Tristate.FALSE);
 	}
 }
