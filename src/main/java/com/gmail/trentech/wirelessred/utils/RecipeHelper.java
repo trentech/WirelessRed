@@ -15,19 +15,19 @@ import ninja.leaping.configurate.ConfigurationNode;
 
 public class RecipeHelper {
 
-	public static ShapedRecipe getTransmitter() {
-		return getRecipe(new ConfigManager().getConfig().getNode("recipes", "transmitter"));
+	public static void init() {
+		ConfigurationNode config = new ConfigManager().getConfig().getNode("recipes");
+		
+		try {
+			Main.getGame().getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("transmitter")));
+			Main.getGame().getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("receiver")));
+			Main.getGame().getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("tool")));
+		} catch (InvalidItemTypeException e) {
+			e.printStackTrace();
+		}
 	}
 
-	public static ShapedRecipe getReceiver() {
-		return getRecipe(new ConfigManager().getConfig().getNode("recipes", "receiver"));
-	}
-
-	public static ShapedRecipe getTool() {
-		return getRecipe(new ConfigManager().getConfig().getNode("recipes", "tool"));
-	}
-	
-	private static ShapedRecipe getRecipe(ConfigurationNode node) {
+	private static ShapedRecipe getRecipe(ConfigurationNode node) throws InvalidItemTypeException {
 		Builder builder = Main.getGame().getRegistry().createBuilder(ShapedRecipe.Builder.class);
 
 		for(Entry<Object, ? extends ConfigurationNode> child : node.getChildrenMap().entrySet()) {
@@ -49,7 +49,7 @@ public class RecipeHelper {
 					
 					builder.ingredient(new Vector2i(Integer.parseInt(grid[0]), Integer.parseInt(grid[1])), ItemStack.builder().itemType(optionalItemType.get()).build());
 				}else {
-					throw new NullPointerException("Invalid ItemType");
+					throw new InvalidItemTypeException("ItemType in configuration is invalid");
 				}
 			}
 		}
