@@ -28,7 +28,6 @@ import com.gmail.trentech.wirelessred.listeners.ReceiverListener;
 import com.gmail.trentech.wirelessred.listeners.ToolListener;
 import com.gmail.trentech.wirelessred.listeners.TransmitterListener;
 import com.gmail.trentech.wirelessred.utils.ConfigManager;
-import com.gmail.trentech.wirelessred.utils.RecipeHelper;
 import com.gmail.trentech.wirelessred.utils.Resource;
 import com.gmail.trentech.wirelessred.utils.SQLUtils;
 
@@ -67,9 +66,9 @@ public class Main {
 		getGame().getDataManager().register(ReceiverData.class, ImmutableReceiverData.class, new ReceiverDataManipulatorBuilder());
 		getGame().getDataManager().registerBuilder(Receiver.class, new ReceiverBuilder());
 
-		getGame().getRegistry().getRecipeRegistry().register(RecipeHelper.getTransmitter());
-		getGame().getRegistry().getRecipeRegistry().register(RecipeHelper.getReceiver());
-		getGame().getRegistry().getRecipeRegistry().register(RecipeHelper.getTool());
+//		getGame().getRegistry().getRecipeRegistry().register(RecipeHelper.getTransmitter());
+//		getGame().getRegistry().getRecipeRegistry().register(RecipeHelper.getReceiver());
+//		getGame().getRegistry().getRecipeRegistry().register(RecipeHelper.getTool());
 
 		SQLUtils.createTables();
 	}

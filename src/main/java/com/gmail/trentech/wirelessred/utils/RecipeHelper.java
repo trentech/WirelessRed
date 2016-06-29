@@ -1,6 +1,9 @@
 package com.gmail.trentech.wirelessred.utils;
 
-import org.spongepowered.api.item.ItemTypes;
+import java.util.Map.Entry;
+import java.util.Optional;
+
+import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.recipe.ShapedRecipe;
 import org.spongepowered.api.item.recipe.ShapedRecipe.Builder;
@@ -8,48 +11,48 @@ import org.spongepowered.api.item.recipe.ShapedRecipe.Builder;
 import com.flowpowered.math.vector.Vector2i;
 import com.gmail.trentech.wirelessred.Main;
 
+import ninja.leaping.configurate.ConfigurationNode;
+
 public class RecipeHelper {
 
 	public static ShapedRecipe getTransmitter() {
-		Builder builder = Main.getGame().getRegistry().createBuilder(ShapedRecipe.Builder.class);
-		builder.dimensions(new Vector2i(3, 3));
-
-		builder.ingredient(1, 1, ItemStack.builder().itemType(ItemTypes.REDSTONE_ORE).build());
-		builder.ingredient(1, 2, ItemStack.builder().itemType(ItemTypes.REDSTONE_TORCH).build());
-		builder.ingredient(1, 3, ItemStack.builder().itemType(ItemTypes.REDSTONE_ORE).build());
-		builder.ingredient(2, 1, ItemStack.builder().itemType(ItemTypes.GOLD_INGOT).build());
-		builder.ingredient(2, 2, ItemStack.builder().itemType(ItemTypes.COMPARATOR).build());
-		builder.ingredient(2, 3, ItemStack.builder().itemType(ItemTypes.GOLD_INGOT).build());
-		builder.ingredient(3, 1, ItemStack.builder().itemType(ItemTypes.REDSTONE_ORE).build());
-		builder.ingredient(3, 2, ItemStack.builder().itemType(ItemTypes.REPEATER).build());
-		builder.ingredient(3, 3, ItemStack.builder().itemType(ItemTypes.REDSTONE_ORE).build());
-
-		return builder.build();
+		return getRecipe(new ConfigManager().getConfig().getNode("recipes", "transmitter"));
 	}
 
 	public static ShapedRecipe getReceiver() {
-		Builder builder = Main.getGame().getRegistry().createBuilder(ShapedRecipe.Builder.class);
-		builder.dimensions(new Vector2i(3, 3));
-
-		builder.ingredient(1, 1, ItemStack.builder().itemType(ItemTypes.REDSTONE_ORE).build());
-		builder.ingredient(1, 2, ItemStack.builder().itemType(ItemTypes.REDSTONE_ORE).build());
-		builder.ingredient(1, 3, ItemStack.builder().itemType(ItemTypes.REDSTONE_ORE).build());
-		builder.ingredient(2, 1, ItemStack.builder().itemType(ItemTypes.GOLD_INGOT).build());
-		builder.ingredient(2, 2, ItemStack.builder().itemType(ItemTypes.REDSTONE_TORCH).build());
-		builder.ingredient(2, 3, ItemStack.builder().itemType(ItemTypes.GOLD_INGOT).build());
-		builder.ingredient(3, 1, ItemStack.builder().itemType(ItemTypes.REDSTONE_ORE).build());
-		builder.ingredient(3, 2, ItemStack.builder().itemType(ItemTypes.REDSTONE_ORE).build());
-		builder.ingredient(3, 3, ItemStack.builder().itemType(ItemTypes.REDSTONE_ORE).build());
-
-		return builder.build();
+		return getRecipe(new ConfigManager().getConfig().getNode("recipes", "receiver"));
 	}
 
 	public static ShapedRecipe getTool() {
+		return getRecipe(new ConfigManager().getConfig().getNode("recipes", "tool"));
+	}
+	
+	private static ShapedRecipe getRecipe(ConfigurationNode node) {
 		Builder builder = Main.getGame().getRegistry().createBuilder(ShapedRecipe.Builder.class);
-		builder.dimensions(new Vector2i(2, 2));
 
-		builder.ingredient(1, 1, ItemStack.builder().itemType(ItemTypes.REDSTONE_ORE).build());
-		builder.ingredient(2, 2, ItemStack.builder().itemType(ItemTypes.STICK).build());
+		for(Entry<Object, ? extends ConfigurationNode> child : node.getChildrenMap().entrySet()) {
+			ConfigurationNode childNode = child.getValue();
+			
+			String key = childNode.getKey().toString();
+			
+			if(key.equals("grid_size")) {
+				String[] size = childNode.getString().split("x");
+				
+				builder.dimensions(new Vector2i(Integer.parseInt(size[0]), Integer.parseInt(size[1])));
+			}else {
+				String itemId = childNode.getString();
+				
+				Optional<ItemType> optionalItemType = Main.getGame().getRegistry().getType(ItemType.class, itemId);
+				
+				if(optionalItemType.isPresent()) {
+					String[] grid = key.split("x");
+					
+					builder.ingredient(new Vector2i(Integer.parseInt(grid[0]), Integer.parseInt(grid[1])), ItemStack.builder().itemType(optionalItemType.get()).build());
+				}else {
+					throw new NullPointerException("Invalid ItemType");
+				}
+			}
+		}
 
 		return builder.build();
 	}
