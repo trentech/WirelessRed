@@ -3,13 +3,13 @@ package com.gmail.trentech.wirelessred.utils;
 import java.util.Map.Entry;
 import java.util.Optional;
 
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.recipe.ShapedRecipe;
 import org.spongepowered.api.item.recipe.ShapedRecipe.Builder;
 
 import com.flowpowered.math.vector.Vector2i;
-import com.gmail.trentech.wirelessred.Main;
 
 import ninja.leaping.configurate.ConfigurationNode;
 
@@ -19,16 +19,16 @@ public class RecipeHelper {
 		ConfigurationNode config = new ConfigManager().getConfig().getNode("recipes");
 		
 		try {
-			Main.getGame().getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("transmitter")));
-			Main.getGame().getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("receiver")));
-			Main.getGame().getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("tool")));
+			Sponge.getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("transmitter")));
+			Sponge.getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("receiver")));
+			Sponge.getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("tool")));
 		} catch (InvalidItemTypeException e) {
 			e.printStackTrace();
 		}
 	}
 
 	private static ShapedRecipe getRecipe(ConfigurationNode node) throws InvalidItemTypeException {
-		Builder builder = Main.getGame().getRegistry().createBuilder(ShapedRecipe.Builder.class);
+		Builder builder = Sponge.getRegistry().createBuilder(ShapedRecipe.Builder.class);
 
 		for(Entry<Object, ? extends ConfigurationNode> child : node.getChildrenMap().entrySet()) {
 			ConfigurationNode childNode = child.getValue();
@@ -42,7 +42,7 @@ public class RecipeHelper {
 			}else {
 				String itemId = childNode.getString();
 				
-				Optional<ItemType> optionalItemType = Main.getGame().getRegistry().getType(ItemType.class, itemId);
+				Optional<ItemType> optionalItemType = Sponge.getRegistry().getType(ItemType.class, itemId);
 				
 				if(optionalItemType.isPresent()) {
 					String[] grid = key.split("x");

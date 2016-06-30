@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.effect.particle.ParticleEffect;
 import org.spongepowered.api.effect.particle.ParticleTypes;
@@ -110,13 +111,13 @@ public class TransmitterHelper {
 
 		String name = location.getExtent().getName() + ":" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ();
 
-		if (!Main.getGame().getScheduler().getTasksByName(name).isEmpty()) {
+		if (!Sponge.getScheduler().getTasksByName(name).isEmpty()) {
 			return;
 		}
 
 		ParticleEffect particle = ParticleEffect.builder().type(ParticleTypes.REDSTONE).build();
 
-		Main.getGame().getScheduler().createTaskBuilder().interval(400, TimeUnit.MILLISECONDS).name(name).execute(t -> {
+		Sponge.getScheduler().createTaskBuilder().interval(400, TimeUnit.MILLISECONDS).name(name).execute(t -> {
 			if (random.nextDouble() > .8) {
 				location.getExtent().spawnParticles(particle, location.getPosition().add(random.nextDouble(), random.nextDouble(), random.nextDouble()));
 			} // .add(.5, .8, .5));
@@ -132,7 +133,7 @@ public class TransmitterHelper {
 	public static void disableParticles(Location<World> location) {
 		String name = location.getExtent().getName() + ":" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ();
 
-		for (Task task : Main.getGame().getScheduler().getScheduledTasks()) {
+		for (Task task : Sponge.getScheduler().getScheduledTasks()) {
 			if (task.getName().equals(name)) {
 				task.cancel();
 			}

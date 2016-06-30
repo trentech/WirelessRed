@@ -3,13 +3,13 @@ package com.gmail.trentech.wirelessred.data.transmitter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.DataSerializable;
 import org.spongepowered.api.data.MemoryDataContainer;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
-import com.gmail.trentech.wirelessred.Main;
 import com.gmail.trentech.wirelessred.data.DataQueries;
 import com.gmail.trentech.wirelessred.data.receiver.Receiver;
 import com.gmail.trentech.wirelessred.utils.ConfigManager;
@@ -44,10 +44,10 @@ public class Transmitter implements DataSerializable {
 		for (String receiver : this.receivers) {
 			String[] args = receiver.split(":");
 
-			if (!Main.getGame().getServer().getWorld(args[0]).isPresent()) {
+			if (!Sponge.getServer().getWorld(args[0]).isPresent()) {
 				continue;
 			}
-			World world = Main.getGame().getServer().getWorld(args[0]).get();
+			World world = Sponge.getServer().getWorld(args[0]).get();
 
 			int x = Integer.parseInt(args[1]);
 			int y = Integer.parseInt(args[2]);

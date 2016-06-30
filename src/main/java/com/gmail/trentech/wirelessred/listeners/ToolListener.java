@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.Entity;
@@ -119,7 +120,7 @@ public class ToolListener {
 
 			player.setScoreboard(scoreboard);
 
-			Main.getGame().getScheduler().createTaskBuilder().async().delayTicks(100).execute(runnable -> {
+			Sponge.getScheduler().createTaskBuilder().async().delayTicks(100).execute(runnable -> {
 				player.setScoreboard(Scoreboard.builder().build());
 			}).submit(Main.getPlugin());
 		}
@@ -216,7 +217,7 @@ public class ToolListener {
 
 			player.setScoreboard(scoreboard);
 
-			Main.getGame().getScheduler().createTaskBuilder().async().delayTicks(100).execute(runnable -> {
+			Sponge.getScheduler().createTaskBuilder().async().delayTicks(100).execute(runnable -> {
 				player.setScoreboard(Scoreboard.builder().build());
 			}).submit(Main.getPlugin());
 		}

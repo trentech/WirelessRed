@@ -6,13 +6,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.DataSerializable;
 import org.spongepowered.api.data.MemoryDataContainer;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
-import com.gmail.trentech.wirelessred.Main;
 import com.gmail.trentech.wirelessred.data.DataQueries;
 import com.gmail.trentech.wirelessred.utils.SQLUtils;
 
@@ -37,10 +37,10 @@ public class Receiver extends SQLUtils implements DataSerializable {
 	public Optional<Location<World>> getTransmitter() {
 		String[] args = this.transmitter.split(":");
 
-		if (!Main.getGame().getServer().getWorld(args[0]).isPresent()) {
+		if (!Sponge.getServer().getWorld(args[0]).isPresent()) {
 			return Optional.empty();
 		}
-		World world = Main.getGame().getServer().getWorld(args[0]).get();
+		World world = Sponge.getServer().getWorld(args[0]).get();
 
 		int x = Integer.parseInt(args[1]);
 		int y = Integer.parseInt(args[2]);

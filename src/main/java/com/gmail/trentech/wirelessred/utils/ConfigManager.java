@@ -74,12 +74,23 @@ public class ConfigManager {
 		if (config.getNode("starting_range").isVirtual()) {
 			config.getNode("starting_range").setValue("32");			
 		}
+		if (config.getNode("economy").isVirtual()) {
+			config.getNode("economy", "items", "tool").setValue(50.0);
+			config.getNode("economy", "items", "transmitter").setValue(50.0);
+			config.getNode("economy", "items", "receiver").setValue(50.0);
+			config.getNode("economy", "items", "upgrade_64").setValue(50.0);
+			config.getNode("economy", "items", "upgrade_128").setValue(100.0);
+			config.getNode("economy", "items", "upgrade_256").setValue(150.0);
+			config.getNode("economy", "items", "upgrade_512").setValue(175.0);
+			config.getNode("economy", "items", "upgrade_unlimited").setValue(200.0);
+			config.getNode("economy", "enable").setValue(true);
+		}
 		if (config.getNode("recipes", "tool").isVirtual()) {
 			config.getNode("recipes", "tool", "grid_size").setValue("2x2");
-			config.getNode("recipes", "tool", "1,1").setValue(ItemTypes.REDSTONE.getId());
-			config.getNode("recipes", "tool", "1,2").setValue(ItemTypes.NONE.getId());
-			config.getNode("recipes", "tool", "2,1").setValue(ItemTypes.NONE.getId());
-			config.getNode("recipes", "tool", "2,2").setValue(ItemTypes.STICK.getId());
+			config.getNode("recipes", "tool", "1x1").setValue(ItemTypes.REDSTONE.getId());
+			config.getNode("recipes", "tool", "1x2").setValue(ItemTypes.NONE.getId());
+			config.getNode("recipes", "tool", "2x1").setValue(ItemTypes.NONE.getId());
+			config.getNode("recipes", "tool", "2x2").setValue(ItemTypes.STICK.getId());
 		}
 		if (config.getNode("recipes", "receiver").isVirtual()) {
 			config.getNode("recipes", "receiver", "grid_size").setValue("3x3");
