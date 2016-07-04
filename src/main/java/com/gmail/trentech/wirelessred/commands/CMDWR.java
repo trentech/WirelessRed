@@ -29,38 +29,38 @@ public class CMDWR implements CommandExecutor {
 		ConfigurationNode config = new ConfigManager().getConfig();
 	
 		if (src.hasPermission("wirelessred.cmd.wr.transmitter")) {
-			if(config.getNode("economy", "enable").getBoolean() && !src.hasPermission("wirelessred.admin")) {
-				double cost = config.getNode("economy", "items", "transmitter").getDouble();
+			if(config.getNode("settings", "economy", "enable").getBoolean() && !src.hasPermission("wirelessred.admin")) {
+				double cost = config.getNode("settings", "economy", "items", "transmitter").getDouble();
 				list.add(Text.of(TextColors.GREEN, "/wr transmitter", TextColors.YELLOW, " - $", cost));
 			}else {
 				list.add(Text.of(TextColors.GREEN, "/wr transmitter"));
 			}
 		}
 		if (src.hasPermission("wirelessred.cmd.wr.receiver")) {
-			if(config.getNode("economy", "enable").getBoolean() && !src.hasPermission("wirelessred.admin")) {
-				double cost = config.getNode("economy", "items", "receiver").getDouble();
+			if(config.getNode("settings", "economy", "enable").getBoolean() && !src.hasPermission("wirelessred.admin")) {
+				double cost = config.getNode("settings", "economy", "items", "receiver").getDouble();
 				list.add(Text.of(TextColors.GREEN, "/wr receiver", TextColors.YELLOW, " - $", cost));
 			}else {
 				list.add(Text.of(TextColors.GREEN, "/wr receiver"));
 			}
 		}
 		if (src.hasPermission("wirelessred.cmd.wr.tool")) {
-			if(config.getNode("economy", "enable").getBoolean() && !src.hasPermission("wirelessred.admin")) {
-				double cost = config.getNode("economy", "items", "tool").getDouble();
+			if(config.getNode("settings", "economy", "enable").getBoolean() && !src.hasPermission("wirelessred.admin")) {
+				double cost = config.getNode("settings", "economy", "items", "tool").getDouble();
 				list.add(Text.of(TextColors.GREEN, "/wr tool", TextColors.YELLOW, " - $", cost));
 			}else {
 				list.add(Text.of(TextColors.GREEN, "/wr tool"));
 			}
 		}
 		if (src.hasPermission("wirelessred.cmd.wr.upgrade")) {
-			double cost64 = config.getNode("economy", "items", "upgrade_64").getDouble();
-			double cost128 = config.getNode("economy", "items", "upgrade_128").getDouble();
-			double cost256 = config.getNode("economy", "items", "upgrade_256").getDouble();
-			double cost512 = config.getNode("economy", "items", "upgrade_512").getDouble();
-			double costUnl = config.getNode("economy", "items", "upgrade_unlimited").getDouble();			
+			double cost64 = config.getNode("settings", "economy", "items", "upgrade_64").getDouble();
+			double cost128 = config.getNode("settings", "economy", "items", "upgrade_128").getDouble();
+			double cost256 = config.getNode("settings", "economy", "items", "upgrade_256").getDouble();
+			double cost512 = config.getNode("settings", "economy", "items", "upgrade_512").getDouble();
+			double costUnl = config.getNode("settings", "economy", "items", "upgrade_unlimited").getDouble();			
 			
 			Text level;
-			if(config.getNode("economy", "enable").getBoolean() && !src.hasPermission("wirelessred.admin")) {
+			if(config.getNode("settings", "economy", "enable").getBoolean() && !src.hasPermission("wirelessred.admin")) {
 				level = Text.builder().color(TextColors.GREEN).onHover(TextActions.showText(Text.of("64 - $", cost64, "\n128 - $", cost128, "\n256 - $", cost256, "\n512 - $", cost512, "\nUnlimited - $", costUnl))).append(Text.of("<level>")).build();
 			}else {
 				level = Text.builder().color(TextColors.GREEN).onHover(TextActions.showText(Text.of("64\n128\n256\n512\nUnlimited"))).append(Text.of("<level>")).build();				

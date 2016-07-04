@@ -22,7 +22,7 @@ public class Transmitter implements DataSerializable {
 	private boolean multiWorld = false;
 
 	public Transmitter() {
-		String range = new ConfigManager().getConfig().getNode("starting_range").getString();
+		String range = new ConfigManager().getConfig().getNode("settings", "starting_range").getString();
 		if (range.equalsIgnoreCase("unlimited")) {
 			this.range = 60000000;
 			this.multiWorld = true;

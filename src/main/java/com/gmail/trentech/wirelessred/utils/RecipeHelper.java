@@ -22,6 +22,11 @@ public class RecipeHelper {
 			Sponge.getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("transmitter")));
 			Sponge.getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("receiver")));
 			Sponge.getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("tool")));
+			Sponge.getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("upgrade_64")));
+			Sponge.getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("upgrade_128")));
+			Sponge.getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("upgrade_256")));
+			Sponge.getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("upgrade_512")));
+			Sponge.getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("upgrade_unlimited")));
 		} catch (InvalidItemTypeException e) {
 			e.printStackTrace();
 		}

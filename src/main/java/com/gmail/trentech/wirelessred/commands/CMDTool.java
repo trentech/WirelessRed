@@ -35,8 +35,8 @@ public class CMDTool implements CommandExecutor {
 
 		ConfigurationNode config = new ConfigManager().getConfig();
 		
-		if(config.getNode("economy", "enable").getBoolean() && !src.hasPermission("wirelessred.admin")) {
-			double cost = config.getNode("economy", "items", "tool").getDouble();
+		if(config.getNode("settings", "economy", "enable").getBoolean() && !src.hasPermission("wirelessred.admin")) {
+			double cost = config.getNode("settings", "economy", "items", "tool").getDouble();
 			
 			Optional<EconomyService> optionalEconomy = Sponge.getServiceManager().provide(EconomyService.class);
 

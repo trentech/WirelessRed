@@ -70,8 +70,8 @@ public class CMDUpgrade implements CommandExecutor {
 	private boolean charge(Player player, String arg) {
 		ConfigurationNode config = new ConfigManager().getConfig();
 		
-		if(config.getNode("economy", "enable").getBoolean() && !player.hasPermission("wirelessred.admin")) {
-			double cost = config.getNode("economy", "items", "upgrade_" + arg).getDouble();
+		if(config.getNode("settings", "economy", "enable").getBoolean() && !player.hasPermission("wirelessred.admin")) {
+			double cost = config.getNode("settings", "economy", "items", "upgrade_" + arg).getDouble();
 			
 			Optional<EconomyService> optionalEconomy = Sponge.getServiceManager().provide(EconomyService.class);
 
