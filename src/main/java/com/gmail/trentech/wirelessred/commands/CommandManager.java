@@ -28,7 +28,7 @@ public class CommandManager {
 		    .build();
 	
 	public CommandSpec cmdWR = CommandSpec.builder()
-		    .permission("worldbackup.cmd.wr")
+		    .permission("wirelessred.cmd.wr")
 		    .child(cmdReceiver, "receiver", "r")
 		    .child(cmdTransmitter, "transmitter", "t")
 		    .child(cmdTool, "tool", "tl")
