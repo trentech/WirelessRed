@@ -2,10 +2,11 @@ package com.gmail.trentech.wirelessred.utils;
 
 public class Resource {
 
-	public final static String NAME = "Wireless Red";
+	public final static String NAME = "@project.name@";
+	public final static String ID = "@project.id@";
 	public final static String VERSION = "@project.version@";
-	public final static String ID = "com.gmail.trentech.wirelessred";
-	public final static String AUTHOR = "TrenTech";
-	public final static String URL = "http://github.com/TrenTech/WirelessRed";
+	public final static String DESCRIPTION = "@project.description@";
+	public final static String AUTHOR = "@project.author@";
+	public final static String URL = "@project.url@";
 
 }
