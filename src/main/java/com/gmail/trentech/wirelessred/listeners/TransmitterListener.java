@@ -3,6 +3,7 @@ package com.gmail.trentech.wirelessred.listeners;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.function.Predicate;
 import java.util.Optional;
 
 import org.spongepowered.api.block.BlockSnapshot;
@@ -226,15 +227,10 @@ public class TransmitterListener {
 
 	@Listener
 	public void onLoadChunkEvent(UnloadChunkEvent event) {
-		for (TileEntity tileEntity : event.getTargetChunk().getTileEntities()) {
+		for (TileEntity tileEntity : event.getTargetChunk().getTileEntities(getFilter())) {
 			Location<World> location = tileEntity.getLocation();
 
-			Optional<TransmitterData> optionalTransmitterData = location.get(TransmitterData.class);
-
-			if (!optionalTransmitterData.isPresent()) {
-				return;
-			}
-			Transmitter transmitter = optionalTransmitterData.get().transmitter().get();
+			Transmitter transmitter = location.get(TransmitterData.class).get().transmitter().get();
 
 			if (!transmitter.isEnabled()) {
 				return;
@@ -246,15 +242,10 @@ public class TransmitterListener {
 
 	@Listener
 	public void onLoadChunkEvent(LoadChunkEvent event) {
-		for (TileEntity tileEntity : event.getTargetChunk().getTileEntities()) {
+		for (TileEntity tileEntity : event.getTargetChunk().getTileEntities(getFilter())) {
 			Location<World> location = tileEntity.getLocation();
 
-			Optional<TransmitterData> optionalTransmitterData = location.get(TransmitterData.class);
-
-			if (!optionalTransmitterData.isPresent()) {
-				return;
-			}
-			Transmitter transmitter = optionalTransmitterData.get().transmitter().get();
+			Transmitter transmitter = location.get(TransmitterData.class).get().transmitter().get();
 
 			if (!transmitter.isEnabled()) {
 				return;
@@ -262,5 +253,15 @@ public class TransmitterListener {
 
 			TransmitterHelper.enableParticles(location);
 		}
+	}
+	
+	private Predicate<TileEntity> getFilter() {
+		return new Predicate<TileEntity>() {
+
+			@Override
+			public boolean test(TileEntity tileEntity) {
+				return tileEntity.getLocation().get(TransmitterData.class).isPresent();
+			}
+		};
 	}
 }
