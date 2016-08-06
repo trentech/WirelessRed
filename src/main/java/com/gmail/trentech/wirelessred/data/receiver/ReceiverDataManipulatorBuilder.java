@@ -7,18 +7,32 @@ import java.util.Optional;
 import org.spongepowered.api.data.DataHolder;
 import org.spongepowered.api.data.DataView;
 import org.spongepowered.api.data.manipulator.DataManipulatorBuilder;
+import org.spongepowered.api.data.persistence.AbstractDataBuilder;
 import org.spongepowered.api.data.persistence.InvalidDataException;
 
-public class ReceiverDataManipulatorBuilder implements DataManipulatorBuilder<ReceiverData, ImmutableReceiverData> {
+public class ReceiverDataManipulatorBuilder extends AbstractDataBuilder<ReceiverData> implements DataManipulatorBuilder<ReceiverData, ImmutableReceiverData> {
+
+	public ReceiverDataManipulatorBuilder() {
+		super(ReceiverData.class, 1);
+	}
 
 	@Override
-	public Optional<ReceiverData> build(DataView container) throws InvalidDataException {
+	protected Optional<ReceiverData> buildContent(DataView container) throws InvalidDataException {
 		if (!container.contains(RECEIVER.getQuery())) {
 			return Optional.empty();
 		}
 		Receiver sign = container.getSerializable(RECEIVER.getQuery(), Receiver.class).get();
 		return Optional.of(new ReceiverData(sign));
 	}
+	
+//	@Override
+//	public Optional<ReceiverData> build(DataView container) throws InvalidDataException {
+//		if (!container.contains(RECEIVER.getQuery())) {
+//			return Optional.empty();
+//		}
+//		Receiver sign = container.getSerializable(RECEIVER.getQuery(), Receiver.class).get();
+//		return Optional.of(new ReceiverData(sign));
+//	}
 
 	@Override
 	public ReceiverData create() {

@@ -3,8 +3,8 @@ package com.gmail.trentech.wirelessred.listeners;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.function.Predicate;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockState;
@@ -13,7 +13,6 @@ import org.spongepowered.api.block.tileentity.TileEntity;
 import org.spongepowered.api.data.Transaction;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.type.HandTypes;
-import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.Item;
 import org.spongepowered.api.entity.living.player.Player;
@@ -67,13 +66,10 @@ public class TransmitterListener {
 
 			ItemStack itemStack = ItemHelper.getTransmitter(transmitterData);
 
-			Optional<Entity> itemEntity = location.getExtent().createEntity(EntityTypes.ITEM, location.getPosition());
-
-			if (itemEntity.isPresent()) {
-				Item item = (Item) itemEntity.get();
-				item.offer(Keys.REPRESENTED_ITEM, itemStack.createSnapshot());
-				location.getExtent().spawnEntity(item, Cause.of(NamedCause.source(EntitySpawnCause.builder().entity(item).type(SpawnTypes.PLUGIN).build())));
-			}
+			Item item = (Item) location.getExtent().createEntity(EntityTypes.ITEM, location.getPosition());
+			item.offer(Keys.REPRESENTED_ITEM, itemStack.createSnapshot());
+			
+			location.getExtent().spawnEntity(item, Cause.of(NamedCause.source(EntitySpawnCause.builder().entity(item).type(SpawnTypes.PLUGIN).build())));
 		}
 	}
 
