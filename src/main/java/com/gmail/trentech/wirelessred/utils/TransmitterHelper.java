@@ -10,6 +10,8 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.effect.particle.ParticleEffect;
 import org.spongepowered.api.effect.particle.ParticleTypes;
+import org.spongepowered.api.event.cause.Cause;
+import org.spongepowered.api.event.cause.NamedCause;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
@@ -49,7 +51,7 @@ public class TransmitterHelper {
 
 			receiver.setEnabled(enable);
 			receiver.updateEnabled(receiverLocation);
-			receiverLocation.offer(Keys.POWERED, enable);
+			receiverLocation.offer(Keys.POWERED, enable, Cause.of(NamedCause.source(Main.getPlugin())));
 		}
 
 		List<Text> lines = new ArrayList<>();

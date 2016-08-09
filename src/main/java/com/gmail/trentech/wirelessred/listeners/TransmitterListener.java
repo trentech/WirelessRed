@@ -121,8 +121,6 @@ public class TransmitterListener {
 			receiver.updateTransmitter(receiverLocation);
 		}
 
-		// location.offer(transmitterData);
-
 		TransmitterHelper.toggleTransmitter(transmitterData, location);
 
 		player.getInventory().query(itemStack).poll(1);
