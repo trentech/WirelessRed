@@ -49,7 +49,7 @@ public class TransmitterHelper {
 
 			receiver.setEnabled(enable);
 			receiver.updateEnabled(receiverLocation);
-			System.out.println(receiverLocation.offer(Keys.POWERED, enable).isSuccessful());
+			receiverLocation.offer(Keys.POWERED, enable);
 		}
 
 		List<Text> lines = new ArrayList<>();
