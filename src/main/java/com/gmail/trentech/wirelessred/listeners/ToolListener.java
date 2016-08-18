@@ -167,7 +167,7 @@ public class ToolListener {
 			item.offer(Keys.REPRESENTED_ITEM, spawnItemStack.createSnapshot());
 			
 			location.getExtent().spawnEntity(item, Cause.of(NamedCause.source(EntitySpawnCause.builder().entity(item).type(SpawnTypes.PLUGIN).build())));
-			location.offer(Keys.POWERED, false);
+			location.offer(Keys.POWERED, false, Cause.of(NamedCause.source(Main.getPlugin())));
 		} else {
 			Scoreboard scoreboard = Scoreboard.builder().build();
 

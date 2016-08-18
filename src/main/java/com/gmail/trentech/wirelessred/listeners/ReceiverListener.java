@@ -26,6 +26,7 @@ import org.spongepowered.api.util.Tristate;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
+import com.gmail.trentech.wirelessred.Main;
 import com.gmail.trentech.wirelessred.data.receiver.Receiver;
 import com.gmail.trentech.wirelessred.data.receiver.ReceiverData;
 import com.gmail.trentech.wirelessred.data.transmitter.TransmitterData;
@@ -119,7 +120,7 @@ public class ReceiverListener {
 		if (transmitterData.transmitter().get().isEnabled()) {
 			if (transmitter.getPosition().distance(location.getPosition()) <= transmitterData.transmitter().get().getRange()) {
 				receiver.setEnabled(true);
-				location.offer(Keys.POWERED, true);
+				location.offer(Keys.POWERED, true, Cause.of(NamedCause.source(Main.getPlugin())));
 			}
 		}
 
