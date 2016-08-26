@@ -19,8 +19,7 @@ import org.spongepowered.api.text.format.TextColors;
 
 import com.gmail.trentech.wirelessred.Main;
 import com.gmail.trentech.wirelessred.data.transmitter.TransmitterData;
-import com.gmail.trentech.wirelessred.utils.ConfigManager;
-import com.gmail.trentech.wirelessred.utils.ItemHelper;
+import com.gmail.trentech.wirelessred.init.Items;
 
 import ninja.leaping.configurate.ConfigurationNode;
 
@@ -34,10 +33,21 @@ public class CMDTransmitter implements CommandExecutor {
 		}
 		Player player = (Player) src;
 
-		ConfigurationNode config = new ConfigManager().getConfig();
+		int quantity = 1;
+		
+		if (args.hasAny("quantity")) {
+			try {
+				quantity = Integer.parseInt(args.<String> getOne("quantity").get());
+			} catch (Exception e) {
+				player.sendMessage(Text.of(TextColors.YELLOW, "/wr transmitter [quantity]"));
+				return CommandResult.empty();
+			};	
+		}
+		
+		ConfigurationNode config = Main.getConfigManager().getConfig();
 		
 		if(config.getNode("settings", "economy", "enable").getBoolean() && !src.hasPermission("wirelessred.admin")) {
-			double cost = config.getNode("settings", "economy", "items", "transmitter").getDouble();
+			double cost = config.getNode("settings", "economy", "items", "transmitter").getDouble() * quantity;
 			
 			Optional<EconomyService> optionalEconomy = Sponge.getServiceManager().provide(EconomyService.class);
 
@@ -57,7 +67,7 @@ public class CMDTransmitter implements CommandExecutor {
 			player.sendMessage(Text.of(TextColors.GREEN, "You were charged ", TextColors.YELLOW, "$", cost));
 		}
 		
-		player.getInventory().offer(ItemHelper.getTransmitter(new TransmitterData()));
+		player.getInventory().offer(Items.getTransmitter(new TransmitterData(), quantity));
 
 		return CommandResult.success();
 	}

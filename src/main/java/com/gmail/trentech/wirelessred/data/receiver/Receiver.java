@@ -10,9 +10,13 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.DataSerializable;
 import org.spongepowered.api.data.MemoryDataContainer;
+import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.event.cause.Cause;
+import org.spongepowered.api.event.cause.NamedCause;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
+import com.gmail.trentech.wirelessred.Main;
 import com.gmail.trentech.wirelessred.data.DataQueries;
 import com.gmail.trentech.wirelessred.utils.SQLUtils;
 
@@ -114,6 +118,10 @@ public class Receiver extends SQLUtils implements DataSerializable {
 			statement.executeUpdate();
 
 			connection.close();
+			
+			Sponge.getScheduler().createTaskBuilder().delayTicks(5).execute(c -> {
+				location.offer(Keys.POWERED, enabled, Cause.of(NamedCause.source(Main.getPlugin())));
+			}).submit(Main.getPlugin());			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -131,6 +139,10 @@ public class Receiver extends SQLUtils implements DataSerializable {
 
 			statement.executeUpdate();
 			connection.close();
+			
+			Sponge.getScheduler().createTaskBuilder().delayTicks(5).execute(c -> {
+				location.offer(Keys.POWERED, enabled, Cause.of(NamedCause.source(Main.getPlugin())));
+			}).submit(Main.getPlugin());	
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -165,6 +177,10 @@ public class Receiver extends SQLUtils implements DataSerializable {
 			statement.executeUpdate();
 
 			connection.close();
+			
+			Sponge.getScheduler().createTaskBuilder().delayTicks(5).execute(c -> {
+				location.offer(Keys.POWERED, false, Cause.of(NamedCause.source(Main.getPlugin())));
+			}).submit(Main.getPlugin());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

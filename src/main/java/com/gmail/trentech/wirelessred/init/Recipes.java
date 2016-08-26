@@ -1,4 +1,4 @@
-package com.gmail.trentech.wirelessred.utils;
+package com.gmail.trentech.wirelessred.init;
 
 import java.util.Map.Entry;
 import java.util.Optional;
@@ -10,13 +10,15 @@ import org.spongepowered.api.item.recipe.ShapedRecipe;
 import org.spongepowered.api.item.recipe.ShapedRecipe.Builder;
 
 import com.flowpowered.math.vector.Vector2i;
+import com.gmail.trentech.wirelessred.Main;
+import com.gmail.trentech.wirelessred.utils.InvalidItemTypeException;
 
 import ninja.leaping.configurate.ConfigurationNode;
 
-public class RecipeHelper {
+public class Recipes {
 
 	public static void init() {
-		ConfigurationNode config = new ConfigManager().getConfig().getNode("recipes");
+		ConfigurationNode config = Main.getConfigManager().getConfig().getNode("recipes");
 		
 		try {
 			Sponge.getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("transmitter")));
@@ -32,6 +34,23 @@ public class RecipeHelper {
 		}
 	}
 
+	public static void remove() {
+		ConfigurationNode config = Main.getConfigManager().getConfig().getNode("recipes");
+		
+		try{	
+			Sponge.getRegistry().getRecipeRegistry().remove(getRecipe(config.getNode("transmitter")));
+			Sponge.getRegistry().getRecipeRegistry().remove(getRecipe(config.getNode("receiver")));
+			Sponge.getRegistry().getRecipeRegistry().remove(getRecipe(config.getNode("tool")));
+			Sponge.getRegistry().getRecipeRegistry().remove(getRecipe(config.getNode("upgrade_64")));
+			Sponge.getRegistry().getRecipeRegistry().remove(getRecipe(config.getNode("upgrade_128")));
+			Sponge.getRegistry().getRecipeRegistry().remove(getRecipe(config.getNode("upgrade_256")));
+			Sponge.getRegistry().getRecipeRegistry().remove(getRecipe(config.getNode("upgrade_512")));
+			Sponge.getRegistry().getRecipeRegistry().remove(getRecipe(config.getNode("upgrade_unlimited")));
+		} catch (InvalidItemTypeException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private static ShapedRecipe getRecipe(ConfigurationNode node) throws InvalidItemTypeException {
 		Builder builder = Sponge.getRegistry().createBuilder(ShapedRecipe.Builder.class);
 
@@ -54,7 +73,7 @@ public class RecipeHelper {
 					
 					builder.ingredient(new Vector2i(Integer.parseInt(grid[0]), Integer.parseInt(grid[1])), ItemStack.builder().itemType(optionalItemType.get()).build());
 				}else {
-					throw new InvalidItemTypeException("ItemType in configuration is invalid");
+					throw new InvalidItemTypeException("ItemType in config.conf at " + childNode.getKey().toString() + " is invalid");
 				}
 			}
 		}

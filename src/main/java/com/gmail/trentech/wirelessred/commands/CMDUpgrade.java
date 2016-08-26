@@ -19,8 +19,7 @@ import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
 import com.gmail.trentech.wirelessred.Main;
-import com.gmail.trentech.wirelessred.utils.ConfigManager;
-import com.gmail.trentech.wirelessred.utils.ItemHelper;
+import com.gmail.trentech.wirelessred.init.Items;
 
 import ninja.leaping.configurate.ConfigurationNode;
 
@@ -40,25 +39,36 @@ public class CMDUpgrade implements CommandExecutor {
 		}
 		String level = args.<String> getOne("level").get();
 		
+		int quantity = 1;
+		
+		if (args.hasAny("quantity")) {
+			try {
+				quantity = Integer.parseInt(args.<String> getOne("quantity").get());
+			} catch (Exception e) {
+				player.sendMessage(getUsage());
+				return CommandResult.empty();
+			};	
+		}
+		
 		if(level.equalsIgnoreCase("64")) {
-			if(charge(player, "64")) {
-				player.getInventory().offer(ItemHelper.getUpgrade("64"));
+			if(charge(player, "64", quantity)) {
+				player.getInventory().offer(Items.getUpgrade("64", quantity));
 			}		
 		} else if (level.equalsIgnoreCase("128")) {
-			if(charge(player, "128")) {
-				player.getInventory().offer(ItemHelper.getUpgrade("128"));
+			if(charge(player, "128", quantity)) {
+				player.getInventory().offer(Items.getUpgrade("128", quantity));
 			}
 		} else if (level.equalsIgnoreCase("256")) {
-			if(charge(player, "256")) {
-				player.getInventory().offer(ItemHelper.getUpgrade("256"));
+			if(charge(player, "256", quantity)) {
+				player.getInventory().offer(Items.getUpgrade("256", quantity));
 			}
 		} else if (level.equalsIgnoreCase("512")) {
-			if(charge(player, "512")) {
-				player.getInventory().offer(ItemHelper.getUpgrade("512"));
+			if(charge(player, "512", quantity)) {
+				player.getInventory().offer(Items.getUpgrade("512", quantity));
 			}
 		} else if (level.equalsIgnoreCase("Unlimited")) {
-			if(charge(player, "Unlimited")) {
-				player.getInventory().offer(ItemHelper.getUpgrade("Unlimited"));
+			if(charge(player, "Unlimited", quantity)) {
+				player.getInventory().offer(Items.getUpgrade("Unlimited", quantity));
 			}
 		} else {
 			player.sendMessage(getUsage());
@@ -67,11 +77,11 @@ public class CMDUpgrade implements CommandExecutor {
 		return CommandResult.success();
 	}
 	
-	private boolean charge(Player player, String arg) {
-		ConfigurationNode config = new ConfigManager().getConfig();
+	private boolean charge(Player player, String arg, int quantity) {
+		ConfigurationNode config = Main.getConfigManager().getConfig();
 		
 		if(config.getNode("settings", "economy", "enable").getBoolean() && !player.hasPermission("wirelessred.admin")) {
-			double cost = config.getNode("settings", "economy", "items", "upgrade_" + arg).getDouble();
+			double cost = config.getNode("settings", "economy", "items", "upgrade_" + arg).getDouble() * quantity;
 			
 			Optional<EconomyService> optionalEconomy = Sponge.getServiceManager().provide(EconomyService.class);
 
@@ -93,9 +103,11 @@ public class CMDUpgrade implements CommandExecutor {
 		
 		return true;
 	}
+	
 	private Text getUsage() {
 		Text t1 = Text.of(TextColors.YELLOW, "/wr upgrade ");
-		Text t2 = Text.builder().color(TextColors.YELLOW).onHover(TextActions.showText(Text.of("64\n128\n256\n512\nUnlimited"))).append(Text.of("<level>")).build();
-		return Text.of(t1, t2);
+		Text t2 = Text.builder().color(TextColors.YELLOW).onHover(TextActions.showText(Text.of("64\n128\n256\n512\nUnlimited"))).append(Text.of("<level> ")).build();
+		Text t3 = Text.of(TextColors.YELLOW, "[quantity]");
+		return Text.of(t1, t2, t3);
 	}
 }

@@ -3,6 +3,7 @@ package com.gmail.trentech.wirelessred;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.game.GameReloadEvent;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.plugin.Dependency;
@@ -20,11 +21,11 @@ import com.gmail.trentech.wirelessred.data.transmitter.Transmitter;
 import com.gmail.trentech.wirelessred.data.transmitter.TransmitterBuilder;
 import com.gmail.trentech.wirelessred.data.transmitter.TransmitterData;
 import com.gmail.trentech.wirelessred.data.transmitter.TransmitterDataManipulatorBuilder;
+import com.gmail.trentech.wirelessred.init.Recipes;
 import com.gmail.trentech.wirelessred.listeners.ReceiverListener;
 import com.gmail.trentech.wirelessred.listeners.ToolListener;
 import com.gmail.trentech.wirelessred.listeners.TransmitterListener;
 import com.gmail.trentech.wirelessred.utils.ConfigManager;
-import com.gmail.trentech.wirelessred.utils.RecipeHelper;
 import com.gmail.trentech.wirelessred.utils.Resource;
 import com.gmail.trentech.wirelessred.utils.SQLUtils;
 
@@ -36,7 +37,8 @@ public class Main {
 
 	private static Logger log;
 	private static PluginContainer plugin;
-
+	private static ConfigManager configManager;
+	
 	@Listener
 	public void onPreInitialization(GamePreInitializationEvent event) {
 		plugin = Sponge.getPluginManager().getPlugin(Resource.ID).get();
@@ -45,7 +47,7 @@ public class Main {
 
 	@Listener
 	public void onInitialization(GameInitializationEvent event) {
-		new ConfigManager().init();
+		configManager = new ConfigManager().init();
 
 		Sponge.getEventManager().registerListeners(this, new TransmitterListener());
 		Sponge.getEventManager().registerListeners(this, new ReceiverListener());
@@ -59,12 +61,31 @@ public class Main {
 		Sponge.getDataManager().registerBuilder(Receiver.class, new ReceiverBuilder());
 
 		try{
-			RecipeHelper.init();
+			Recipes.init();
 		}catch(Exception e) {
 			getLog().warn("Recipe registration failed. This could be an implementation error.");
 		}
-
+		
 		SQLUtils.createTables();
+	}
+	
+	@Listener
+	public void onReloadEvent(GameReloadEvent event) {
+		Sponge.getEventManager().unregisterPluginListeners(getPlugin());
+		
+		Recipes.remove();
+		
+		configManager = new ConfigManager().init();
+		
+		Sponge.getEventManager().registerListeners(this, new TransmitterListener());
+		Sponge.getEventManager().registerListeners(this, new ReceiverListener());
+		Sponge.getEventManager().registerListeners(this, new ToolListener());
+		
+		try{
+			Recipes.init();
+		}catch(Exception e) {
+			getLog().warn("Recipe registration failed. This could be an implementation error.");
+		}
 	}
 	
 	public static Logger getLog() {
@@ -73,5 +94,9 @@ public class Main {
 
 	public static PluginContainer getPlugin() {
 		return plugin;
+	}
+	
+	public static ConfigManager getConfigManager() {
+		return configManager;
 	}
 }

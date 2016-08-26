@@ -26,11 +26,10 @@ import org.spongepowered.api.util.Tristate;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
-import com.gmail.trentech.wirelessred.Main;
 import com.gmail.trentech.wirelessred.data.receiver.Receiver;
 import com.gmail.trentech.wirelessred.data.receiver.ReceiverData;
 import com.gmail.trentech.wirelessred.data.transmitter.TransmitterData;
-import com.gmail.trentech.wirelessred.utils.ItemHelper;
+import com.gmail.trentech.wirelessred.init.Items;
 
 public class ReceiverListener {
 
@@ -51,7 +50,7 @@ public class ReceiverListener {
 			}
 			Receiver receiver = optionalReceiver.get();
 
-			ItemStack itemStack = ItemHelper.getReceiver(receiver);
+			ItemStack itemStack = Items.getReceiver(receiver, 1);
 
 			Item item = (Item) location.getExtent().createEntity(EntityTypes.ITEM, location.getPosition());
 			item.offer(Keys.REPRESENTED_ITEM, itemStack.createSnapshot());
@@ -120,13 +119,12 @@ public class ReceiverListener {
 		if (transmitterData.transmitter().get().isEnabled()) {
 			if (transmitter.getPosition().distance(location.getPosition()) <= transmitterData.transmitter().get().getRange()) {
 				receiver.setEnabled(true);
-				location.offer(Keys.POWERED, true, Cause.of(NamedCause.source(Main.getPlugin())));
 			}
 		}
 
 		receiver.save(location);
 
-		player.getInventory().query(itemStack).poll(1);
+		player.getInventory().query(itemStack).poll(1);		
 	}
 
 	@Listener
@@ -159,7 +157,7 @@ public class ReceiverListener {
 
 		receiver.setTransmitter(location);
 
-		player.getInventory().query(itemStack).set(ItemHelper.getReceiver(receiver));
+		player.getInventory().query(itemStack).set(Items.getReceiver(receiver, itemStack.getQuantity()));
 
 		player.sendMessage(Text.of(TextColors.GREEN, "Linked"));
 	}

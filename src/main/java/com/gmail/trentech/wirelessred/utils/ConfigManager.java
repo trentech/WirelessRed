@@ -17,28 +17,6 @@ public class ConfigManager {
 	private CommentedConfigurationNode config;
 	private ConfigurationLoader<CommentedConfigurationNode> loader;
 
-	public ConfigManager(String folder, String configName) {
-		folder = "config" + File.separator + Resource.ID + File.separator + folder;
-		if (!new File(folder).isDirectory()) {
-			new File(folder).mkdirs();
-		}
-		file = new File(folder, configName);
-
-		create();
-		load();
-	}
-
-	public ConfigManager(String configName) {
-		String folder = "config" + File.separator + Resource.ID;
-		if (!new File(folder).isDirectory()) {
-			new File(folder).mkdirs();
-		}
-		file = new File(folder, configName);
-
-		create();
-		load();
-	}
-
 	public ConfigManager() {
 		String folder = "config" + File.separator + Resource.ID;
 		if (!new File(folder).isDirectory()) {
@@ -70,7 +48,7 @@ public class ConfigManager {
 		}
 	}
 
-	public void init() {
+	public ConfigManager init() {
 		if (config.getNode("settings", "starting_range").isVirtual()) {
 			config.getNode("settings", "starting_range").setValue("32");			
 		}
@@ -177,6 +155,8 @@ public class ConfigManager {
 			config.getNode("recipes", "upgrade_unlimited", "3x3").setValue(ItemTypes.DIAMOND_BLOCK.getId());
 		}
 		save();
+		
+		return this;
 	}
 
 	private void load() {

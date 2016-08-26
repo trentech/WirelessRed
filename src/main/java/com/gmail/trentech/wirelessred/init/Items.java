@@ -1,4 +1,4 @@
-package com.gmail.trentech.wirelessred.utils;
+package com.gmail.trentech.wirelessred.init;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +17,12 @@ import com.gmail.trentech.wirelessred.data.receiver.ReceiverData;
 import com.gmail.trentech.wirelessred.data.transmitter.Transmitter;
 import com.gmail.trentech.wirelessred.data.transmitter.TransmitterData;
 
-public class ItemHelper {
+public class Items {
 
-	public static ItemStack getTransmitter(TransmitterData transmitterData) {
+	public static ItemStack getTransmitter(TransmitterData transmitterData, int quantity) {
 		Transmitter transmitter = transmitterData.transmitter().get();
 
-		ItemStack itemStack = ItemStack.builder().itemType(ItemTypes.PAPER).quantity(1).build();
+		ItemStack itemStack = ItemStack.builder().itemType(ItemTypes.PAPER).quantity(quantity).build();
 		itemStack.offer(new TransmitterData());
 		itemStack.offer(Keys.DISPLAY_NAME, Text.of("Transmitter Circuit"));
 
@@ -41,8 +41,8 @@ public class ItemHelper {
 		return itemStack;
 	}
 
-	public static ItemStack getReceiver(Receiver receiver) {
-		ItemStack itemStack = ItemStack.builder().itemType(ItemTypes.PAPER).build();
+	public static ItemStack getReceiver(Receiver receiver, int quantity) {
+		ItemStack itemStack = ItemStack.builder().itemType(ItemTypes.PAPER).quantity(quantity).build();
 		itemStack.offer(Keys.DISPLAY_NAME, Text.of("Receiver Circuit"));
 
 		if (receiver != null) {
@@ -88,8 +88,8 @@ public class ItemHelper {
 		return itemStack;
 	}
 
-	public static ItemStack getUpgrade(String range) {
-		ItemStack itemStack = ItemStack.builder().itemType(ItemTypes.PAPER).quantity(1).build();
+	public static ItemStack getUpgrade(String range, int quantity) {
+		ItemStack itemStack = ItemStack.builder().itemType(ItemTypes.PAPER).quantity(quantity).build();
 		itemStack.offer(Keys.DISPLAY_NAME, Text.of("Transmitter Upgrade"));
 
 		List<Text> lore = new ArrayList<>();

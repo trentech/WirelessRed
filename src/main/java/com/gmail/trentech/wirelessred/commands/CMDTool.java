@@ -18,8 +18,7 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import com.gmail.trentech.wirelessred.Main;
-import com.gmail.trentech.wirelessred.utils.ConfigManager;
-import com.gmail.trentech.wirelessred.utils.ItemHelper;
+import com.gmail.trentech.wirelessred.init.Items;
 
 import ninja.leaping.configurate.ConfigurationNode;
 
@@ -33,7 +32,7 @@ public class CMDTool implements CommandExecutor {
 		}
 		Player player = (Player) src;
 
-		ConfigurationNode config = new ConfigManager().getConfig();
+		ConfigurationNode config = Main.getConfigManager().getConfig();
 		
 		if(config.getNode("settings", "economy", "enable").getBoolean() && !src.hasPermission("wirelessred.admin")) {
 			double cost = config.getNode("settings", "economy", "items", "tool").getDouble();
@@ -56,7 +55,7 @@ public class CMDTool implements CommandExecutor {
 			player.sendMessage(Text.of(TextColors.GREEN, "You were charged ", TextColors.YELLOW, "$", cost));
 		}
 		
-		player.getInventory().offer(ItemHelper.getTool(false));
+		player.getInventory().offer(Items.getTool(false));
 
 		return CommandResult.success();
 	}

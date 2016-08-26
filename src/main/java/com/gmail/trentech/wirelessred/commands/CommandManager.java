@@ -8,11 +8,13 @@ public class CommandManager {
 
 	private CommandSpec cmdReceiver = CommandSpec.builder()
 		    .permission("wirelessred.cmd.wr.receiver")
+		    .arguments(GenericArguments.optional(GenericArguments.string(Text.of("quantity"))))
 		    .executor(new CMDReceiver())
 		    .build();
 	
 	private CommandSpec cmdTransmitter = CommandSpec.builder()
 		    .permission("wirelessred.cmd.wr.transmitter")
+		    .arguments(GenericArguments.optional(GenericArguments.string(Text.of("quantity"))))
 		    .executor(new CMDTransmitter())
 		    .build();
 	
@@ -23,7 +25,7 @@ public class CommandManager {
 	
 	private CommandSpec cmdUpgrade = CommandSpec.builder()
 		    .permission("wirelessred.cmd.wr.upgrade")
-		    .arguments(GenericArguments.optional(GenericArguments.string(Text.of("level"))))
+		    .arguments(GenericArguments.optional(GenericArguments.string(Text.of("level"))), GenericArguments.optional(GenericArguments.string(Text.of("quantity"))))
 		    .executor(new CMDUpgrade())
 		    .build();
 	

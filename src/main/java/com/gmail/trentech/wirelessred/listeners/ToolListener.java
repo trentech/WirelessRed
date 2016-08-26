@@ -31,8 +31,7 @@ import com.gmail.trentech.wirelessred.Main;
 import com.gmail.trentech.wirelessred.data.receiver.Receiver;
 import com.gmail.trentech.wirelessred.data.transmitter.Transmitter;
 import com.gmail.trentech.wirelessred.data.transmitter.TransmitterData;
-import com.gmail.trentech.wirelessred.utils.ItemHelper;
-import com.gmail.trentech.wirelessred.utils.TransmitterHelper;
+import com.gmail.trentech.wirelessred.init.Items;
 
 public class ToolListener {
 
@@ -73,9 +72,9 @@ public class ToolListener {
 		List<Text> lore = itemStack.get(Keys.ITEM_LORE).get();
 
 		if (lore.get(0).toPlain().equalsIgnoreCase("Mode: Tool")) {
-			TransmitterHelper.toggleTransmitter(transmitterData, location, false);
+			Transmitter.toggle(transmitterData, location, false);
 
-			ItemStack spawnItemStack = ItemHelper.getTransmitter(transmitterData);
+			ItemStack spawnItemStack = Items.getTransmitter(transmitterData, 1);
 
 			Item item = (Item) location.getExtent().createEntity(EntityTypes.ITEM, location.getPosition());
 			item.offer(Keys.REPRESENTED_ITEM, spawnItemStack.createSnapshot());
@@ -103,7 +102,7 @@ public class ToolListener {
 			objective.getOrCreateScore(Text.of(TextColors.GREEN, "Receivers")).setScore(score--);
 
 			for (Location<World> receiver : transmitter.getReceivers()) {
-				if (TransmitterHelper.isInRange(transmitter, location, receiver)) {
+				if (Transmitter.isInRange(transmitter, location, receiver)) {
 					objective.getOrCreateScore(Text.of("- ", receiver.getExtent().getName(), " ", receiver.getBlockX(), " ", receiver.getBlockY(), " ", receiver.getBlockZ())).setScore(score--);
 				} else {
 					objective.getOrCreateScore(Text.of(TextColors.RED, "- ", receiver.getExtent().getName(), " ", receiver.getBlockX(), " ", receiver.getBlockY(), " ", receiver.getBlockZ())).setScore(score--);
@@ -159,7 +158,7 @@ public class ToolListener {
 		if (lore.get(0).toPlain().equalsIgnoreCase("Mode: Tool")) {
 			receiver.setEnabled(false);
 
-			ItemStack spawnItemStack = ItemHelper.getReceiver(receiver);
+			ItemStack spawnItemStack = Items.getReceiver(receiver, 1);
 
 			Receiver.remove(location);
 
@@ -167,7 +166,6 @@ public class ToolListener {
 			item.offer(Keys.REPRESENTED_ITEM, spawnItemStack.createSnapshot());
 			
 			location.getExtent().spawnEntity(item, Cause.of(NamedCause.source(EntitySpawnCause.builder().entity(item).type(SpawnTypes.PLUGIN).build())));
-			location.offer(Keys.POWERED, false, Cause.of(NamedCause.source(Main.getPlugin())));
 		} else {
 			Scoreboard scoreboard = Scoreboard.builder().build();
 
@@ -187,7 +185,7 @@ public class ToolListener {
 
 					Transmitter transmitter = optionalTransmitterData.get().transmitter().get();
 
-					if (TransmitterHelper.isInRange(transmitter, transmitterLocation, location)) {
+					if (Transmitter.isInRange(transmitter, transmitterLocation, location)) {
 						if (transmitter.getReceivers().contains(location)) {
 							objective.getOrCreateScore(Text.of(TextColors.GREEN, "- In range")).setScore(1);
 						} else {
@@ -242,10 +240,10 @@ public class ToolListener {
 		List<Text> lore = itemStack.get(Keys.ITEM_LORE).get();
 
 		if (lore.get(0).toPlain().equalsIgnoreCase("Mode: Tool")) {
-			player.getInventory().query(itemStack).set(ItemHelper.getTool(false));
+			player.getInventory().query(itemStack).set(Items.getTool(false));
 			player.sendMessage(Text.of(TextColors.GREEN, "Information mode"));
 		} else {
-			player.getInventory().query(itemStack).set(ItemHelper.getTool(true));
+			player.getInventory().query(itemStack).set(Items.getTool(true));
 			player.sendMessage(Text.of(TextColors.GREEN, "Tool mode"));
 		}
 	}

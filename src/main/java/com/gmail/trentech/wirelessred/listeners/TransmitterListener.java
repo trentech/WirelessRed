@@ -38,8 +38,7 @@ import com.gmail.trentech.wirelessred.data.receiver.Receiver;
 import com.gmail.trentech.wirelessred.data.transmitter.ImmutableTransmitterData;
 import com.gmail.trentech.wirelessred.data.transmitter.Transmitter;
 import com.gmail.trentech.wirelessred.data.transmitter.TransmitterData;
-import com.gmail.trentech.wirelessred.utils.ItemHelper;
-import com.gmail.trentech.wirelessred.utils.TransmitterHelper;
+import com.gmail.trentech.wirelessred.init.Items;
 
 public class TransmitterListener {
 
@@ -62,9 +61,9 @@ public class TransmitterListener {
 			}
 			TransmitterData transmitterData = optionalTransmitterData.get().asMutable();
 
-			TransmitterHelper.toggleTransmitter(transmitterData, location, false);
+			Transmitter.toggle(transmitterData, location, false);
 
-			ItemStack itemStack = ItemHelper.getTransmitter(transmitterData);
+			ItemStack itemStack = Items.getTransmitter(transmitterData, 1);
 
 			Item item = (Item) location.getExtent().createEntity(EntityTypes.ITEM, location.getPosition());
 			item.offer(Keys.REPRESENTED_ITEM, itemStack.createSnapshot());
@@ -121,7 +120,7 @@ public class TransmitterListener {
 			receiver.updateTransmitter(receiverLocation);
 		}
 
-		TransmitterHelper.toggleTransmitter(transmitterData, location);
+		Transmitter.toggle(transmitterData, location);
 
 		player.getInventory().query(itemStack).poll(1);
 	}
@@ -177,7 +176,7 @@ public class TransmitterListener {
 			transmitter.setRange(Double.parseDouble(upgrade));
 		}
 
-		TransmitterHelper.toggleTransmitter(transmitterData, location, transmitter.isEnabled());
+		Transmitter.toggle(transmitterData, location);
 
 		player.getInventory().query(itemStack).poll(1);
 
@@ -193,7 +192,7 @@ public class TransmitterListener {
 				Optional<TransmitterData> optionalTransmitterData = location.get(TransmitterData.class);
 
 				if (optionalTransmitterData.isPresent()) {
-					TransmitterHelper.toggleTransmitter(optionalTransmitterData.get(), location, (snapshot.get(Keys.POWER).get() >= 1));
+					Transmitter.toggle(optionalTransmitterData.get(), location, (snapshot.get(Keys.POWER).get() >= 1));
 				}
 			}
 		} else if (snapshot.get(Keys.POWERED).isPresent()) {
@@ -203,7 +202,7 @@ public class TransmitterListener {
 				Optional<TransmitterData> optionalTransmitterData = location.get(TransmitterData.class);
 
 				if (optionalTransmitterData.isPresent()) {
-					TransmitterHelper.toggleTransmitter(optionalTransmitterData.get(), location, snapshot.get(Keys.POWERED).get());
+					Transmitter.toggle(optionalTransmitterData.get(), location, snapshot.get(Keys.POWERED).get());
 				}
 			}
 		} else {
@@ -213,7 +212,7 @@ public class TransmitterListener {
 				Optional<TransmitterData> optionalTransmitterData = location.get(TransmitterData.class);
 
 				if (optionalTransmitterData.isPresent()) {
-					TransmitterHelper.toggleTransmitter(optionalTransmitterData.get(), location, false);
+					Transmitter.toggle(optionalTransmitterData.get(), location, false);
 				}
 			}
 		}
@@ -230,7 +229,7 @@ public class TransmitterListener {
 				return;
 			}
 
-			TransmitterHelper.disableParticles(location);
+			Transmitter.disableParticles(location);
 		}
 	}
 
@@ -245,7 +244,7 @@ public class TransmitterListener {
 				return;
 			}
 
-			TransmitterHelper.enableParticles(location);
+			Transmitter.enableParticles(location);
 		}
 	}
 	
