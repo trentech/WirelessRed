@@ -120,8 +120,8 @@ public class Receiver extends SQLUtils implements DataSerializable {
 			connection.close();
 			
 			Sponge.getScheduler().createTaskBuilder().delayTicks(5).execute(c -> {
-				location.offer(Keys.POWERED, enabled, Cause.of(NamedCause.source(Main.getPlugin())));
-			}).submit(Main.getPlugin());			
+				location.offer(Keys.POWERED, enabled, Cause.of(NamedCause.source(Main.instance().getPlugin())));
+			}).submit(Main.instance().getPlugin());			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -141,8 +141,8 @@ public class Receiver extends SQLUtils implements DataSerializable {
 			connection.close();
 			
 			Sponge.getScheduler().createTaskBuilder().delayTicks(5).execute(c -> {
-				location.offer(Keys.POWERED, enabled, Cause.of(NamedCause.source(Main.getPlugin())));
-			}).submit(Main.getPlugin());	
+				location.offer(Keys.POWERED, enabled, Cause.of(NamedCause.source(Main.instance().getPlugin())));
+			}).submit(Main.instance().getPlugin());	
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -179,8 +179,8 @@ public class Receiver extends SQLUtils implements DataSerializable {
 			connection.close();
 			
 			Sponge.getScheduler().createTaskBuilder().delayTicks(5).execute(c -> {
-				location.offer(Keys.POWERED, false, Cause.of(NamedCause.source(Main.getPlugin())));
-			}).submit(Main.getPlugin());
+				location.offer(Keys.POWERED, false, Cause.of(NamedCause.source(Main.instance().getPlugin())));
+			}).submit(Main.instance().getPlugin());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

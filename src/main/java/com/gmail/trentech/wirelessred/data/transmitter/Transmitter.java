@@ -25,6 +25,7 @@ import org.spongepowered.api.world.World;
 import com.gmail.trentech.wirelessred.Main;
 import com.gmail.trentech.wirelessred.data.DataQueries;
 import com.gmail.trentech.wirelessred.data.receiver.Receiver;
+import com.gmail.trentech.wirelessred.utils.ConfigManager;
 
 public class Transmitter implements DataSerializable {
 
@@ -34,7 +35,7 @@ public class Transmitter implements DataSerializable {
 	private boolean multiWorld = false;
 
 	public Transmitter() {
-		String range = Main.getConfigManager().getConfig().getNode("settings", "starting_range").getString();
+		String range = ConfigManager.get().getConfig().getNode("settings", "starting_range").getString();
 		
 		if (range.equalsIgnoreCase("unlimited")) {
 			this.range = 60000000;
@@ -135,7 +136,7 @@ public class Transmitter implements DataSerializable {
 
 			receiver.setEnabled(enable);
 			receiver.updateEnabled(receiverLocation);
-			receiverLocation.offer(Keys.POWERED, enable, Cause.of(NamedCause.source(Main.getPlugin())));
+			receiverLocation.offer(Keys.POWERED, enable, Cause.of(NamedCause.source(Main.instance().getPlugin())));
 		}
 
 		List<Text> lines = new ArrayList<>();
@@ -212,7 +213,7 @@ public class Transmitter implements DataSerializable {
 			if (random.nextDouble() > .8) {
 				location.getExtent().spawnParticles(particle, location.getPosition().add(random.nextDouble(), random.nextDouble(), random.nextDouble()));
 			} // .add(.5, .8, .5));
-		}).submit(Main.getPlugin());
+		}).submit(Main.instance().getPlugin());
 	}
 
 	public static void disableParticles(Location<World> location) {

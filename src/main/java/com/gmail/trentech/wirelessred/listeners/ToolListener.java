@@ -116,7 +116,7 @@ public class ToolListener {
 
 			Sponge.getScheduler().createTaskBuilder().async().delayTicks(100).execute(runnable -> {
 				player.setScoreboard(Scoreboard.builder().build());
-			}).submit(Main.getPlugin());
+			}).submit(Main.instance().getPlugin());
 		}
 	}
 
@@ -208,7 +208,7 @@ public class ToolListener {
 
 			Sponge.getScheduler().createTaskBuilder().async().delayTicks(100).execute(runnable -> {
 				player.setScoreboard(Scoreboard.builder().build());
-			}).submit(Main.getPlugin());
+			}).submit(Main.instance().getPlugin());
 		}
 	}
 

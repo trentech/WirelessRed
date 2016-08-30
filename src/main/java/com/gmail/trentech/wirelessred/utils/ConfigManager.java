@@ -1,7 +1,9 @@
 package com.gmail.trentech.wirelessred.utils;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.spongepowered.api.item.ItemTypes;
 
@@ -13,42 +15,43 @@ import ninja.leaping.configurate.loader.ConfigurationLoader;
 
 public class ConfigManager {
 
-	private File file;
+	private Path path;
 	private CommentedConfigurationNode config;
 	private ConfigurationLoader<CommentedConfigurationNode> loader;
+	
+	private static ConcurrentHashMap<String, ConfigManager> configManagers = new ConcurrentHashMap<>();
 
-	public ConfigManager() {
-		String folder = "config" + File.separator + Resource.ID;
-		if (!new File(folder).isDirectory()) {
-			new File(folder).mkdirs();
+	private ConfigManager(String configName) {
+		try {
+			path = Main.instance().getPath().resolve(configName + ".conf");
+			
+			if (!Files.exists(path)) {		
+				Files.createFile(path);
+				Main.instance().getLog().info("Creating new " + path.getFileName() + " file...");
+			}		
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		file = new File(folder, "config.conf");
 
-		create();
 		load();
 	}
-
-	public ConfigurationLoader<CommentedConfigurationNode> getLoader() {
-		return loader;
+	
+	public static ConfigManager get(String configName) {
+		return configManagers.get(configName);
+	}
+	
+	public static ConfigManager get() {
+		return configManagers.get("config");
 	}
 
-	public CommentedConfigurationNode getConfig() {
-		return config;
+	public static ConfigManager init() {
+		return init("config");
 	}
+	
+	public static ConfigManager init(String configName) {
+		ConfigManager configManager = new ConfigManager(configName);
+		CommentedConfigurationNode config = configManager.getConfig();
 
-	private void create() {
-		if (!file.exists()) {
-			try {
-				Main.getLog().info("Creating new " + file.getName() + " file...");
-				file.createNewFile();
-			} catch (IOException e) {
-				Main.getLog().error("Failed to create new config file");
-				e.printStackTrace();
-			}
-		}
-	}
-
-	public ConfigManager init() {
 		if (config.getNode("settings", "starting_range").isVirtual()) {
 			config.getNode("settings", "starting_range").setValue("32");			
 		}
@@ -154,17 +157,26 @@ public class ConfigManager {
 			config.getNode("recipes", "upgrade_unlimited", "3x2").setValue(ItemTypes.DIAMOND_BLOCK.getId());
 			config.getNode("recipes", "upgrade_unlimited", "3x3").setValue(ItemTypes.DIAMOND_BLOCK.getId());
 		}
-		save();
 		
-		return this;
+		configManager.save();
+		
+		return configManager;
 	}
 
+	public ConfigurationLoader<CommentedConfigurationNode> getLoader() {
+		return loader;
+	}
+
+	public CommentedConfigurationNode getConfig() {
+		return config;
+	}
+	
 	private void load() {
-		loader = HoconConfigurationLoader.builder().setFile(file).build();
+		loader = HoconConfigurationLoader.builder().setPath(path).build();
 		try {
 			config = loader.load();
 		} catch (IOException e) {
-			Main.getLog().error("Failed to load config");
+			Main.instance().getLog().error("Failed to load config");
 			e.printStackTrace();
 		}
 	}
@@ -173,7 +185,7 @@ public class ConfigManager {
 		try {
 			loader.save(config);
 		} catch (IOException e) {
-			Main.getLog().error("Failed to save config");
+			Main.instance().getLog().error("Failed to save config");
 			e.printStackTrace();
 		}
 	}

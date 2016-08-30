@@ -10,7 +10,7 @@ import org.spongepowered.api.item.recipe.ShapedRecipe;
 import org.spongepowered.api.item.recipe.ShapedRecipe.Builder;
 
 import com.flowpowered.math.vector.Vector2i;
-import com.gmail.trentech.wirelessred.Main;
+import com.gmail.trentech.wirelessred.utils.ConfigManager;
 import com.gmail.trentech.wirelessred.utils.InvalidItemTypeException;
 
 import ninja.leaping.configurate.ConfigurationNode;
@@ -18,7 +18,7 @@ import ninja.leaping.configurate.ConfigurationNode;
 public class Recipes {
 
 	public static void init() {
-		ConfigurationNode config = Main.getConfigManager().getConfig().getNode("recipes");
+		ConfigurationNode config = ConfigManager.get().getConfig().getNode("recipes");
 		
 		try {
 			Sponge.getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("transmitter")));
@@ -35,7 +35,7 @@ public class Recipes {
 	}
 
 	public static void remove() {
-		ConfigurationNode config = Main.getConfigManager().getConfig().getNode("recipes");
+		ConfigurationNode config = ConfigManager.get().getConfig().getNode("recipes");
 		
 		try{	
 			Sponge.getRegistry().getRecipeRegistry().remove(getRecipe(config.getNode("transmitter")));
