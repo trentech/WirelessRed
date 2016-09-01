@@ -3,7 +3,6 @@ package com.gmail.trentech.wirelessred.commands;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -11,12 +10,11 @@ import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.service.pagination.PaginationList;
-import org.spongepowered.api.service.pagination.PaginationService;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
-import com.gmail.trentech.wirelessred.Main;
+import com.gmail.trentech.wirelessred.utils.ConfigManager;
 
 import ninja.leaping.configurate.ConfigurationNode;
 
@@ -26,7 +24,7 @@ public class CMDWR implements CommandExecutor {
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		List<Text> list = new ArrayList<>();
 
-		ConfigurationNode config = Main.getConfigManager().getConfig();
+		ConfigurationNode config = ConfigManager.get().getConfig();
 	
 		if (src.hasPermission("wirelessred.cmd.wr.transmitter")) {
 			if(config.getNode("settings", "economy", "enable").getBoolean() && !src.hasPermission("wirelessred.admin")) {
@@ -70,7 +68,7 @@ public class CMDWR implements CommandExecutor {
 		}
 		
 		if (src instanceof Player) {
-			PaginationList.Builder pages = Sponge.getServiceManager().provide(PaginationService.class).get().builder();
+			PaginationList.Builder pages = PaginationList.builder();
 
 			pages.title(Text.builder().color(TextColors.DARK_GREEN).append(Text.of(TextColors.GREEN, "Command List")).build());
 

@@ -20,6 +20,7 @@ import org.spongepowered.api.text.format.TextColors;
 
 import com.gmail.trentech.wirelessred.Main;
 import com.gmail.trentech.wirelessred.init.Items;
+import com.gmail.trentech.wirelessred.utils.ConfigManager;
 
 import ninja.leaping.configurate.ConfigurationNode;
 
@@ -33,21 +34,12 @@ public class CMDUpgrade implements CommandExecutor {
 		}
 		Player player = (Player) src;
 
-		if (!args.hasAny("level")) {
-			player.sendMessage(getUsage());
-			return CommandResult.empty();
-		}
 		String level = args.<String> getOne("level").get();
 		
 		int quantity = 1;
 		
 		if (args.hasAny("quantity")) {
-			try {
-				quantity = Integer.parseInt(args.<String> getOne("quantity").get());
-			} catch (Exception e) {
-				player.sendMessage(getUsage());
-				return CommandResult.empty();
-			};	
+			quantity = args.<Integer> getOne("quantity").get();	
 		}
 		
 		if(level.equalsIgnoreCase("64")) {
@@ -78,7 +70,7 @@ public class CMDUpgrade implements CommandExecutor {
 	}
 	
 	private boolean charge(Player player, String arg, int quantity) {
-		ConfigurationNode config = Main.getConfigManager().getConfig();
+		ConfigurationNode config = ConfigManager.get().getConfig();
 		
 		if(config.getNode("settings", "economy", "enable").getBoolean() && !player.hasPermission("wirelessred.admin")) {
 			double cost = config.getNode("settings", "economy", "items", "upgrade_" + arg).getDouble() * quantity;
@@ -87,13 +79,13 @@ public class CMDUpgrade implements CommandExecutor {
 
 			if (!optionalEconomy.isPresent()) {
 				player.sendMessage(Text.of(TextColors.RED, "Economy plugin not found!"));
-				Main.getLog().error("Economy plugin not found!");
+				Main.instance().getLog().error("Economy plugin not found!");
 				return false;
 			}
 			
 			EconomyService economy = optionalEconomy.get();
 			
-			if(economy.getOrCreateAccount(player.getUniqueId()).get().withdraw(economy.getDefaultCurrency(), new BigDecimal(cost), Cause.of(NamedCause.source(Main.getPlugin()))).getResult() == ResultType.FAILED) {
+			if(economy.getOrCreateAccount(player.getUniqueId()).get().withdraw(economy.getDefaultCurrency(), new BigDecimal(cost), Cause.of(NamedCause.source(Main.instance().getPlugin()))).getResult() == ResultType.FAILED) {
 				player.sendMessage(Text.of(TextColors.RED, "Not enough money. Need ", TextColors.YELLOW, "$", cost));
 				return false;
 			}
