@@ -25,7 +25,7 @@ public class CommandManager {
 	
 	private CommandSpec cmdUpgrade = CommandSpec.builder()
 		    .permission("wirelessred.cmd.wr.upgrade")
-		    .arguments(GenericArguments.string(Text.of("level")), GenericArguments.optional(GenericArguments.integer(Text.of("quantity"))))
+		    .arguments(GenericArguments.integer(Text.of("level")), GenericArguments.optional(GenericArguments.integer(Text.of("quantity"))))
 		    .executor(new CMDUpgrade())
 		    .build();
 	
