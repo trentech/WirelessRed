@@ -15,7 +15,6 @@ import org.spongepowered.api.event.cause.NamedCause;
 import org.spongepowered.api.service.economy.EconomyService;
 import org.spongepowered.api.service.economy.transaction.ResultType;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
 import com.gmail.trentech.wirelessred.Main;
@@ -29,8 +28,7 @@ public class CMDUpgrade implements CommandExecutor {
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		if (!(src instanceof Player)) {
-			src.sendMessage(Text.of(TextColors.DARK_RED, "Must be a player"));
-			return CommandResult.empty();
+			throw new CommandException(Text.of(TextColors.RED, "Must be a player"));
 		}
 		Player player = (Player) src;
 
@@ -63,7 +61,7 @@ public class CMDUpgrade implements CommandExecutor {
 				player.getInventory().offer(Items.getUpgrade("Unlimited", quantity));
 			}
 		} else {
-			player.sendMessage(getUsage());
+			throw new CommandException(Text.of(TextColors.RED, "Not a valid upgrade"));
 		}
 
 		return CommandResult.success();
@@ -95,11 +93,5 @@ public class CMDUpgrade implements CommandExecutor {
 		
 		return true;
 	}
-	
-	private Text getUsage() {
-		Text t1 = Text.of(TextColors.YELLOW, "/wr upgrade ");
-		Text t2 = Text.builder().color(TextColors.YELLOW).onHover(TextActions.showText(Text.of("64\n128\n256\n512\nUnlimited"))).append(Text.of("<level> ")).build();
-		Text t3 = Text.of(TextColors.YELLOW, "[quantity]");
-		return Text.of(t1, t2, t3);
-	}
+
 }

@@ -29,8 +29,7 @@ public class CMDTransmitter implements CommandExecutor {
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		if (!(src instanceof Player)) {
-			src.sendMessage(Text.of(TextColors.DARK_RED, "Must be a player"));
-			return CommandResult.empty();
+			throw new CommandException(Text.of(TextColors.RED, "Must be a player"));
 		}
 		Player player = (Player) src;
 
@@ -48,16 +47,13 @@ public class CMDTransmitter implements CommandExecutor {
 			Optional<EconomyService> optionalEconomy = Sponge.getServiceManager().provide(EconomyService.class);
 
 			if (!optionalEconomy.isPresent()) {
-				player.sendMessage(Text.of(TextColors.RED, "Economy plugin not found!"));
-				Main.instance().getLog().error("Economy plugin not found!");
-				return CommandResult.empty();
+				throw new CommandException(Text.of(TextColors.RED, "Economy plugin not found!"));
 			}
 			
 			EconomyService economy = optionalEconomy.get();
-			
+
 			if(economy.getOrCreateAccount(player.getUniqueId()).get().withdraw(economy.getDefaultCurrency(), new BigDecimal(cost), Cause.of(NamedCause.source(Main.getPlugin()))).getResult() == ResultType.FAILED) {
-				player.sendMessage(Text.of(TextColors.RED, "Not enough money. Need ", TextColors.YELLOW, "$", cost));
-				return CommandResult.empty();
+				throw new CommandException(Text.of(TextColors.RED, "Not enough money. Need ", TextColors.YELLOW, "$", cost));
 			}
 			
 			player.sendMessage(Text.of(TextColors.GREEN, "You were charged ", TextColors.YELLOW, "$", cost));
