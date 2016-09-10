@@ -136,7 +136,7 @@ public class Transmitter implements DataSerializable {
 
 			receiver.setEnabled(enable);
 			receiver.updateEnabled(receiverLocation);
-			receiverLocation.offer(Keys.POWERED, enable, Cause.of(NamedCause.source(Main.instance().getPlugin())));
+			receiverLocation.offer(Keys.POWERED, enable, Cause.of(NamedCause.source(Main.getPlugin())));
 		}
 
 		List<Text> lines = new ArrayList<>();
@@ -213,7 +213,7 @@ public class Transmitter implements DataSerializable {
 			if (random.nextDouble() > .8) {
 				location.getExtent().spawnParticles(particle, location.getPosition().add(random.nextDouble(), random.nextDouble(), random.nextDouble()));
 			} // .add(.5, .8, .5));
-		}).submit(Main.instance().getPlugin());
+		}).submit(Main.getPlugin());
 	}
 
 	public static void disableParticles(Location<World> location) {

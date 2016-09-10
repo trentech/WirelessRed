@@ -16,7 +16,7 @@ import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.cause.NamedCause;
 import org.spongepowered.api.event.cause.entity.spawn.EntitySpawnCause;
 import org.spongepowered.api.event.cause.entity.spawn.SpawnTypes;
-import org.spongepowered.api.event.filter.cause.First;
+import org.spongepowered.api.event.filter.cause.Root;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.scoreboard.Scoreboard;
 import org.spongepowered.api.scoreboard.critieria.Criteria;
@@ -36,7 +36,7 @@ import com.gmail.trentech.wirelessred.init.Items;
 public class ToolListener {
 
 	@Listener
-	public void onInteractTransmitterEventPrimary(InteractBlockEvent.Secondary event, @First Player player) {
+	public void onInteractTransmitterEventPrimary(InteractBlockEvent.Secondary event, @Root Player player) {
 		Optional<Location<World>> optionalLocation = event.getTargetBlock().getLocation();
 
 		if (!optionalLocation.isPresent()) {
@@ -116,12 +116,12 @@ public class ToolListener {
 
 			Sponge.getScheduler().createTaskBuilder().async().delayTicks(100).execute(runnable -> {
 				player.setScoreboard(Scoreboard.builder().build());
-			}).submit(Main.instance().getPlugin());
+			}).submit(Main.getPlugin());
 		}
 	}
 
 	@Listener
-	public void onInteractRecieverEventPrimary(InteractBlockEvent.Secondary event, @First Player player) {
+	public void onInteractRecieverEventPrimary(InteractBlockEvent.Secondary event, @Root Player player) {
 		Optional<Location<World>> optionalLocation = event.getTargetBlock().getLocation();
 
 		if (!optionalLocation.isPresent()) {
@@ -208,12 +208,12 @@ public class ToolListener {
 
 			Sponge.getScheduler().createTaskBuilder().async().delayTicks(100).execute(runnable -> {
 				player.setScoreboard(Scoreboard.builder().build());
-			}).submit(Main.instance().getPlugin());
+			}).submit(Main.getPlugin());
 		}
 	}
 
 	@Listener
-	public void onInteractModeEventPrimary(InteractBlockEvent.Secondary event, @First Player player) {
+	public void onInteractModeEventPrimary(InteractBlockEvent.Secondary event, @Root Player player) {
 		Optional<Location<World>> optionalLocation = event.getTargetBlock().getLocation();
 
 		if (optionalLocation.isPresent()) {

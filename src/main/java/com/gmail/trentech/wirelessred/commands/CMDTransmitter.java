@@ -55,7 +55,7 @@ public class CMDTransmitter implements CommandExecutor {
 			
 			EconomyService economy = optionalEconomy.get();
 			
-			if(economy.getOrCreateAccount(player.getUniqueId()).get().withdraw(economy.getDefaultCurrency(), new BigDecimal(cost), Cause.of(NamedCause.source(Main.instance().getPlugin()))).getResult() == ResultType.FAILED) {
+			if(economy.getOrCreateAccount(player.getUniqueId()).get().withdraw(economy.getDefaultCurrency(), new BigDecimal(cost), Cause.of(NamedCause.source(Main.getPlugin()))).getResult() == ResultType.FAILED) {
 				player.sendMessage(Text.of(TextColors.RED, "Not enough money. Need ", TextColors.YELLOW, "$", cost));
 				return CommandResult.empty();
 			}

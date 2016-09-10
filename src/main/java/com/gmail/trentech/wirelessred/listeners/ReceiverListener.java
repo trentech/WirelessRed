@@ -18,7 +18,7 @@ import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.cause.NamedCause;
 import org.spongepowered.api.event.cause.entity.spawn.EntitySpawnCause;
 import org.spongepowered.api.event.cause.entity.spawn.SpawnTypes;
-import org.spongepowered.api.event.filter.cause.First;
+import org.spongepowered.api.event.filter.cause.Root;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
@@ -62,7 +62,7 @@ public class ReceiverListener {
 	}
 
 	@Listener
-	public void onInteractTransmitterEvent(InteractBlockEvent.Secondary event, @First Player player) {
+	public void onInteractTransmitterEvent(InteractBlockEvent.Secondary event, @Root Player player) {
 		BlockSnapshot snapshot = event.getTargetBlock();
 
 		Optional<Location<World>> optionalLocation = snapshot.getLocation();
@@ -128,7 +128,7 @@ public class ReceiverListener {
 	}
 
 	@Listener
-	public void onInteractLinkEvent(InteractBlockEvent.Secondary event, @First Player player) {
+	public void onInteractLinkEvent(InteractBlockEvent.Secondary event, @Root Player player) {
 		Optional<Location<World>> optionalLocation = event.getTargetBlock().getLocation();
 
 		if (!optionalLocation.isPresent()) {
@@ -163,7 +163,7 @@ public class ReceiverListener {
 	}
 
 	@Listener
-	public void onInteractReceiverEvent(InteractBlockEvent.Secondary event, @First Player player) {
+	public void onInteractReceiverEvent(InteractBlockEvent.Secondary event, @Root Player player) {
 		BlockSnapshot snapshot = event.getTargetBlock();
 
 		Optional<Location<World>> optionalLocation = snapshot.getLocation();
