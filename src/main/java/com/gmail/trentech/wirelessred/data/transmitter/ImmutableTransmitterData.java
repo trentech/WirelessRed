@@ -30,11 +30,6 @@ public class ImmutableTransmitterData extends AbstractImmutableSingleData<Transm
 	}
 
 	@Override
-	public int compareTo(ImmutableTransmitterData arg0) {
-		return 0;
-	}
-
-	@Override
 	public int getContentVersion() {
 		return 1;
 	}

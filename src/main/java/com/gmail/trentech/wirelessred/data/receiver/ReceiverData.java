@@ -57,11 +57,6 @@ public class ReceiverData extends AbstractSingleData<Receiver, ReceiverData, Imm
 	}
 
 	@Override
-	public int compareTo(ReceiverData value) {
-		return value.compareTo(this);
-	}
-
-	@Override
 	protected Value<Receiver> getValueGetter() {
 		return Sponge.getRegistry().getValueFactory().createValue(RECEIVER, getValue(), getValue());
 	}
