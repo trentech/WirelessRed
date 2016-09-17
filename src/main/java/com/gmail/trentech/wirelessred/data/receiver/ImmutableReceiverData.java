@@ -30,11 +30,6 @@ public class ImmutableReceiverData extends AbstractImmutableSingleData<Receiver,
 	}
 
 	@Override
-	public int compareTo(ImmutableReceiverData arg0) {
-		return 0;
-	}
-
-	@Override
 	public int getContentVersion() {
 		return 1;
 	}

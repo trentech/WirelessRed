@@ -57,11 +57,6 @@ public class TransmitterData extends AbstractSingleData<Transmitter, Transmitter
 	}
 
 	@Override
-	public int compareTo(TransmitterData value) {
-		return value.compareTo(this);
-	}
-
-	@Override
 	protected Value<Transmitter> getValueGetter() {
 		return Sponge.getRegistry().getValueFactory().createValue(TRANSMITTER, getValue(), getValue());
 	}
