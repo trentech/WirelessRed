@@ -10,6 +10,8 @@ import org.spongepowered.api.item.recipe.ShapedRecipe;
 import org.spongepowered.api.item.recipe.ShapedRecipe.Builder;
 
 import com.flowpowered.math.vector.Vector2i;
+import com.gmail.trentech.wirelessred.data.receiver.Receiver;
+import com.gmail.trentech.wirelessred.data.transmitter.TransmitterData;
 import com.gmail.trentech.wirelessred.utils.ConfigManager;
 import com.gmail.trentech.wirelessred.utils.InvalidItemTypeException;
 
@@ -21,14 +23,14 @@ public class Recipes {
 		ConfigurationNode config = ConfigManager.get().getConfig().getNode("recipes");
 		
 		try {
-			Sponge.getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("transmitter")));
-			Sponge.getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("receiver")));
-			Sponge.getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("tool")));
-			Sponge.getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("upgrade_64")));
-			Sponge.getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("upgrade_128")));
-			Sponge.getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("upgrade_256")));
-			Sponge.getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("upgrade_512")));
-			Sponge.getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("upgrade_unlimited")));
+			Sponge.getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("transmitter"), Items.getTransmitter(new TransmitterData(), 1)));
+			Sponge.getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("receiver"), Items.getReceiver(new Receiver(), 1)));
+			Sponge.getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("tool"), Items.getTool(true)));
+			Sponge.getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("upgrade_64"), Items.getUpgrade("64", 1)));
+			Sponge.getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("upgrade_128"), Items.getUpgrade("128", 1)));
+			Sponge.getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("upgrade_256"), Items.getUpgrade("256", 1)));
+			Sponge.getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("upgrade_512"), Items.getUpgrade("512", 1)));
+			Sponge.getRegistry().getRecipeRegistry().register(getRecipe(config.getNode("upgrade_unlimited"), Items.getUpgrade("Unlimited", 1)));
 		} catch (InvalidItemTypeException e) {
 			e.printStackTrace();
 		}
@@ -38,20 +40,20 @@ public class Recipes {
 		ConfigurationNode config = ConfigManager.get().getConfig().getNode("recipes");
 		
 		try{	
-			Sponge.getRegistry().getRecipeRegistry().remove(getRecipe(config.getNode("transmitter")));
-			Sponge.getRegistry().getRecipeRegistry().remove(getRecipe(config.getNode("receiver")));
-			Sponge.getRegistry().getRecipeRegistry().remove(getRecipe(config.getNode("tool")));
-			Sponge.getRegistry().getRecipeRegistry().remove(getRecipe(config.getNode("upgrade_64")));
-			Sponge.getRegistry().getRecipeRegistry().remove(getRecipe(config.getNode("upgrade_128")));
-			Sponge.getRegistry().getRecipeRegistry().remove(getRecipe(config.getNode("upgrade_256")));
-			Sponge.getRegistry().getRecipeRegistry().remove(getRecipe(config.getNode("upgrade_512")));
-			Sponge.getRegistry().getRecipeRegistry().remove(getRecipe(config.getNode("upgrade_unlimited")));
+			Sponge.getRegistry().getRecipeRegistry().remove(getRecipe(config.getNode("transmitter"), Items.getTransmitter(new TransmitterData(), 1)));
+			Sponge.getRegistry().getRecipeRegistry().remove(getRecipe(config.getNode("receiver"), Items.getReceiver(new Receiver(), 1)));
+			Sponge.getRegistry().getRecipeRegistry().remove(getRecipe(config.getNode("tool"), Items.getTool(true)));
+			Sponge.getRegistry().getRecipeRegistry().remove(getRecipe(config.getNode("upgrade_64"), Items.getUpgrade("64", 1)));
+			Sponge.getRegistry().getRecipeRegistry().remove(getRecipe(config.getNode("upgrade_128"), Items.getUpgrade("128", 1)));
+			Sponge.getRegistry().getRecipeRegistry().remove(getRecipe(config.getNode("upgrade_256"), Items.getUpgrade("256", 1)));
+			Sponge.getRegistry().getRecipeRegistry().remove(getRecipe(config.getNode("upgrade_512"), Items.getUpgrade("512", 1)));
+			Sponge.getRegistry().getRecipeRegistry().remove(getRecipe(config.getNode("upgrade_unlimited"), Items.getUpgrade("Unlimited", 1)));
 		} catch (InvalidItemTypeException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	private static ShapedRecipe getRecipe(ConfigurationNode node) throws InvalidItemTypeException {
+	private static ShapedRecipe getRecipe(ConfigurationNode node, ItemStack result) throws InvalidItemTypeException {
 		Builder builder = Sponge.getRegistry().createBuilder(ShapedRecipe.Builder.class);
 
 		for(Entry<Object, ? extends ConfigurationNode> child : node.getChildrenMap().entrySet()) {
@@ -78,6 +80,6 @@ public class Recipes {
 			}
 		}
 
-		return builder.build();
+		return builder.addResult(result).build();
 	}
 }
