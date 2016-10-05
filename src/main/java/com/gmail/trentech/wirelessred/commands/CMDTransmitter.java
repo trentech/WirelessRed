@@ -20,6 +20,7 @@ import org.spongepowered.api.text.format.TextColors;
 import com.gmail.trentech.wirelessred.Main;
 import com.gmail.trentech.wirelessred.data.transmitter.TransmitterData;
 import com.gmail.trentech.wirelessred.init.Items;
+import com.gmail.trentech.wirelessred.listeners.TransmitterListener;
 import com.gmail.trentech.wirelessred.utils.ConfigManager;
 
 import ninja.leaping.configurate.ConfigurationNode;
@@ -61,6 +62,8 @@ public class CMDTransmitter implements CommandExecutor {
 		
 		player.getInventory().offer(Items.getTransmitter(new TransmitterData(), quantity));
 
+		TransmitterListener.checkItemInHand(player);
+		
 		return CommandResult.success();
 	}
 }

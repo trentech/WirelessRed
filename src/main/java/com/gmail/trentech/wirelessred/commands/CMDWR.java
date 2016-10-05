@@ -42,14 +42,6 @@ public class CMDWR implements CommandExecutor {
 				list.add(Text.of(TextColors.GREEN, "/wr receiver"));
 			}
 		}
-		if (src.hasPermission("wirelessred.cmd.wr.tool")) {
-			if(config.getNode("settings", "economy", "enable").getBoolean() && !src.hasPermission("wirelessred.admin")) {
-				double cost = config.getNode("settings", "economy", "items", "tool").getDouble();
-				list.add(Text.of(TextColors.GREEN, "/wr tool", TextColors.YELLOW, " - $", cost));
-			}else {
-				list.add(Text.of(TextColors.GREEN, "/wr tool"));
-			}
-		}
 		if (src.hasPermission("wirelessred.cmd.wr.upgrade")) {
 			double cost64 = config.getNode("settings", "economy", "items", "upgrade_64").getDouble();
 			double cost128 = config.getNode("settings", "economy", "items", "upgrade_128").getDouble();

@@ -22,7 +22,7 @@ public class Items {
 	public static ItemStack getTransmitter(TransmitterData transmitterData, int quantity) {
 		Transmitter transmitter = transmitterData.transmitter().get();
 
-		ItemStack itemStack = ItemStack.builder().itemType(ItemTypes.PAPER).quantity(quantity).build();
+		ItemStack itemStack = ItemStack.builder().itemType(ItemTypes.SIGN).quantity(quantity).build();
 		itemStack.offer(new TransmitterData());
 		itemStack.offer(Keys.DISPLAY_NAME, Text.of("Transmitter Circuit"));
 
@@ -42,7 +42,7 @@ public class Items {
 	}
 
 	public static ItemStack getReceiver(Receiver receiver, int quantity) {
-		ItemStack itemStack = ItemStack.builder().itemType(ItemTypes.PAPER).quantity(quantity).build();
+		ItemStack itemStack = ItemStack.builder().itemType(ItemTypes.STONE_BUTTON).quantity(quantity).build();
 		itemStack.offer(Keys.DISPLAY_NAME, Text.of("Receiver Circuit"));
 
 		if (receiver != null) {

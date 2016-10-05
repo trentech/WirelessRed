@@ -17,12 +17,7 @@ public class CommandManager {
 		    .arguments(GenericArguments.optional(GenericArguments.integer(Text.of("quantity"))))
 		    .executor(new CMDTransmitter())
 		    .build();
-	
-	private CommandSpec cmdTool = CommandSpec.builder()
-		    .permission("wirelessred.cmd.wr.tool")
-		    .executor(new CMDTool())
-		    .build();
-	
+
 	private CommandSpec cmdUpgrade = CommandSpec.builder()
 		    .permission("wirelessred.cmd.wr.upgrade")
 		    .arguments(GenericArguments.string(Text.of("level")), GenericArguments.optional(GenericArguments.integer(Text.of("quantity"))))
@@ -33,7 +28,6 @@ public class CommandManager {
 		    .permission("wirelessred.cmd.wr")
 		    .child(cmdReceiver, "receiver", "r")
 		    .child(cmdTransmitter, "transmitter", "t")
-		    .child(cmdTool, "tool", "tl")
 		    .child(cmdUpgrade, "upgrade", "u")
 		    .executor(new CMDWR())
 		    .build();

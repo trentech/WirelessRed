@@ -28,7 +28,6 @@ import com.gmail.trentech.wirelessred.data.transmitter.TransmitterData;
 import com.gmail.trentech.wirelessred.data.transmitter.TransmitterDataManipulatorBuilder;
 import com.gmail.trentech.wirelessred.init.Recipes;
 import com.gmail.trentech.wirelessred.listeners.ReceiverListener;
-import com.gmail.trentech.wirelessred.listeners.ToolListener;
 import com.gmail.trentech.wirelessred.listeners.TransmitterListener;
 import com.gmail.trentech.wirelessred.utils.ConfigManager;
 import com.gmail.trentech.wirelessred.utils.Resource;
@@ -68,7 +67,6 @@ public class Main {
 
 		Sponge.getEventManager().registerListeners(this, new TransmitterListener());
 		Sponge.getEventManager().registerListeners(this, new ReceiverListener());
-		Sponge.getEventManager().registerListeners(this, new ToolListener());
 
 		Sponge.getCommandManager().register(this, new CommandManager().cmdWR, "wr");
 
@@ -90,13 +88,16 @@ public class Main {
 	public void onReloadEvent(GameReloadEvent event) {
 		Sponge.getEventManager().unregisterPluginListeners(getPlugin());
 		
-		Recipes.remove();
-		
+		try{
+			Recipes.remove();
+		}catch(Exception e) {
+			getLog().warn("Recipe removal failed. This could be an implementation error.");
+		}
+
 		ConfigManager.init();
 		
 		Sponge.getEventManager().registerListeners(this, new TransmitterListener());
 		Sponge.getEventManager().registerListeners(this, new ReceiverListener());
-		Sponge.getEventManager().registerListeners(this, new ToolListener());
 		
 		try{
 			Recipes.init();
