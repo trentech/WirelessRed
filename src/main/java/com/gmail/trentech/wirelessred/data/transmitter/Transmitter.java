@@ -201,7 +201,7 @@ public class Transmitter implements DataSerializable {
 			return;
 		}
 
-		ParticleEffect particle = ParticleEffect.builder().type(ParticleTypes.REDSTONE).build();
+		ParticleEffect particle = ParticleEffect.builder().type(ParticleTypes.REDSTONE_DUST).build();
 
 		Sponge.getScheduler().createTaskBuilder().interval(400, TimeUnit.MILLISECONDS).name(name).execute(t -> {
 			if (random.nextDouble() > .8) {
