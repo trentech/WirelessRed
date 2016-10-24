@@ -142,15 +142,15 @@ public class Transmitter implements DataSerializable {
 		List<Text> lines = new ArrayList<>();
 
 		if (enable) {
-			lines.add(Text.of(TextColors.DARK_BLUE, "[Transmitter]"));
+			lines.add(Text.of(TextColors.GREEN, "======="));
 			lines.add(Text.of(TextColors.GREEN, "====="));
 			lines.add(Text.of(TextColors.GREEN, "==="));
 			lines.add(Text.of(TextColors.GREEN, "="));
 			enableParticles(location);
 		} else {
-			lines.add(Text.of(TextColors.DARK_BLUE, "[Transmitter]"));
 			lines.add(Text.EMPTY);
 			lines.add(Text.EMPTY);
+			lines.add(Text.of(TextColors.RED, "==="));
 			lines.add(Text.of(TextColors.RED, "="));
 
 			disableParticles(location);

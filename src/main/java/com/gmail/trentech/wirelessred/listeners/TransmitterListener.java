@@ -98,14 +98,14 @@ public class TransmitterListener {
 			List<Text> lines = new ArrayList<>();
 			
 			if(Transmitter.toggle(transmitterData, location)) {
-				lines.add(Text.of(TextColors.DARK_BLUE, "[Transmitter]"));
+				lines.add(Text.of(TextColors.GREEN, "======="));
 				lines.add(Text.of(TextColors.GREEN, "====="));
 				lines.add(Text.of(TextColors.GREEN, "==="));
 				lines.add(Text.of(TextColors.GREEN, "="));
 			} else {
-				lines.add(Text.of(TextColors.DARK_BLUE, "[Transmitter]"));
 				lines.add(Text.EMPTY);
 				lines.add(Text.EMPTY);
+				lines.add(Text.of(TextColors.RED, "==="));
 				lines.add(Text.of(TextColors.RED, "="));
 			}
 			
