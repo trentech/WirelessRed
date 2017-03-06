@@ -17,10 +17,10 @@ import org.spongepowered.api.service.economy.transaction.ResultType;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
+import com.gmail.trentech.pjc.core.ConfigManager;
 import com.gmail.trentech.wirelessred.Main;
 import com.gmail.trentech.wirelessred.init.Items;
 import com.gmail.trentech.wirelessred.listeners.ReceiverListener;
-import com.gmail.trentech.wirelessred.utils.ConfigManager;
 
 import ninja.leaping.configurate.ConfigurationNode;
 
@@ -39,7 +39,7 @@ public class CMDReceiver implements CommandExecutor {
 			quantity = args.<Integer> getOne("quantity").get();	
 		}
 
-		ConfigurationNode config = ConfigManager.get().getConfig();
+		ConfigurationNode config = ConfigManager.get(Main.getPlugin()).getConfig();
 		
 		if(config.getNode("settings", "economy", "enable").getBoolean() && !src.hasPermission("wirelessred.admin")) {
 			double cost = config.getNode("settings", "economy", "items", "receiver").getDouble() * quantity;

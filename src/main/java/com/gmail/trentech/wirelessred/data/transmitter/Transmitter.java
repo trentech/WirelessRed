@@ -22,10 +22,10 @@ import org.spongepowered.api.util.Direction;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
+import com.gmail.trentech.pjc.core.ConfigManager;
 import com.gmail.trentech.wirelessred.Main;
 import com.gmail.trentech.wirelessred.data.DataQueries;
 import com.gmail.trentech.wirelessred.data.receiver.Receiver;
-import com.gmail.trentech.wirelessred.utils.ConfigManager;
 
 public class Transmitter implements DataSerializable {
 
@@ -35,7 +35,7 @@ public class Transmitter implements DataSerializable {
 	private boolean multiWorld = false;
 
 	public Transmitter() {
-		String range = ConfigManager.get().getConfig().getNode("settings", "starting_range").getString();
+		String range = ConfigManager.get(Main.getPlugin()).getConfig().getNode("settings", "starting_range").getString();
 		
 		if (range.equalsIgnoreCase("unlimited")) {
 			this.range = 60000000;

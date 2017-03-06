@@ -17,9 +17,9 @@ import org.spongepowered.api.service.economy.transaction.ResultType;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
+import com.gmail.trentech.pjc.core.ConfigManager;
 import com.gmail.trentech.wirelessred.Main;
 import com.gmail.trentech.wirelessred.init.Items;
-import com.gmail.trentech.wirelessred.utils.ConfigManager;
 
 import ninja.leaping.configurate.ConfigurationNode;
 
@@ -68,7 +68,7 @@ public class CMDUpgrade implements CommandExecutor {
 	}
 	
 	private boolean charge(Player player, String arg, int quantity) {
-		ConfigurationNode config = ConfigManager.get().getConfig();
+		ConfigurationNode config = ConfigManager.get(Main.getPlugin()).getConfig();
 		
 		if(config.getNode("settings", "economy", "enable").getBoolean() && !player.hasPermission("wirelessred.admin")) {
 			double cost = config.getNode("settings", "economy", "items", "upgrade_" + arg).getDouble() * quantity;

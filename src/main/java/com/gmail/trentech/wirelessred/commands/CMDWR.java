@@ -14,7 +14,8 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
-import com.gmail.trentech.wirelessred.utils.ConfigManager;
+import com.gmail.trentech.pjc.core.ConfigManager;
+import com.gmail.trentech.wirelessred.Main;
 
 import ninja.leaping.configurate.ConfigurationNode;
 
@@ -24,7 +25,7 @@ public class CMDWR implements CommandExecutor {
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		List<Text> list = new ArrayList<>();
 
-		ConfigurationNode config = ConfigManager.get().getConfig();
+		ConfigurationNode config = ConfigManager.get(Main.getPlugin()).getConfig();
 	
 		if (src.hasPermission("wirelessred.cmd.wr.transmitter")) {
 			if(config.getNode("settings", "economy", "enable").getBoolean() && !src.hasPermission("wirelessred.admin")) {

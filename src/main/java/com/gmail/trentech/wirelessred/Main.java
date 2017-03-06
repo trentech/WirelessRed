@@ -26,10 +26,9 @@ import com.gmail.trentech.wirelessred.data.transmitter.Transmitter;
 import com.gmail.trentech.wirelessred.data.transmitter.TransmitterBuilder;
 import com.gmail.trentech.wirelessred.data.transmitter.TransmitterData;
 import com.gmail.trentech.wirelessred.data.transmitter.TransmitterDataManipulatorBuilder;
-import com.gmail.trentech.wirelessred.init.Recipes;
+import com.gmail.trentech.wirelessred.init.Common;
 import com.gmail.trentech.wirelessred.listeners.ReceiverListener;
 import com.gmail.trentech.wirelessred.listeners.TransmitterListener;
-import com.gmail.trentech.wirelessred.utils.ConfigManager;
 import com.gmail.trentech.wirelessred.utils.Resource;
 import com.gmail.trentech.wirelessred.utils.SQLUtils;
 import com.google.inject.Inject;
@@ -37,7 +36,7 @@ import com.google.inject.Inject;
 import me.flibio.updatifier.Updatifier;
 
 @Updatifier(repoName = Resource.NAME, repoOwner = Resource.AUTHOR, version = Resource.VERSION)
-@Plugin(id = Resource.ID, name = Resource.NAME, version = Resource.VERSION, description = Resource.DESCRIPTION, authors = Resource.AUTHOR, url = Resource.URL, dependencies = { @Dependency(id = "Updatifier", optional = true) })
+@Plugin(id = Resource.ID, name = Resource.NAME, version = Resource.VERSION, description = Resource.DESCRIPTION, authors = Resource.AUTHOR, url = Resource.URL, dependencies = { @Dependency(id = "Updatifier", optional = true), @Dependency(id = "pjc", optional = false) })
 public class Main {
 
 	@Inject @ConfigDir(sharedRoot = false)
@@ -63,7 +62,7 @@ public class Main {
 
 	@Listener
 	public void onInitialization(GameInitializationEvent event) {
-		ConfigManager.init();
+		Common.initConfig();
 
 		Sponge.getEventManager().registerListeners(this, new TransmitterListener());
 		Sponge.getEventManager().registerListeners(this, new ReceiverListener());
@@ -75,11 +74,7 @@ public class Main {
 		Sponge.getDataManager().register(ReceiverData.class, ImmutableReceiverData.class, new ReceiverDataManipulatorBuilder());
 		Sponge.getDataManager().registerBuilder(Receiver.class, new ReceiverBuilder());
 
-		try{
-			Recipes.init();
-		}catch(Exception e) {
-			getLog().warn("Recipe registration failed. This could be an implementation error.");
-		}
+		//Common.initRecipes();
 		
 		SQLUtils.createTables();
 	}
@@ -87,23 +82,13 @@ public class Main {
 	@Listener
 	public void onReloadEvent(GameReloadEvent event) {
 		Sponge.getEventManager().unregisterPluginListeners(getPlugin());
-		
-		try{
-			Recipes.remove();
-		}catch(Exception e) {
-			getLog().warn("Recipe removal failed. This could be an implementation error.");
-		}
 
-		ConfigManager.init();
+		Common.initConfig();
 		
 		Sponge.getEventManager().registerListeners(this, new TransmitterListener());
 		Sponge.getEventManager().registerListeners(this, new ReceiverListener());
 		
-		try{
-			Recipes.init();
-		}catch(Exception e) {
-			getLog().warn("Recipe registration failed. This could be an implementation error.");
-		}
+		//Common.initRecipes();
 	}
 	
 	public Logger getLog() {
