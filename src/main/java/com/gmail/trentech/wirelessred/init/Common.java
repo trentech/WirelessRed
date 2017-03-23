@@ -4,7 +4,7 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.item.ItemTypes;
 
 import com.gmail.trentech.pjc.core.ConfigManager;
-import com.gmail.trentech.pjc.core.Recipes;
+import com.gmail.trentech.pjc.core.RecipeManager;
 import com.gmail.trentech.pjc.utils.InvalidItemTypeException;
 import com.gmail.trentech.wirelessred.Main;
 import com.gmail.trentech.wirelessred.data.receiver.Receiver;
@@ -137,18 +137,18 @@ public class Common {
 		configManager.save();
 	}
 	
-	public static void initRecipes() {
+	public static void initRecipeManager() {
 		ConfigurationNode config = ConfigManager.get(Main.getPlugin()).getConfig().getNode("recipes");
 
 		try {
-			Sponge.getRegistry().getRecipeRegistry().register(Recipes.getShapedRecipe(config.getNode("transmitter"), Items.getTransmitter(new TransmitterData(), 1)));
-			Sponge.getRegistry().getRecipeRegistry().register(Recipes.getShapedRecipe(config.getNode("receiver"), Items.getReceiver(new Receiver(), 1)));
-			Sponge.getRegistry().getRecipeRegistry().register(Recipes.getShapedRecipe(config.getNode("tool"), Items.getTool(true)));
-			Sponge.getRegistry().getRecipeRegistry().register(Recipes.getShapedRecipe(config.getNode("upgrade_64"), Items.getUpgrade("64", 1)));
-			Sponge.getRegistry().getRecipeRegistry().register(Recipes.getShapedRecipe(config.getNode("upgrade_128"), Items.getUpgrade("128", 1)));
-			Sponge.getRegistry().getRecipeRegistry().register(Recipes.getShapedRecipe(config.getNode("upgrade_256"), Items.getUpgrade("256", 1)));
-			Sponge.getRegistry().getRecipeRegistry().register(Recipes.getShapedRecipe(config.getNode("upgrade_512"), Items.getUpgrade("512", 1)));
-			Sponge.getRegistry().getRecipeRegistry().register(Recipes.getShapedRecipe(config.getNode("upgrade_unlimited"), Items.getUpgrade("Unlimited", 1)));
+			Sponge.getRegistry().getRecipeRegistry().register(RecipeManager.getShapedRecipe(config.getNode("transmitter"), Items.getTransmitter(new TransmitterData(), 1)));
+			Sponge.getRegistry().getRecipeRegistry().register(RecipeManager.getShapedRecipe(config.getNode("receiver"), Items.getReceiver(new Receiver(), 1)));
+			Sponge.getRegistry().getRecipeRegistry().register(RecipeManager.getShapedRecipe(config.getNode("tool"), Items.getTool(true)));
+			Sponge.getRegistry().getRecipeRegistry().register(RecipeManager.getShapedRecipe(config.getNode("upgrade_64"), Items.getUpgrade("64", 1)));
+			Sponge.getRegistry().getRecipeRegistry().register(RecipeManager.getShapedRecipe(config.getNode("upgrade_128"), Items.getUpgrade("128", 1)));
+			Sponge.getRegistry().getRecipeRegistry().register(RecipeManager.getShapedRecipe(config.getNode("upgrade_256"), Items.getUpgrade("256", 1)));
+			Sponge.getRegistry().getRecipeRegistry().register(RecipeManager.getShapedRecipe(config.getNode("upgrade_512"), Items.getUpgrade("512", 1)));
+			Sponge.getRegistry().getRecipeRegistry().register(RecipeManager.getShapedRecipe(config.getNode("upgrade_unlimited"), Items.getUpgrade("Unlimited", 1)));
 		} catch (InvalidItemTypeException e) {
 			e.printStackTrace();
 		}
