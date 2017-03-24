@@ -16,11 +16,11 @@ import org.spongepowered.api.event.cause.NamedCause;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
+import com.gmail.trentech.pjc.core.SQLManager;
 import com.gmail.trentech.wirelessred.Main;
 import com.gmail.trentech.wirelessred.data.DataQueries;
-import com.gmail.trentech.wirelessred.utils.SQLUtils;
 
-public class Receiver extends SQLUtils implements DataSerializable {
+public class Receiver implements DataSerializable {
 
 	private boolean enabled = false;
 	private String transmitter = "";
@@ -81,9 +81,10 @@ public class Receiver extends SQLUtils implements DataSerializable {
 		Optional<Receiver> optional = Optional.empty();
 
 		try {
-			Connection connection = getDataSource().getConnection();
+			SQLManager sqlManager = SQLManager.get(Main.getPlugin());
+			Connection connection = sqlManager.getDataSource().getConnection();
 
-			PreparedStatement statement = connection.prepareStatement("SELECT * FROM Receivers");
+			PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + sqlManager.getPrefix("RECEIVERS"));
 
 			ResultSet result = statement.executeQuery();
 
@@ -107,9 +108,10 @@ public class Receiver extends SQLUtils implements DataSerializable {
 		String name = location.getExtent().getName() + ":" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ();
 
 		try {
-			Connection connection = getDataSource().getConnection();
+			SQLManager sqlManager = SQLManager.get(Main.getPlugin());
+			Connection connection = sqlManager.getDataSource().getConnection();
 
-			PreparedStatement statement = connection.prepareStatement("INSERT into Receivers (Location, Enabled, Transmitter) VALUES (?, ?, ?)");
+			PreparedStatement statement = connection.prepareStatement("INSERT into " + sqlManager.getPrefix("RECEIVERS") + " (Location, Enabled, Transmitter) VALUES (?, ?, ?)");
 
 			statement.setString(1, name);
 			statement.setBoolean(2, enabled);
@@ -131,8 +133,10 @@ public class Receiver extends SQLUtils implements DataSerializable {
 		String name = location.getExtent().getName() + ":" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ();
 
 		try {
-			Connection connection = getDataSource().getConnection();
-			PreparedStatement statement = connection.prepareStatement("UPDATE Receivers SET Enabled = ? WHERE Location = ?");
+			SQLManager sqlManager = SQLManager.get(Main.getPlugin());
+			Connection connection = sqlManager.getDataSource().getConnection();
+			
+			PreparedStatement statement = connection.prepareStatement("UPDATE " + sqlManager.getPrefix("RECEIVERS") + " SET Enabled = ? WHERE Location = ?");
 
 			statement.setBoolean(1, enabled);
 			statement.setString(2, name);
@@ -152,8 +156,10 @@ public class Receiver extends SQLUtils implements DataSerializable {
 		String name = location.getExtent().getName() + ":" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ();
 
 		try {
-			Connection connection = getDataSource().getConnection();
-			PreparedStatement statement = connection.prepareStatement("UPDATE Receivers SET Transmitter = ? WHERE Location = ?");
+			SQLManager sqlManager = SQLManager.get(Main.getPlugin());
+			Connection connection = sqlManager.getDataSource().getConnection();
+			
+			PreparedStatement statement = connection.prepareStatement("UPDATE " + sqlManager.getPrefix("RECEIVERS") + " SET Transmitter = ? WHERE Location = ?");
 
 			statement.setString(1, transmitter);
 			statement.setString(2, name);
@@ -169,9 +175,10 @@ public class Receiver extends SQLUtils implements DataSerializable {
 		String name = location.getExtent().getName() + ":" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ();
 
 		try {
-			Connection connection = getDataSource().getConnection();
+			SQLManager sqlManager = SQLManager.get(Main.getPlugin());
+			Connection connection = sqlManager.getDataSource().getConnection();
 
-			PreparedStatement statement = connection.prepareStatement("DELETE from Receivers WHERE Location = ?");
+			PreparedStatement statement = connection.prepareStatement("DELETE from " + sqlManager.getPrefix("RECEIVERS") + " WHERE Location = ?");
 
 			statement.setString(1, name);
 			statement.executeUpdate();

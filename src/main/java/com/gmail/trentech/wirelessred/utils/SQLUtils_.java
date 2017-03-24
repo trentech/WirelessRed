@@ -9,7 +9,7 @@ import javax.sql.DataSource;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.service.sql.SqlService;
 
-public abstract class SQLUtils {
+public abstract class SQLUtils_ {
 
 	protected static SqlService sql;
 
