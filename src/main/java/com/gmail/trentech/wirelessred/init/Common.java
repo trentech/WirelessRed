@@ -28,7 +28,9 @@ public class Common {
 	
 	public static void initData() {
 		try {
-			SQLManager sqlManager = SQLManager.get(Main.getPlugin());
+			String database = ConfigManager.get(Main.getPlugin()).getConfig().getNode("settings", "sql", "database").getString();
+
+			SQLManager sqlManager = SQLManager.get(Main.getPlugin(), database);
 			Connection connection = sqlManager.getDataSource().getConnection();
 
 			PreparedStatement statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + sqlManager.getPrefix("RECEIVERS") + " (Location TEXT, Enabled BOOL, Transmitter TEXT, Destination TEXT)");
@@ -153,7 +155,9 @@ public class Common {
 			config.getNode("recipes", "upgrade_unlimited", "3x2").setValue(ItemTypes.DIAMOND_BLOCK.getId());
 			config.getNode("recipes", "upgrade_unlimited", "3x3").setValue(ItemTypes.DIAMOND_BLOCK.getId());
 		}
-		
+		if (config.getNode("settings", "sql", "database").isVirtual()) {
+			config.getNode("settings", "sql", "database").setValue(Main.getPlugin().getId());
+		}
 		configManager.save();
 	}
 	

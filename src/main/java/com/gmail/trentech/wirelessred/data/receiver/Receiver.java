@@ -16,6 +16,7 @@ import org.spongepowered.api.event.cause.NamedCause;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
+import com.gmail.trentech.pjc.core.ConfigManager;
 import com.gmail.trentech.pjc.core.SQLManager;
 import com.gmail.trentech.wirelessred.Main;
 import com.gmail.trentech.wirelessred.data.DataQueries;
@@ -108,7 +109,9 @@ public class Receiver implements DataSerializable {
 		String name = location.getExtent().getName() + ":" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ();
 
 		try {
-			SQLManager sqlManager = SQLManager.get(Main.getPlugin());
+			String database = ConfigManager.get(Main.getPlugin()).getConfig().getNode("settings", "sql", "database").getString();
+
+			SQLManager sqlManager = SQLManager.get(Main.getPlugin(), database);
 			Connection connection = sqlManager.getDataSource().getConnection();
 
 			PreparedStatement statement = connection.prepareStatement("INSERT into " + sqlManager.getPrefix("RECEIVERS") + " (Location, Enabled, Transmitter) VALUES (?, ?, ?)");
@@ -133,7 +136,9 @@ public class Receiver implements DataSerializable {
 		String name = location.getExtent().getName() + ":" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ();
 
 		try {
-			SQLManager sqlManager = SQLManager.get(Main.getPlugin());
+			String database = ConfigManager.get(Main.getPlugin()).getConfig().getNode("settings", "sql", "database").getString();
+
+			SQLManager sqlManager = SQLManager.get(Main.getPlugin(), database);
 			Connection connection = sqlManager.getDataSource().getConnection();
 			
 			PreparedStatement statement = connection.prepareStatement("UPDATE " + sqlManager.getPrefix("RECEIVERS") + " SET Enabled = ? WHERE Location = ?");
@@ -156,7 +161,9 @@ public class Receiver implements DataSerializable {
 		String name = location.getExtent().getName() + ":" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ();
 
 		try {
-			SQLManager sqlManager = SQLManager.get(Main.getPlugin());
+			String database = ConfigManager.get(Main.getPlugin()).getConfig().getNode("settings", "sql", "database").getString();
+
+			SQLManager sqlManager = SQLManager.get(Main.getPlugin(), database);
 			Connection connection = sqlManager.getDataSource().getConnection();
 			
 			PreparedStatement statement = connection.prepareStatement("UPDATE " + sqlManager.getPrefix("RECEIVERS") + " SET Transmitter = ? WHERE Location = ?");
@@ -175,7 +182,9 @@ public class Receiver implements DataSerializable {
 		String name = location.getExtent().getName() + ":" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ();
 
 		try {
-			SQLManager sqlManager = SQLManager.get(Main.getPlugin());
+			String database = ConfigManager.get(Main.getPlugin()).getConfig().getNode("settings", "sql", "database").getString();
+
+			SQLManager sqlManager = SQLManager.get(Main.getPlugin(), database);
 			Connection connection = sqlManager.getDataSource().getConnection();
 
 			PreparedStatement statement = connection.prepareStatement("DELETE from " + sqlManager.getPrefix("RECEIVERS") + " WHERE Location = ?");
