@@ -3,7 +3,6 @@ package com.gmail.trentech.wirelessred;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
 
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
@@ -16,7 +15,6 @@ import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 
-import com.gmail.trentech.pjc.core.SQLManager;
 import com.gmail.trentech.wirelessred.commands.CommandManager;
 import com.gmail.trentech.wirelessred.data.receiver.ImmutableReceiverData;
 import com.gmail.trentech.wirelessred.data.receiver.Receiver;
@@ -75,14 +73,7 @@ public class Main {
 		Sponge.getDataManager().register(ReceiverData.class, ImmutableReceiverData.class, new ReceiverDataManipulatorBuilder());
 		Sponge.getDataManager().registerBuilder(Receiver.class, new ReceiverBuilder());
 
-		HashMap<String, String> hash = new HashMap<>();
-		
-		hash.put("Location", "TEXT");
-		hash.put("Enabled", "BOOL");
-		hash.put("Transmitter", "TEXT");
-		hash.put("Destination", "TEXT");
-		
-		SQLManager.get(getPlugin()).createTable("RECEIVERS", hash);
+		Common.initData();
 	}
 	
 	@Listener

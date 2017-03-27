@@ -1,10 +1,15 @@
 package com.gmail.trentech.wirelessred.init;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.item.ItemTypes;
 
 import com.gmail.trentech.pjc.core.ConfigManager;
 import com.gmail.trentech.pjc.core.RecipeManager;
+import com.gmail.trentech.pjc.core.SQLManager;
 import com.gmail.trentech.pjc.utils.InvalidItemTypeException;
 import com.gmail.trentech.wirelessred.Main;
 import com.gmail.trentech.wirelessred.data.receiver.Receiver;
@@ -18,6 +23,21 @@ public class Common {
 	public static void init() {
 		initConfig();
 		initHelp();
+		initData();
+	}
+	
+	public static void initData() {
+		try {
+			SQLManager sqlManager = SQLManager.get(Main.getPlugin());
+			Connection connection = sqlManager.getDataSource().getConnection();
+
+			PreparedStatement statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + sqlManager.getPrefix("RECEIVERS") + " (Location TEXT, Enabled BOOL, Transmitter TEXT, Destination TEXT)");
+			statement.executeUpdate();
+
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void initHelp() {
