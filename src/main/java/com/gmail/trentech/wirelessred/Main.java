@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.config.ConfigDir;
+import org.spongepowered.api.data.DataRegistration;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.GameReloadEvent;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
@@ -68,9 +69,14 @@ public class Main {
 
 		Sponge.getCommandManager().register(this, new CommandManager().cmdWR, "wr");
 
-		Sponge.getDataManager().register(TransmitterData.class, ImmutableTransmitterData.class, new TransmitterDataManipulatorBuilder());
+		DataRegistration.builder().dataClass(TransmitterData.class).immutableClass(ImmutableTransmitterData.class)
+			.builder(new TransmitterDataManipulatorBuilder()).dataName("Transmitter").manipulatorId("wirelessred_transmitter").buildAndRegister(Main.getPlugin());
+		
 		Sponge.getDataManager().registerBuilder(Transmitter.class, new TransmitterBuilder());
-		Sponge.getDataManager().register(ReceiverData.class, ImmutableReceiverData.class, new ReceiverDataManipulatorBuilder());
+
+		DataRegistration.builder().dataClass(ReceiverData.class).immutableClass(ImmutableReceiverData.class)
+			.builder(new ReceiverDataManipulatorBuilder()).dataName("Receiver").manipulatorId("wirelessred_receiver").buildAndRegister(Main.getPlugin());
+		
 		Sponge.getDataManager().registerBuilder(Receiver.class, new ReceiverBuilder());
 
 		Common.initData();
