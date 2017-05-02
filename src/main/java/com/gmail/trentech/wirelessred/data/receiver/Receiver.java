@@ -9,7 +9,6 @@ import java.util.Optional;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.DataSerializable;
-import org.spongepowered.api.data.MemoryDataContainer;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.cause.NamedCause;
@@ -73,7 +72,7 @@ public class Receiver implements DataSerializable {
 
 	@Override
 	public DataContainer toContainer() {
-		return new MemoryDataContainer().set(DataQueries.ENABLED, enabled).set(DataQueries.TRANSMITTER, transmitter);
+		return DataContainer.createNew().set(DataQueries.ENABLED, enabled).set(DataQueries.TRANSMITTER, transmitter);
 	}
 
 	public static Optional<Receiver> get(Location<World> location) {

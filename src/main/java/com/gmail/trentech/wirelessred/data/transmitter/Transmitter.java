@@ -9,7 +9,6 @@ import java.util.concurrent.TimeUnit;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.DataSerializable;
-import org.spongepowered.api.data.MemoryDataContainer;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.effect.particle.ParticleEffect;
 import org.spongepowered.api.effect.particle.ParticleTypes;
@@ -233,6 +232,6 @@ public class Transmitter implements DataSerializable {
 
 	@Override
 	public DataContainer toContainer() {
-		return new MemoryDataContainer().set(DataQueries.ENABLED, enabled).set(DataQueries.RANGE, range).set(DataQueries.MULTIWORLD, multiWorld).set(DataQueries.RECEVIERS, receivers);
+		return DataContainer.createNew().set(DataQueries.ENABLED, enabled).set(DataQueries.RANGE, range).set(DataQueries.MULTIWORLD, multiWorld).set(DataQueries.RECEVIERS, receivers);
 	}
 }
