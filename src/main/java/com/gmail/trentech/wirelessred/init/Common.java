@@ -28,9 +28,7 @@ public class Common {
 	
 	public static void initData() {
 		try {
-			String database = ConfigManager.get(Main.getPlugin()).getConfig().getNode("settings", "sql", "database").getString();
-
-			SQLManager sqlManager = SQLManager.get(Main.getPlugin(), database);
+			SQLManager sqlManager = SQLManager.get(Main.getPlugin());
 			Connection connection = sqlManager.getDataSource().getConnection();
 
 			PreparedStatement statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + sqlManager.getPrefix("RECEIVERS") + " (Location TEXT, Enabled BOOL, Transmitter TEXT, Destination TEXT)");
