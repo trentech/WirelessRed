@@ -282,7 +282,7 @@ public class TransmitterListener {
 		Optional<ItemStack> optionalItemStack = player.getItemInHand(HandTypes.MAIN_HAND);
 
 		if (optionalItemStack.isPresent()) {
-			if(optionalItemStack.get().getItem().equals(ItemTypes.STONE_BUTTON)) {
+			if(optionalItemStack.get().getType().equals(ItemTypes.STONE_BUTTON)) {
 				return;
 			}
 		}
