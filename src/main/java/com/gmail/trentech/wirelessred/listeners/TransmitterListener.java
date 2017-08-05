@@ -146,7 +146,7 @@ public class TransmitterListener {
 				}
 			}
 			
-			ItemStack itemStack = Items.getTransmitter(transmitterData, 1);
+			ItemStack itemStack = Items.getTransmitter(transmitterData);
 
 			Item item = (Item) location.getExtent().createEntity(EntityTypes.ITEM, location.getPosition());
 			item.offer(Keys.REPRESENTED_ITEM, itemStack.createSnapshot());
@@ -377,13 +377,31 @@ public class TransmitterListener {
 		if(optionalItemStack.isPresent()) {
 			ItemStack itemStack = optionalItemStack.get();
 
-			Optional<TransmitterData> optionalData = itemStack.get(TransmitterData.class);
+			Optional<Text> optionalName = itemStack.get(Keys.DISPLAY_NAME);
 			
-			if(optionalData.isPresent()) {
-				cache.put(player.getUniqueId(), optionalData.get());
+			if(!optionalName.isPresent()) {
+				return;
+			}		
 
+			if(!optionalName.get().toPlain().equalsIgnoreCase("Transmitter")) {
 				return;
 			}
+			Optional<TransmitterData> optionalData = itemStack.get(TransmitterData.class);
+
+			TransmitterData data;
+			if (!optionalData.isPresent()) {
+				data = new TransmitterData();
+				
+				itemStack.offer(data);
+				
+				player.setItemInHand(HandTypes.MAIN_HAND, itemStack);
+			} else {
+				data = optionalData.get();
+			}
+
+			cache.put(player.getUniqueId(), data);
+
+			return;
 		}
 
 		cache.remove(player.getUniqueId());

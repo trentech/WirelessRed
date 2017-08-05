@@ -7,9 +7,11 @@ import java.sql.SQLException;
 import org.spongepowered.api.item.ItemTypes;
 
 import com.gmail.trentech.pjc.core.ConfigManager;
+import com.gmail.trentech.pjc.core.RecipeManager;
 import com.gmail.trentech.pjc.core.SQLManager;
 import com.gmail.trentech.wirelessred.Main;
 
+import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 
 public class Common {
@@ -57,95 +59,60 @@ public class Common {
 			config.getNode("settings", "economy", "enable").setValue(true);
 		}
 		if (config.getNode("recipes", "tool").isVirtual()) {
-			config.getNode("recipes", "tool", "grid_size").setValue("2x2");
-			config.getNode("recipes", "tool", "1x1").setValue(ItemTypes.REDSTONE.getId());
-			config.getNode("recipes", "tool", "1x2").setValue(ItemTypes.NONE.getId());
-			config.getNode("recipes", "tool", "2x1").setValue(ItemTypes.NONE.getId());
-			config.getNode("recipes", "tool", "2x2").setValue(ItemTypes.STICK.getId());
+			config.getNode("recipes", "tool", "enable").setValue(true);
+			config.getNode("recipes", "tool", "id").setValue("tool");
+			config.getNode("recipes", "tool", "row1").setValue(ItemTypes.REDSTONE.getId() + "," + ItemTypes.NONE.getId() + "," + ItemTypes.NONE.getId());
+			config.getNode("recipes", "tool", "row2").setValue(ItemTypes.NONE.getId() + "," + ItemTypes.STICK.getId() + "," + ItemTypes.NONE.getId());
+			config.getNode("recipes", "tool", "row3").setValue(ItemTypes.NONE.getId() + "," + ItemTypes.NONE.getId() + "," + ItemTypes.NONE.getId());
 		}
 		if (config.getNode("recipes", "receiver").isVirtual()) {
-			config.getNode("recipes", "receiver", "grid_size").setValue("3x3");
-			config.getNode("recipes", "receiver", "1x1").setValue(ItemTypes.GOLD_INGOT.getId());
-			config.getNode("recipes", "receiver", "1x2").setValue(ItemTypes.REDSTONE_TORCH.getId());
-			config.getNode("recipes", "receiver", "1x3").setValue(ItemTypes.GOLD_INGOT.getId());
-			config.getNode("recipes", "receiver", "2x1").setValue(ItemTypes.REDSTONE.getId());
-			config.getNode("recipes", "receiver", "2x2").setValue(ItemTypes.REPEATER.getId());
-			config.getNode("recipes", "receiver", "2x3").setValue(ItemTypes.REDSTONE.getId());
-			config.getNode("recipes", "receiver", "3x1").setValue(ItemTypes.GOLD_INGOT.getId());
-			config.getNode("recipes", "receiver", "3x2").setValue(ItemTypes.GOLD_INGOT.getId());
-			config.getNode("recipes", "receiver", "3x3").setValue(ItemTypes.GOLD_INGOT.getId());
+			config.getNode("recipes", "receiver", "enable").setValue(true);
+			config.getNode("recipes", "receiver", "id").setValue("receiver");
+			config.getNode("recipes", "receiver", "row1").setValue(ItemTypes.GOLD_INGOT.getId() + "," + ItemTypes.REDSTONE_TORCH.getId() + "," + ItemTypes.GOLD_INGOT.getId());
+			config.getNode("recipes", "receiver", "row2").setValue(ItemTypes.REDSTONE.getId() + "," + ItemTypes.REPEATER.getId() + "," + ItemTypes.REDSTONE.getId());
+			config.getNode("recipes", "receiver", "row3").setValue(ItemTypes.GOLD_INGOT.getId() + "," + ItemTypes.GOLD_INGOT.getId() + "," + ItemTypes.GOLD_INGOT.getId());
 		}
 		if (config.getNode("recipes", "transmitter").isVirtual()) {
-			config.getNode("recipes", "transmitter", "grid_size").setValue("3x3");
-			config.getNode("recipes", "transmitter", "1x1").setValue(ItemTypes.GOLD_INGOT.getId());
-			config.getNode("recipes", "transmitter", "1x2").setValue(ItemTypes.REDSTONE_TORCH.getId());
-			config.getNode("recipes", "transmitter", "1x3").setValue(ItemTypes.GOLD_INGOT.getId());
-			config.getNode("recipes", "transmitter", "2x1").setValue(ItemTypes.REDSTONE.getId());
-			config.getNode("recipes", "transmitter", "2x2").setValue(ItemTypes.COMPARATOR.getId());
-			config.getNode("recipes", "transmitter", "2x3").setValue(ItemTypes.REDSTONE.getId());
-			config.getNode("recipes", "transmitter", "3x1").setValue(ItemTypes.GOLD_INGOT.getId());
-			config.getNode("recipes", "transmitter", "3x2").setValue(ItemTypes.GOLD_INGOT.getId());
-			config.getNode("recipes", "transmitter", "3x3").setValue(ItemTypes.GOLD_INGOT.getId());
+			config.getNode("recipes", "transmitter", "enable").setValue(true);
+			config.getNode("recipes", "transmitter", "id").setValue("transmitter");
+			config.getNode("recipes", "transmitter", "row1").setValue(ItemTypes.GOLD_INGOT.getId() + "," + ItemTypes.REDSTONE_TORCH.getId() + "," + ItemTypes.GOLD_INGOT.getId());
+			config.getNode("recipes", "transmitter", "row2").setValue(ItemTypes.REDSTONE.getId() + "," + ItemTypes.COMPARATOR.getId() + "," + ItemTypes.REDSTONE.getId());
+			config.getNode("recipes", "transmitter", "row3").setValue(ItemTypes.GOLD_INGOT.getId() + "," + ItemTypes.GOLD_INGOT.getId() + "," + ItemTypes.GOLD_INGOT.getId());
 		}
 		if (config.getNode("recipes", "upgrade_64").isVirtual()) {
-			config.getNode("recipes", "upgrade_64", "grid_size").setValue("3x3");
-			config.getNode("recipes", "upgrade_64", "1x1").setValue(ItemTypes.STONE.getId());
-			config.getNode("recipes", "upgrade_64", "1x2").setValue(ItemTypes.STONE.getId());
-			config.getNode("recipes", "upgrade_64", "1x3").setValue(ItemTypes.STONE.getId());
-			config.getNode("recipes", "upgrade_64", "2x1").setValue(ItemTypes.GOLD_INGOT.getId());
-			config.getNode("recipes", "upgrade_64", "2x2").setValue(ItemTypes.REDSTONE_TORCH.getId());
-			config.getNode("recipes", "upgrade_64", "2x3").setValue(ItemTypes.GOLD_INGOT.getId());
-			config.getNode("recipes", "upgrade_64", "3x1").setValue(ItemTypes.STONE.getId());
-			config.getNode("recipes", "upgrade_64", "3x2").setValue(ItemTypes.STONE.getId());
-			config.getNode("recipes", "upgrade_64", "3x3").setValue(ItemTypes.STONE.getId());
+			config.getNode("recipes", "upgrade_64", "enable").setValue(true);
+			config.getNode("recipes", "upgrade_64", "id").setValue("upgrade_64");
+			config.getNode("recipes", "upgrade_64", "row1").setValue(ItemTypes.STONE.getId() + "," + ItemTypes.STONE.getId() + "," + ItemTypes.STONE.getId());
+			config.getNode("recipes", "upgrade_64", "row2").setValue(ItemTypes.GOLD_INGOT.getId() + "," + ItemTypes.REDSTONE_TORCH.getId() + "," + ItemTypes.GOLD_INGOT.getId());
+			config.getNode("recipes", "upgrade_64", "row3").setValue(ItemTypes.STONE.getId() + "," + ItemTypes.STONE.getId() + "," + ItemTypes.STONE.getId());
 		}
 		if (config.getNode("recipes", "upgrade_128").isVirtual()) {
-			config.getNode("recipes", "upgrade_128", "grid_size").setValue("3x3");
-			config.getNode("recipes", "upgrade_128", "1x1").setValue(ItemTypes.IRON_INGOT.getId());
-			config.getNode("recipes", "upgrade_128", "1x2").setValue(ItemTypes.IRON_INGOT.getId());
-			config.getNode("recipes", "upgrade_128", "1x3").setValue(ItemTypes.IRON_INGOT.getId());
-			config.getNode("recipes", "upgrade_128", "2x1").setValue(ItemTypes.GOLD_INGOT.getId());
-			config.getNode("recipes", "upgrade_128", "2x2").setValue(ItemTypes.REDSTONE_TORCH.getId());
-			config.getNode("recipes", "upgrade_128", "2x3").setValue(ItemTypes.GOLD_INGOT.getId());
-			config.getNode("recipes", "upgrade_128", "3x1").setValue(ItemTypes.IRON_INGOT.getId());
-			config.getNode("recipes", "upgrade_128", "3x2").setValue(ItemTypes.IRON_INGOT.getId());
-			config.getNode("recipes", "upgrade_128", "3x3").setValue(ItemTypes.IRON_INGOT.getId());
+			config.getNode("recipes", "upgrade_128", "enable").setValue(true);
+			config.getNode("recipes", "upgrade_128", "id").setValue("upgrade_128");
+			config.getNode("recipes", "upgrade_128", "row1").setValue(ItemTypes.IRON_INGOT.getId() + "," + ItemTypes.IRON_INGOT.getId() + "," + ItemTypes.IRON_INGOT.getId());
+			config.getNode("recipes", "upgrade_128", "row2").setValue(ItemTypes.GOLD_INGOT.getId() + "," + ItemTypes.REDSTONE_TORCH.getId() + "," + ItemTypes.GOLD_INGOT.getId());
+			config.getNode("recipes", "upgrade_128", "row3").setValue(ItemTypes.IRON_INGOT.getId() + "," + ItemTypes.IRON_INGOT.getId() + "," + ItemTypes.IRON_INGOT.getId());
 		}
 		if (config.getNode("recipes", "upgrade_256").isVirtual()) {
-			config.getNode("recipes", "upgrade_256", "grid_size").setValue("3x3");
-			config.getNode("recipes", "upgrade_256", "1x1").setValue(ItemTypes.IRON_BLOCK.getId());
-			config.getNode("recipes", "upgrade_256", "1x2").setValue(ItemTypes.IRON_BLOCK.getId());
-			config.getNode("recipes", "upgrade_256", "1x3").setValue(ItemTypes.IRON_BLOCK.getId());
-			config.getNode("recipes", "upgrade_256", "2x1").setValue(ItemTypes.GOLD_INGOT.getId());
-			config.getNode("recipes", "upgrade_256", "2x2").setValue(ItemTypes.REDSTONE_TORCH.getId());
-			config.getNode("recipes", "upgrade_256", "2x3").setValue(ItemTypes.GOLD_INGOT.getId());
-			config.getNode("recipes", "upgrade_256", "3x1").setValue(ItemTypes.IRON_BLOCK.getId());
-			config.getNode("recipes", "upgrade_256", "3x2").setValue(ItemTypes.IRON_BLOCK.getId());
-			config.getNode("recipes", "upgrade_256", "3x3").setValue(ItemTypes.IRON_BLOCK.getId());
+			config.getNode("recipes", "upgrade_256", "enable").setValue(true);
+			config.getNode("recipes", "upgrade_256", "id").setValue("upgrade_256");
+			config.getNode("recipes", "upgrade_256", "row1").setValue(ItemTypes.IRON_BLOCK.getId() + "," + ItemTypes.IRON_BLOCK.getId() + "," + ItemTypes.IRON_BLOCK.getId());
+			config.getNode("recipes", "upgrade_256", "row2").setValue(ItemTypes.GOLD_INGOT.getId() + "," + ItemTypes.REDSTONE_TORCH.getId() + "," + ItemTypes.GOLD_INGOT.getId());
+			config.getNode("recipes", "upgrade_256", "row3").setValue(ItemTypes.IRON_BLOCK.getId() + "," + ItemTypes.IRON_BLOCK.getId() + "," + ItemTypes.IRON_BLOCK.getId());
 		}
 		if (config.getNode("recipes", "upgrade_512").isVirtual()) {
-			config.getNode("recipes", "upgrade_512", "grid_size").setValue("3x3");
-			config.getNode("recipes", "upgrade_512", "1x1").setValue(ItemTypes.DIAMOND.getId());
-			config.getNode("recipes", "upgrade_512", "1x2").setValue(ItemTypes.DIAMOND.getId());
-			config.getNode("recipes", "upgrade_512", "1x3").setValue(ItemTypes.DIAMOND.getId());
-			config.getNode("recipes", "upgrade_512", "2x1").setValue(ItemTypes.GOLD_INGOT.getId());
-			config.getNode("recipes", "upgrade_512", "2x2").setValue(ItemTypes.REDSTONE_TORCH.getId());
-			config.getNode("recipes", "upgrade_512", "2x3").setValue(ItemTypes.GOLD_INGOT.getId());
-			config.getNode("recipes", "upgrade_512", "3x1").setValue(ItemTypes.DIAMOND.getId());
-			config.getNode("recipes", "upgrade_512", "3x2").setValue(ItemTypes.DIAMOND.getId());
-			config.getNode("recipes", "upgrade_512", "3x3").setValue(ItemTypes.DIAMOND.getId());
+			config.getNode("recipes", "upgrade_512", "enable").setValue(true);
+			config.getNode("recipes", "upgrade_512", "id").setValue("upgrade_512");
+			config.getNode("recipes", "upgrade_512", "row1").setValue(ItemTypes.DIAMOND.getId() + "," + ItemTypes.DIAMOND.getId() + "," + ItemTypes.DIAMOND.getId());
+			config.getNode("recipes", "upgrade_512", "row2").setValue(ItemTypes.GOLD_INGOT.getId() + "," + ItemTypes.REDSTONE_TORCH.getId() + "," + ItemTypes.GOLD_INGOT.getId());
+			config.getNode("recipes", "upgrade_512", "row3").setValue(ItemTypes.DIAMOND.getId() + "," + ItemTypes.DIAMOND.getId() + "," + ItemTypes.DIAMOND.getId());
 		}
 		if (config.getNode("recipes", "upgrade_unlimited").isVirtual()) {
-			config.getNode("recipes", "upgrade_unlimited", "grid_size").setValue("3x3");
-			config.getNode("recipes", "upgrade_unlimited", "1x1").setValue(ItemTypes.DIAMOND_BLOCK.getId());
-			config.getNode("recipes", "upgrade_unlimited", "1x2").setValue(ItemTypes.DIAMOND_BLOCK.getId());
-			config.getNode("recipes", "upgrade_unlimited", "1x3").setValue(ItemTypes.DIAMOND_BLOCK.getId());
-			config.getNode("recipes", "upgrade_unlimited", "2x1").setValue(ItemTypes.GOLD_INGOT.getId());
-			config.getNode("recipes", "upgrade_unlimited", "2x2").setValue(ItemTypes.REDSTONE_TORCH.getId());
-			config.getNode("recipes", "upgrade_unlimited", "2x3").setValue(ItemTypes.GOLD_INGOT.getId());
-			config.getNode("recipes", "upgrade_unlimited", "3x1").setValue(ItemTypes.DIAMOND_BLOCK.getId());
-			config.getNode("recipes", "upgrade_unlimited", "3x2").setValue(ItemTypes.DIAMOND_BLOCK.getId());
-			config.getNode("recipes", "upgrade_unlimited", "3x3").setValue(ItemTypes.DIAMOND_BLOCK.getId());
+			config.getNode("recipes", "upgrade_unlimited", "enable").setValue(true);
+			config.getNode("recipes", "upgrade_unlimited", "id").setValue("upgrade_unlimited");
+			config.getNode("recipes", "upgrade_unlimited", "row1").setValue(ItemTypes.DIAMOND_BLOCK.getId() + "," + ItemTypes.DIAMOND_BLOCK.getId() + "," + ItemTypes.DIAMOND_BLOCK.getId());
+			config.getNode("recipes", "upgrade_unlimited", "row2").setValue(ItemTypes.GOLD_INGOT.getId() + "," + ItemTypes.REDSTONE_TORCH.getId() + "," + ItemTypes.GOLD_INGOT.getId());
+			config.getNode("recipes", "upgrade_unlimited", "row3").setValue(ItemTypes.DIAMOND_BLOCK.getId() + "," + ItemTypes.DIAMOND_BLOCK.getId() + "," + ItemTypes.DIAMOND_BLOCK.getId());
 		}
 		if (config.getNode("settings", "sql", "database").isVirtual()) {
 			config.getNode("settings", "sql", "database").setValue(Main.getPlugin().getId());
@@ -154,19 +121,31 @@ public class Common {
 	}
 	
 	public static void initRecipeManager() {
-//		ConfigurationNode config = ConfigManager.get(Main.getPlugin()).getConfig().getNode("recipes");
-//
-//		try {
-//			Sponge.getRegistry().getRecipeRegistry().register(RecipeManager.getShapedRecipe(config.getNode("transmitter"), Items.getTransmitter(new TransmitterData(), 1)));
-//			Sponge.getRegistry().getRecipeRegistry().register(RecipeManager.getShapedRecipe(config.getNode("receiver"), Items.getReceiver(new Receiver(), 1)));
-//			Sponge.getRegistry().getRecipeRegistry().register(RecipeManager.getShapedRecipe(config.getNode("tool"), Items.getTool(true)));
-//			Sponge.getRegistry().getRecipeRegistry().register(RecipeManager.getShapedRecipe(config.getNode("upgrade_64"), Items.getUpgrade("64", 1)));
-//			Sponge.getRegistry().getRecipeRegistry().register(RecipeManager.getShapedRecipe(config.getNode("upgrade_128"), Items.getUpgrade("128", 1)));
-//			Sponge.getRegistry().getRecipeRegistry().register(RecipeManager.getShapedRecipe(config.getNode("upgrade_256"), Items.getUpgrade("256", 1)));
-//			Sponge.getRegistry().getRecipeRegistry().register(RecipeManager.getShapedRecipe(config.getNode("upgrade_512"), Items.getUpgrade("512", 1)));
-//			Sponge.getRegistry().getRecipeRegistry().register(RecipeManager.getShapedRecipe(config.getNode("upgrade_unlimited"), Items.getUpgrade("Unlimited", 1)));
-//		} catch (InvalidItemTypeException e) {
-//			e.printStackTrace();
-//		}
+		ConfigurationNode recipes = ConfigManager.get(Main.getPlugin()).getConfig().getNode("recipes");
+
+		if (recipes.getNode("transmitter", "enable").getBoolean()) {
+			RecipeManager.register(recipes.getNode("transmitter"), Items.getEmptyTransmitter());
+		}
+		if (recipes.getNode("receiver", "enable").getBoolean()) {
+			RecipeManager.register(recipes.getNode("receiver"), Items.getEmptyReceiver());
+		}
+		if (recipes.getNode("tool", "enable").getBoolean()) {
+			RecipeManager.register(recipes.getNode("tool"), Items.getTool(true));
+		}
+		if (recipes.getNode("upgrade_64", "enable").getBoolean()) {
+			RecipeManager.register(recipes.getNode("upgrade_64"), Items.getUpgrade("64"));
+		}
+		if (recipes.getNode("upgrade_128", "enable").getBoolean()) {
+			RecipeManager.register(recipes.getNode("upgrade_128"), Items.getUpgrade("128"));
+		}
+		if (recipes.getNode("upgrade_256", "enable").getBoolean()) {
+			RecipeManager.register(recipes.getNode("upgrade_256"), Items.getUpgrade("256"));
+		}
+		if (recipes.getNode("upgrade_512", "enable").getBoolean()) {
+			RecipeManager.register(recipes.getNode("upgrade_512"), Items.getUpgrade("512"));
+		}
+		if (recipes.getNode("upgrade_unlimited", "enable").getBoolean()) {
+			RecipeManager.register(recipes.getNode("upgrade_unlimited"), Items.getUpgrade("Unlimited"));
+		}
 	}
 }

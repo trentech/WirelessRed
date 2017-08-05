@@ -12,6 +12,7 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.cause.NamedCause;
+import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.service.economy.EconomyService;
 import org.spongepowered.api.service.economy.transaction.ResultType;
 import org.spongepowered.api.text.Text;
@@ -42,23 +43,38 @@ public class CMDUpgrade implements CommandExecutor {
 		
 		if(level.equalsIgnoreCase("64")) {
 			if(charge(player, "64", quantity)) {
-				player.getInventory().offer(Items.getUpgrade("64", quantity));
+				ItemStack itemStack = Items.getUpgrade("64");
+				itemStack.setQuantity(quantity);
+				
+				player.getInventory().offer(itemStack);
 			}		
 		} else if (level.equalsIgnoreCase("128")) {
 			if(charge(player, "128", quantity)) {
-				player.getInventory().offer(Items.getUpgrade("128", quantity));
+				ItemStack itemStack = Items.getUpgrade("128");
+				itemStack.setQuantity(quantity);
+				
+				player.getInventory().offer(itemStack);
 			}
 		} else if (level.equalsIgnoreCase("256")) {
 			if(charge(player, "256", quantity)) {
-				player.getInventory().offer(Items.getUpgrade("256", quantity));
+				ItemStack itemStack = Items.getUpgrade("256");
+				itemStack.setQuantity(quantity);
+				
+				player.getInventory().offer(itemStack);
 			}
 		} else if (level.equalsIgnoreCase("512")) {
 			if(charge(player, "512", quantity)) {
-				player.getInventory().offer(Items.getUpgrade("512", quantity));
+				ItemStack itemStack = Items.getUpgrade("512");
+				itemStack.setQuantity(quantity);
+				
+				player.getInventory().offer(itemStack);
 			}
 		} else if (level.equalsIgnoreCase("Unlimited")) {
 			if(charge(player, "Unlimited", quantity)) {
-				player.getInventory().offer(Items.getUpgrade("Unlimited", quantity));
+				ItemStack itemStack = Items.getUpgrade("Unlimited");
+				itemStack.setQuantity(quantity);
+				
+				player.getInventory().offer(itemStack);
 			}
 		} else {
 			throw new CommandException(Text.of(TextColors.RED, "Not a valid upgrade"));

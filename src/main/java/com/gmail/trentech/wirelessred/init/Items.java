@@ -19,10 +19,10 @@ import com.gmail.trentech.wirelessred.data.transmitter.TransmitterData;
 
 public class Items {
 
-	public static ItemStack getTransmitter(TransmitterData transmitterData, int quantity) {
+	public static ItemStack getTransmitter(TransmitterData transmitterData) {
 		Transmitter transmitter = transmitterData.transmitter().get();
 
-		ItemStack itemStack = ItemStack.builder().itemType(ItemTypes.SIGN).quantity(quantity).build();
+		ItemStack itemStack = getEmptyTransmitter();
 		itemStack.offer(new TransmitterData());
 		itemStack.offer(Keys.DISPLAY_NAME, Text.of("Transmitter Circuit"));
 
@@ -40,9 +40,16 @@ public class Items {
 
 		return itemStack;
 	}
+	
+	public static ItemStack getEmptyTransmitter() {
+		ItemStack itemStack = ItemStack.builder().itemType(ItemTypes.SIGN).build();
+		itemStack.offer(Keys.DISPLAY_NAME, Text.of("Transmitter Circuit"));
 
-	public static ItemStack getReceiver(Receiver receiver, int quantity) {
-		ItemStack itemStack = ItemStack.builder().itemType(ItemTypes.STONE_BUTTON).quantity(quantity).build();
+		return itemStack;
+	}
+
+	public static ItemStack getReceiver(Receiver receiver) {
+		ItemStack itemStack = getEmptyReceiver();
 		itemStack.offer(Keys.DISPLAY_NAME, Text.of("Receiver Circuit"));
 
 		if (receiver != null) {
@@ -71,6 +78,13 @@ public class Items {
 		return itemStack;
 	}
 
+	public static ItemStack getEmptyReceiver() {
+		ItemStack itemStack = ItemStack.builder().itemType(ItemTypes.STONE_BUTTON).build();
+		itemStack.offer(Keys.DISPLAY_NAME, Text.of("Receiver Circuit"));
+
+		return itemStack;
+	}
+	
 	public static ItemStack getTool(boolean tool) {
 		ItemStack itemStack = ItemStack.builder().itemType(ItemTypes.STICK).quantity(1).build();
 		itemStack.offer(Keys.DISPLAY_NAME, Text.of("Screw Driver"));
@@ -88,8 +102,8 @@ public class Items {
 		return itemStack;
 	}
 
-	public static ItemStack getUpgrade(String range, int quantity) {
-		ItemStack itemStack = ItemStack.builder().itemType(ItemTypes.PAPER).quantity(quantity).build();
+	public static ItemStack getUpgrade(String range) {
+		ItemStack itemStack = ItemStack.builder().itemType(ItemTypes.PAPER).build();
 		itemStack.offer(Keys.DISPLAY_NAME, Text.of("Transmitter Upgrade"));
 
 		List<Text> lore = new ArrayList<>();

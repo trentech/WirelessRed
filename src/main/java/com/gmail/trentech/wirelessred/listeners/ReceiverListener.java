@@ -145,7 +145,7 @@ public class ReceiverListener {
 				}
 			}
 			
-			ItemStack itemStack = Items.getReceiver(receiver, 1);
+			ItemStack itemStack = Items.getReceiver(receiver);
 
 			Item item = (Item) location.getExtent().createEntity(EntityTypes.ITEM, location.getPosition());
 			item.offer(Keys.REPRESENTED_ITEM, itemStack.createSnapshot());
@@ -186,7 +186,10 @@ public class ReceiverListener {
 
 		receiver.setTransmitter(location);
 
-		player.getInventory().query(itemStack).set(Items.getReceiver(receiver, itemStack.getQuantity()));
+		ItemStack newItemStack = Items.getReceiver(receiver);
+		newItemStack.setQuantity(itemStack.getQuantity());
+		
+		player.getInventory().query(itemStack).set(newItemStack);
 
 		player.sendMessage(Text.of(TextColors.GREEN, "Linked"));
 	}
@@ -279,13 +282,31 @@ public class ReceiverListener {
 		if(optionalItemStack.isPresent()) {
 			ItemStack itemStack = optionalItemStack.get();
 
-			Optional<ReceiverData> optionalData = itemStack.get(ReceiverData.class);
+			Optional<Text> optionalName = itemStack.get(Keys.DISPLAY_NAME);
 			
-			if(optionalData.isPresent()) {
-				cache.put(player.getUniqueId(), optionalData.get());
+			if(!optionalName.isPresent()) {
+				return;
+			}		
 
+			if(!optionalName.get().toPlain().equalsIgnoreCase("Receiver")) {
 				return;
 			}
+			Optional<ReceiverData> optionalData = itemStack.get(ReceiverData.class);
+
+			ReceiverData data;
+			if (!optionalData.isPresent()) {
+				data = new ReceiverData();
+				
+				itemStack.offer(data);
+				
+				player.setItemInHand(HandTypes.MAIN_HAND, itemStack);
+			} else {
+				data = optionalData.get();
+			}
+
+			cache.put(player.getUniqueId(), data);
+
+			return;
 		}
 
 		cache.remove(player.getUniqueId());
