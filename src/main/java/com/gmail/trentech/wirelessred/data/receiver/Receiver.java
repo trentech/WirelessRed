@@ -10,8 +10,6 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.DataSerializable;
 import org.spongepowered.api.data.key.Keys;
-import org.spongepowered.api.event.cause.Cause;
-import org.spongepowered.api.event.cause.NamedCause;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
@@ -121,7 +119,7 @@ public class Receiver implements DataSerializable {
 			connection.close();
 			
 			Sponge.getScheduler().createTaskBuilder().delayTicks(5).execute(c -> {
-				location.offer(Keys.POWERED, enabled, Cause.of(NamedCause.source(Main.getPlugin())));
+				location.offer(Keys.POWERED, enabled);
 			}).submit(Main.getPlugin());			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -144,7 +142,7 @@ public class Receiver implements DataSerializable {
 			connection.close();
 			
 			Sponge.getScheduler().createTaskBuilder().delayTicks(5).execute(c -> {
-				location.offer(Keys.POWERED, enabled, Cause.of(NamedCause.source(Main.getPlugin())));
+				location.offer(Keys.POWERED, enabled);
 			}).submit(Main.getPlugin());	
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -185,7 +183,7 @@ public class Receiver implements DataSerializable {
 			connection.close();
 			
 			Sponge.getScheduler().createTaskBuilder().delayTicks(5).execute(c -> {
-				location.offer(Keys.POWERED, false, Cause.of(NamedCause.source(Main.getPlugin())));
+				location.offer(Keys.POWERED, false);
 			}).submit(Main.getPlugin());
 		} catch (SQLException e) {
 			e.printStackTrace();
