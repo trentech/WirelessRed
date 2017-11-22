@@ -10,6 +10,7 @@ import com.gmail.trentech.pjc.core.ConfigManager;
 import com.gmail.trentech.pjc.core.RecipeManager;
 import com.gmail.trentech.pjc.core.SQLManager;
 import com.gmail.trentech.wirelessred.Main;
+import com.gmail.trentech.wirelessred.utils.Resource;
 
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
@@ -124,28 +125,28 @@ public class Common {
 		ConfigurationNode recipes = ConfigManager.get(Main.getPlugin()).getConfig().getNode("recipes");
 
 		if (recipes.getNode("transmitter", "enable").getBoolean()) {
-			RecipeManager.register(recipes.getNode("transmitter"), Items.getEmptyTransmitter());
+			RecipeManager.register(Resource.ID, recipes.getNode("transmitter"), Items.getEmptyTransmitter());
 		}
 		if (recipes.getNode("receiver", "enable").getBoolean()) {
-			RecipeManager.register(recipes.getNode("receiver"), Items.getEmptyReceiver());
+			RecipeManager.register(Resource.ID, recipes.getNode("receiver"), Items.getEmptyReceiver());
 		}
 		if (recipes.getNode("tool", "enable").getBoolean()) {
-			RecipeManager.register(recipes.getNode("tool"), Items.getTool(true));
+			RecipeManager.register(Resource.ID, recipes.getNode("tool"), Items.getTool(true));
 		}
 		if (recipes.getNode("upgrade_64", "enable").getBoolean()) {
-			RecipeManager.register(recipes.getNode("upgrade_64"), Items.getUpgrade("64"));
+			RecipeManager.register(Resource.ID, recipes.getNode("upgrade_64"), Items.getUpgrade("64"));
 		}
 		if (recipes.getNode("upgrade_128", "enable").getBoolean()) {
-			RecipeManager.register(recipes.getNode("upgrade_128"), Items.getUpgrade("128"));
+			RecipeManager.register(Resource.ID, recipes.getNode("upgrade_128"), Items.getUpgrade("128"));
 		}
 		if (recipes.getNode("upgrade_256", "enable").getBoolean()) {
-			RecipeManager.register(recipes.getNode("upgrade_256"), Items.getUpgrade("256"));
+			RecipeManager.register(Resource.ID, recipes.getNode("upgrade_256"), Items.getUpgrade("256"));
 		}
 		if (recipes.getNode("upgrade_512", "enable").getBoolean()) {
-			RecipeManager.register(recipes.getNode("upgrade_512"), Items.getUpgrade("512"));
+			RecipeManager.register(Resource.ID, recipes.getNode("upgrade_512"), Items.getUpgrade("512"));
 		}
 		if (recipes.getNode("upgrade_unlimited", "enable").getBoolean()) {
-			RecipeManager.register(recipes.getNode("upgrade_unlimited"), Items.getUpgrade("Unlimited"));
+			RecipeManager.register(Resource.ID, recipes.getNode("upgrade_unlimited"), Items.getUpgrade("Unlimited"));
 		}
 	}
 }
