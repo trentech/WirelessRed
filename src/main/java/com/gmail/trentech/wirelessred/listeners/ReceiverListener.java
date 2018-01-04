@@ -24,6 +24,7 @@ import org.spongepowered.api.event.filter.cause.Root;
 import org.spongepowered.api.event.item.inventory.AffectSlotEvent;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.item.inventory.query.QueryOperationTypes;
 import org.spongepowered.api.scoreboard.Scoreboard;
 import org.spongepowered.api.scoreboard.critieria.Criteria;
 import org.spongepowered.api.scoreboard.displayslot.DisplaySlots;
@@ -185,7 +186,7 @@ public class ReceiverListener {
 		ItemStack newItemStack = Items.getReceiver(receiver);
 		newItemStack.setQuantity(itemStack.getQuantity());
 		
-		player.getInventory().query(itemStack).set(newItemStack);
+		player.getInventory().query(QueryOperationTypes.ITEM_STACK_EXACT.of(itemStack)).set(newItemStack);
 
 		player.sendMessage(Text.of(TextColors.GREEN, "Linked"));
 	}

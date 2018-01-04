@@ -36,6 +36,7 @@ import org.spongepowered.api.event.world.chunk.LoadChunkEvent;
 import org.spongepowered.api.event.world.chunk.UnloadChunkEvent;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.item.inventory.query.QueryOperationTypes;
 import org.spongepowered.api.scoreboard.Scoreboard;
 import org.spongepowered.api.scoreboard.critieria.Criteria;
 import org.spongepowered.api.scoreboard.displayslot.DisplaySlots;
@@ -206,7 +207,7 @@ public class TransmitterListener {
 
 		Transmitter.toggle(transmitterData, location);
 
-		player.getInventory().query(itemStack).poll(1);
+		player.getInventory().query(QueryOperationTypes.ITEM_STACK_EXACT.of(itemStack)).poll(1);
 
 		player.sendMessage(Text.of(TextColors.GREEN, "Transmitter upgraded"));
 	}
